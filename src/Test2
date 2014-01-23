@@ -1,0 +1,9 @@
+public class Test2 
+{
+        //Test 2-playing around
+        public static void main(String[] args)
+        {
+                System.out.println("PROJECT-OS SIMULATOR FOR CS-3243/5243-900 SPRING 2014");
+        }
+        
+}
