@@ -7,7 +7,7 @@ public class Loader {
 	
 	public Loader() {
 		try {
-			reader = new Scanner(new File("../DataFile2-Cleaned.txt"));
+			reader = new Scanner(new File("DataFile2-Cleaned.txt"));
 		}
 		catch (Exception e) {
 		}
@@ -15,7 +15,7 @@ public class Loader {
 	
 	public void load() {
 		while (reader.hasNext()) {
-			System.out.println(reader.next());
+			System.out.println(reader.nextLine());
 		}
 	}
 }
