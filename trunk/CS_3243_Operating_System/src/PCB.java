@@ -1,38 +1,28 @@
-import java.util.ArrayList;
+import java.util.Stack;
 
+
+
+//Ruben
+//This is the Process Control Block (PCB) that
+//it contains a stack that will hold all job information
 
 public class PCB 
 {
-	private int processId;
-	private int processSize;
-	private int priority;
-	private int status;
-	private int address;
+	//Stack of jobs
+	private static Stack<Job> jobQueue;
+	private static int count;
 	
-	private long inQueueTime = 0;
-	private long outQueueTime = 0;
-	private long cpuStartTime = 0;
-	private long cpuEndTIme = 0;
-	
-	
-	private ProcessState state;
-	private PCB parent;
-	private ArrayList<PCB> children;
-	
-	PCB(int a, int b, int c, int d)
+	//Constructor
+	public PCB()
 	{
-		this.processId = a;
-		this.processSize = b;
-		this.priority = c;
-		this.address = d;
-	
+		count = 0;
+		jobQueue = new Stack<Job>();
 	}
 	
-	public PCB() {
-		children = new ArrayList<PCB>();
-	}
+	//
 	
-	public PCB(PCB parent) {
-		this.parent = parent;
-	}
+	
+	
+	
+	
 }
