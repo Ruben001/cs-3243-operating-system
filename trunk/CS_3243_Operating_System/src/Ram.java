@@ -5,15 +5,13 @@
  * 
  */
 public class Ram {
-	private int[][] ram; // array of int which will behave as a ram.
+	private static int[][] ram = new int[1024][32]; // array of int which will behave as a ram.
 	/**
 	 * Constructor for the Class Ram
 	 * It initialize ram as two dimension array of int[1024][32]
 	 */
-	public Ram() {
-		this.ram=new int[1024][32];
-	}
-	public int[][] getRam(){
+	
+	public static int[][] getRam(){
 		return ram;
 	}
 	/**
@@ -22,7 +20,7 @@ public class Ram {
 	 * @param bitPostion is a position of column in the ram. It should range from 0 to 31.
 	 * @return it returns the particular bit from the ram of give line and bit position.
 	 */
-	public int readRamBit(int line, int bitPosition){
+	public static int readRamBit(int line, int bitPosition){
 		return ram[line][bitPosition];
 		
 	}
@@ -31,14 +29,14 @@ public class Ram {
 	 * @param line is position of row in the ram to retrieve the date.
 	 * @return it returns an array of int from the ram.
 	 */
-	public int[] readRamLine(int line){
+	public static int[] readRamLine(int line){
 		return ram[line];
 		
 	}
 	/**
 	 * This method clear whole ram. Be careful when using this method.
 	 */
-	public void clearRam(){
+	public static void clearRam(){
 		ram = new int[1024][31];
 	}
 	
@@ -48,7 +46,7 @@ public class Ram {
 	 * @param bitPosition is a position of column in the ram. It should range from 0 to 31.
 	 * @param data is used to add a data to the ram. It should range from 0 to 1.
 	 */
-	public void writeBitToRam(int line, int bitPosition, int data){
+	public static void writeBitToRam(int line, int bitPosition, int data){
 		if(line<=1023 && line>=0){
 			if (bitPosition<=31 && bitPosition>=0){
 				if(data==0 || data ==1){
@@ -70,7 +68,7 @@ public class Ram {
 	 * @param line is a position of row in the ram. It should range from 0 to 1023. 
 	 * @param data is an array of int[] it should be size of 32
 	 */
-	public void writeLineToRam(int line, int[] data){
+	public static void writeLineToRam(int line, int[] data){
 		if(line<=1023 && line>=0){
 			
 			ram[line] = data;
