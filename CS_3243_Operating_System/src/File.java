@@ -6,4 +6,8 @@ public class File {
 		this.address = address;
 		this.length = length;
 	}
+	
+	public int getAddress() { return address; }
+	
+	public int getFileLength() { return length; }
 }
