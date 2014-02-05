@@ -1,12 +1,12 @@
 public class Disk {
 	
-	private int[] data;
+	private long[] data;
 	
 	public Disk() {
-		data = new int[2048];
+		data = new long[2048];
 	}
 	
-	public void writeData(int address, int word) {
+	public void writeData(int address, long word) {
 		try {
 			data[address] = word;
 		}
@@ -15,7 +15,7 @@ public class Disk {
 		}
 	}
 	
-	public int readData(int address) {
+	public long readData(int address) {
 		try {
 			return data[address];
 		}
