@@ -20,6 +20,7 @@ public class Loader {
 	
 	public void load() {
 		String line = "";
+		PCB pcb;
 		while (true) {
 			if (!reader.hasNext())
 				break;
