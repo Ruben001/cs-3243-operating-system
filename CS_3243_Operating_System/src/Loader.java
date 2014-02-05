@@ -16,8 +16,11 @@ public class Loader {
 	}
 	
 	public void load() {
-		while (reader.hasNext()) {
-			System.out.println(reader.nextLine());
+		String line = "";
+		while (true) {
+			if (!reader.hasNext())
+				break;
+			line = reader.nextLine();
 		}
 	}
 }
