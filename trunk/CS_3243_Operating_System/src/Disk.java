@@ -6,7 +6,7 @@ public class Disk {
 		data = new int[2048];
 	}
 	
-	private void writeData(int address, int word) {
+	public void writeData(int address, int word) {
 		try {
 			data[address] = word;
 		}
@@ -15,7 +15,7 @@ public class Disk {
 		}
 	}
 	
-	private int readData(int address) {
+	public int readData(int address) {
 		try {
 			return data[address];
 		}
