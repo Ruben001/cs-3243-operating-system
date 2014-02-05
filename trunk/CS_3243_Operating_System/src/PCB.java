@@ -20,7 +20,7 @@ public class PCB {
 	
 	public PCB parent;
 	public ArrayList<PCB> children;
-	public ArrayList<File> files;
+	public ArrayList<PcbFile> files;
 	
 	/**
 	 * This is the Constructor
