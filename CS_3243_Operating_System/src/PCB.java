@@ -2,41 +2,26 @@ import java.util.ArrayList;
 
 public class PCB {
 	
+	public int processId;
+	public int priority;
+	public int processSize;
 	
+	public int inputBuffer;
+	public int outputBuffer;
+	public int tempBuffer;
 	
-	//variables
-	private int processId;
-	private int priority;
-	private int processSize;
+	public int address;
 	
-	private int inputBuffer;
-	private int outputBuffer;
-	private int tempBuffer;
-	
-	private int address;
-	
-	private ProcessState state;
-	private int pc;
+	public ProcessState state;
+	public int pc;
 	
 	public PCB parent;
 	public ArrayList<PCB> children;
 	public ArrayList<PcbFile> files;
-	
-	/**
-	 * This is the Constructor
-	*/
-	public PCB(int ProcessId, int ProcessSize, int Priority, int Address
-			,int InputBuffer, int OutputBuffer, int TempBuffer) {
-		this.processId = ProcessId;
-		this.processSize = ProcessSize;
-		this.priority = Priority;
-		this.address = Address;
-		this.inputBuffer = InputBuffer;
-		this.outputBuffer = OutputBuffer;
-		this.tempBuffer = TempBuffer;
-		
-		
-		
+
+	public PCB() {
+		children = new ArrayList<PCB>();
+		files =new ArrayList<PcbFile>();
 	}
 	
 	
