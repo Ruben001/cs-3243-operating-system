@@ -6,44 +6,42 @@ import java.util.Random;
 public class LongTermScheduler {
 	
 //public static void main(String[] args) {
-	private Queue<Integer> jobPriorityQueue;
 	
+	private Queue<Integer> jobPriorityQueue;
 	private int jobPriority;
 	//private int jobId;
 	//private int jobDiskAddress;
+	//private jobMemoryAddress; 
 	
-	//private jobMemoryAddress; job is written at in RAM
-	//add a get set method for this member
-		
-	//constructor -initialisation
+	private PCB pcb; 
+			
+	/*
+	 * constructor -initialisation
+	 */
 	public LongTermScheduler() {
 		
-		jobPriorityQueue = new PriorityQueue<>(20);
+		jobPriorityQueue = new PriorityQueue<>(20);//for 20 jobs 
 		
 		/* 
-		 * 	add jobs to priority queue to order jobs according to their priority 	
+		 * 	adds jobs to priority queue to order jobs according to their priority 	
 		 */
-		for(int i=0;i<jobPriorityQueue.size();i++){//it should be 1024 max int on disk. length of count of process id on PCB initially
-			jobPriority = PCB.getPriority();//required to write to memory from a given disk address 
-			jobPriorityQueue.offer(new Integer(jobPriority));//add priority of each process id from PCB			
+		for(int i=0;i<jobPriorityQueue.size();i++){//it should be count of processes loaded on PCB 
+			jobPriority = pcb.getPriority();//required to sort processes in order of priority 
+			jobPriorityQueue.offer(new Integer(jobPriority));//add priority of each process from PCB			
 		}
 	}
 		
 		/* 
-		 * writes the top priority job to RAM when prompted by CPU		
+		 * writes one top priority job to RAM when prompted by CPU-//instead of looping through the whole queue 
 		 */
-		//I think it is to write one job at a time instead of looping through the whole queue 
 		public void writeJobToRAM(){
 			Integer topPriorityJob = jobPriorityQueue.poll();
-			//System.out.println("Processing :"+topPrirityJob);
+			//jobId = pcb.getProcessId(topPriorityJob);
+			//jobDiskAddress = pcb.getAddress(jobId);
 			
-			//on basis of known priority, find jobId and address from PCB and get from Disk
-			jobId = PCB.getProcessId(topJobPriority);
-			jobDiskAddress = PCB.getAddress(jobId);
+			//RAM.writeBitToRam(line, bitPosition, readData(address) )
 			
-			//TO DO : RAM.writeBitToRam(line, bitPosition, readData(int address) )
-			
-			//TO DO :store pid's RAM address to PCB					
+			//TO DO :store pid's RAM address(line and bit position to PCB					
 		}
 }
 //}
