@@ -11,7 +11,7 @@ public class LongTermScheduler {
 	//private int jobDiskAddress;
 	//private jobMemoryAddress; 
 	
-	private PCB pcb; 
+	//private PCB pcb; 
 			
 	/*
 	 * constructor -initialisation
@@ -34,8 +34,8 @@ public class LongTermScheduler {
 		 */
 		public void writeJobToRAM(){
 			Integer topPriorityJob = jobPriorityQueue.poll();
-			//jobId = pcb.getProcessId(topPriorityJob);
-			//jobDiskAddress = pcb.getAddress(jobId);
+			//jobId = PCB.getProcessId(topPriorityJob);
+			//jobDiskAddress = PCB.getAddress(jobId);
 			
 			//RAM.writeBitToRam(line, bitPosition, readData(address) )
 			
