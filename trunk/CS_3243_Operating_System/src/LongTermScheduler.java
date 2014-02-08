@@ -32,7 +32,7 @@ public class LongTermScheduler {
 	}
 		
 		/* 
-		 * writes one top priority job to RAM when prompted by CPU-//instead of looping through the whole queue 
+		 * writes one top job to RAM when prompted by CPU-//instead of whole disk-queue at once  
 		 */
 		public void writeJobToRAM(){
 			Integer topPriorityJob = jobPriorityQueue.poll();
