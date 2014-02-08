@@ -1,7 +1,5 @@
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Random;
-
 
 public class LongTermScheduler {
 	
