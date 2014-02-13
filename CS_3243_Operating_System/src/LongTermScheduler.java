@@ -24,7 +24,7 @@ public class LongTermScheduler {
 		 * 	adds jobs to priority queue to order jobs according to their priority 	
 		 */
 		for(int i=0;i<jobPriorityQueue.size();i++){//it should be count of processes loaded on PCB 
-			jobPriority = pcb.getPriority();//required to sort processes in order of priority 
+			//jobPriority = pcb.getPriority();//required to sort processes in order of priority 
 			jobPriorityQueue.offer(new Integer(jobPriority));//add priority of each process from PCB			
 		}
 	}

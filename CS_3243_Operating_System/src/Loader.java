@@ -29,25 +29,40 @@ public class Loader {
 			if (!reader.hasNext())
 				break;
 			pcb = new PCB();
+			pcbList.add(pcb);
 			line = reader.nextLine();
 			tokens = line.split(" ");
 			pcb.priority = Integer.parseInt(tokens[4], 16);
-			PcbFile exeFile = new PcbFile(diskIndex, Integer.parseInt(tokens[3], 16), PcbFileType.JOB);
-			pcb.files.add(exeFile);
-			for (int i = 0; i < exeFile.getFileLength(); ++i) {
+			pcb.jobFileAddress = diskIndex;
+			pcb.jobFileLength = Integer.parseInt(tokens[3], 16);
+			for (int i = 0; i < pcb.jobFileLength; ++i) {
 				line = reader.nextLine();
 				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
 				diskIndex++;
 			}
 			line = reader.nextLine();
 			tokens = line.split(" ");
-			PcbFile dataFile = new PcbFile(diskIndex, Integer.parseInt(tokens[2], 16) + Integer.parseInt(tokens[3], 16) + Integer.parseInt(tokens[4], 16), PcbFileType.DATA);
-			pcb.files.add(dataFile);
-			for (int i = 0; i < dataFile.getFileLength(); ++i) {
+			pcb.inputBufferAddress = diskIndex;
+			pcb.inputBufferLength = Integer.parseInt(tokens[2], 16);
+			for (int i = 0; i < pcb.inputBufferLength; ++i) {
 				line = reader.nextLine();
 				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
-				diskIndex++;
-			};
+				++diskIndex;
+			}
+			pcb.outputBufferAddress = diskIndex;
+			pcb.outputBufferLength = Integer.parseInt(tokens[3], 16);
+			for (int i = 0; i < pcb.outputBufferLength; ++i) {
+				line = reader.nextLine();
+				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				++diskIndex;
+			}
+			pcb.tempBufferAddress = diskIndex;
+			pcb.tempBufferLength = Integer.parseInt(tokens[4], 16);
+			for (int i = 0; i < pcb.tempBufferLength; ++i) {
+				line = reader.nextLine();
+				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				++diskIndex;
+			}
 			line = reader.nextLine();
 		}
 	}
