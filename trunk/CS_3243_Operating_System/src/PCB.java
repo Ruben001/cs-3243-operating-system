@@ -6,44 +6,26 @@ public class PCB {
 	public int priority;
 	public int processSize;
 	
-	public int inputBuffer;
-	public int outputBuffer;
-	public int tempBuffer;
-	
-	public int address;
-	
 	public ProcessState state;
 	public int pc;
 	
 	public PCB parent;
 	public ArrayList<PCB> children;
-	public ArrayList<PcbFile> files;
+	
+	// file information
+	public int jobFileAddress;
+	public int jobFileLength;
+	public int inputBufferAddress;
+	public int inputBufferLength;
+	public int outputBufferAddress;
+	public int outputBufferLength;
+	public int tempBufferAddress;
+	public int tempBufferLength;
+
 
 	public PCB() {
 		children = new ArrayList<PCB>();
-		files =new ArrayList<PcbFile>();
 	}
-	
-	
-	public int getProcessId(){
-		return processId;
-	}
-	public int getProcessSize()
-	{
-		return processSize;
-	};
-	public int getPriority()
-	{
-		return priority;
-	};
-	public int getPc()
-	{
-		return pc;
-	};
-	public int getAddress()
-	{
-		return address;
-	};
 	
 	class Sched{
 		
@@ -54,7 +36,6 @@ public class PCB {
 		public int remainTime;
 		
 		public Sched(){
-			
 		}
 		
 	class Registers{
