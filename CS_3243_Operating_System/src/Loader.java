@@ -14,7 +14,7 @@ public class Loader {
 		this.disk = disk;
 		this.pcbList = pcbList;
 		try {
-			reader = new Scanner(new File("DataFile2-Cleaned.txt"));
+			reader = new Scanner(new File("DataFile2-Jobs1+2.txt"));
 		}
 		catch (Exception e) {
 		}
@@ -33,6 +33,7 @@ public class Loader {
 			line = reader.nextLine();
 			tokens = line.split(" ");
 			pcb.priority = Integer.parseInt(tokens[4], 16);
+			pcb.processId = Integer.parseInt(tokens[2]);//Set the process ID
 			pcb.jobFileAddress = diskIndex;
 			pcb.jobFileLength = Integer.parseInt(tokens[3], 16);
 			for (int i = 0; i < pcb.jobFileLength; ++i) {
@@ -46,6 +47,7 @@ public class Loader {
 			pcb.inputBufferLength = Integer.parseInt(tokens[2], 16);
 			for (int i = 0; i < pcb.inputBufferLength; ++i) {
 				line = reader.nextLine();
+				System.out.println(line);
 				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
 				++diskIndex;
 			}
