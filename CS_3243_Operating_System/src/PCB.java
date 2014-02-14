@@ -4,7 +4,6 @@ public class PCB {
 	
 	public int processId;
 	public int priority;
-	public int processSize;
 	
 	public ProcessState state;
 	public int pc;
