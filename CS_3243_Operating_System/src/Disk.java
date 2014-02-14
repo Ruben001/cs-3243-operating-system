@@ -47,7 +47,8 @@ public class Disk {
 		}
 		
 		for(int i = 0; i < strAddr.length(); i++){
-			value[i] = strAddr.charAt(i);
+			//change char into int and add to array
+			value[i] = Character.getNumericValue(strAddr.charAt(i));
 		}
 		
 		return value;
