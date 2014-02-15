@@ -31,16 +31,88 @@ public class CPU {
 	private void decode(int[] binaryArray){
 		
 		
-		if(binaryArray[0] == 0 && binaryArray[1] == 0){
+		String opcodeString = "";
+		String s1RegString = "";
+		String s2RegString = "";
+		String dRegString = "";
+		String bRegString = "";
+		String addressString = "";
+		String reg1String = "";
+		String reg2String = "";
+		
+		int count = 29;
+		
+		for(int i = 0; i < 6;i--){
+			opcodeString = opcodeString + binaryArray[count];
+			count--;
+		}
+		opcode = Integer.parseInt(opcodeString,2);
+		//00
+		if(binaryArray[30] == 0 && binaryArray[31] == 0){
+			
+			for(int i = 0; i < 4;i--){
+				s1RegString = s1RegString + binaryArray[count];
+				count--;
+			}
+			s1Reg = Integer.parseInt(s1RegString,2);
+			for(int i = 0; i < 4;i--){
+				s2RegString = s2RegString + binaryArray[count];
+				count--;
+			}
+			s2Reg = Integer.parseInt(s2RegString,2);
+			for(int i = 0; i < 4;i--){
+				dRegString = dRegString + binaryArray[count];
+				count--;
+			}
+			dReg = Integer.parseInt(dRegString,2);
+		}
+		//01
+		else if(binaryArray[30] == 0 && binaryArray[31] == 1){
+			
+			for(int i = 0; i < 4;i--){
+				bRegString = bRegString + binaryArray[count];
+				count--;
+			}
+			bReg = Integer.parseInt(bRegString,2);
+			for(int i = 0; i < 4;i--){
+				dRegString = dRegString + binaryArray[count];
+				count--;
+			}
+			dReg = Integer.parseInt(dRegString,2);
+			for(int i = 0; i < 16;i--){
+				addressString = addressString + binaryArray[count];
+				count--;
+			}
+			address = Integer.parseInt(addressString,2);
+		}
+		//10
+		else if(binaryArray[30] == 1 && binaryArray[31] == 0){
+			
+			for(int i = 0; i < 24;i--){
+				addressString = addressString + binaryArray[count];
+				count--;
+			}
+			address = Integer.parseInt(addressString,2);
 			
 		}
-		else if(binaryArray[0] == 0 && binaryArray[1] == 1){
+		//11
+		else if(binaryArray[30] == 1 && binaryArray[31] == 1){
 			
-		}
-		else if(binaryArray[0] == 1 && binaryArray[1] == 0){
-			
-		}
-		else if(binaryArray[0] == 1 && binaryArray[1] == 1){
+			for(int i = 0; i < 4;i--){
+				reg1String = reg1String + binaryArray[count];
+				count--;
+			}
+			reg1 = Integer.parseInt(reg1String,2);
+			for(int i = 0; i < 4;i--){
+				reg2String = reg2String + binaryArray[count];
+				count--;
+			}
+			reg2 = Integer.parseInt(reg2String,2);
+			for(int i = 0; i < 16;i--){
+				addressString = addressString + binaryArray[count];
+				count--;
+			}
+			address = Integer.parseInt(addressString,2);
 			
 		}
 			
