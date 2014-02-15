@@ -28,7 +28,7 @@ public class CPU {
 	private void fetch(int lineRam){
 		
 	}
-	private void decode(int[] binaryArray){
+	public void decode(int[] binaryArray){
 		
 		
 		String opcodeString = "";
@@ -42,53 +42,53 @@ public class CPU {
 		
 		int count = 29;
 		
-		for(int i = 0; i < 6;i--){
+		for(int i = 0; i < 6;i++){
 			opcodeString = opcodeString + binaryArray[count];
 			count--;
 		}
 		opcode = Integer.parseInt(opcodeString,2);
 		//00
-		if(binaryArray[30] == 0 && binaryArray[31] == 0){
+		if(binaryArray[31] == 0 && binaryArray[30] == 0){
 			
-			for(int i = 0; i < 4;i--){
+			for(int i = 0; i < 4;i++){
 				s1RegString = s1RegString + binaryArray[count];
 				count--;
 			}
 			s1Reg = Integer.parseInt(s1RegString,2);
-			for(int i = 0; i < 4;i--){
+			for(int i = 0; i < 4;i++){
 				s2RegString = s2RegString + binaryArray[count];
 				count--;
 			}
 			s2Reg = Integer.parseInt(s2RegString,2);
-			for(int i = 0; i < 4;i--){
+			for(int i = 0; i < 4;i++){
 				dRegString = dRegString + binaryArray[count];
 				count--;
 			}
 			dReg = Integer.parseInt(dRegString,2);
 		}
 		//01
-		else if(binaryArray[30] == 0 && binaryArray[31] == 1){
+		else if(binaryArray[31] == 0 && binaryArray[30] == 1){
 			
-			for(int i = 0; i < 4;i--){
+			for(int i = 0; i < 4;i++){
 				bRegString = bRegString + binaryArray[count];
 				count--;
 			}
 			bReg = Integer.parseInt(bRegString,2);
-			for(int i = 0; i < 4;i--){
+			for(int i = 0; i < 4;i++){
 				dRegString = dRegString + binaryArray[count];
 				count--;
 			}
 			dReg = Integer.parseInt(dRegString,2);
-			for(int i = 0; i < 16;i--){
+			for(int i = 0; i < 16;i++){
 				addressString = addressString + binaryArray[count];
 				count--;
 			}
 			address = Integer.parseInt(addressString,2);
 		}
 		//10
-		else if(binaryArray[30] == 1 && binaryArray[31] == 0){
+		else if(binaryArray[31] == 1 && binaryArray[30] == 0){
 			
-			for(int i = 0; i < 24;i--){
+			for(int i = 0; i < 24;i++){
 				addressString = addressString + binaryArray[count];
 				count--;
 			}
@@ -96,19 +96,19 @@ public class CPU {
 			
 		}
 		//11
-		else if(binaryArray[30] == 1 && binaryArray[31] == 1){
+		else if(binaryArray[31] == 1 && binaryArray[30] == 1){
 			
-			for(int i = 0; i < 4;i--){
+			for(int i = 0; i < 4;i++){
 				reg1String = reg1String + binaryArray[count];
 				count--;
 			}
 			reg1 = Integer.parseInt(reg1String,2);
-			for(int i = 0; i < 4;i--){
+			for(int i = 0; i < 4;i++){
 				reg2String = reg2String + binaryArray[count];
 				count--;
 			}
 			reg2 = Integer.parseInt(reg2String,2);
-			for(int i = 0; i < 16;i--){
+			for(int i = 0; i < 16;i++){
 				addressString = addressString + binaryArray[count];
 				count--;
 			}
