@@ -2,26 +2,47 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Loader to load lines from the job file, stripping out control cards, storing data on created PCBs, and writing 
+ * data into the disk. 
+ * @author wmasters
+ */
+/**
+ * @author wmasters
+ *
+ */
 public class Loader {
 
+	/**
+	 * Disk into which data from the job file will be written. 
+	 */
 	private Disk disk;
+
+	/**
+	 * List of PCBs to populate with data from the job file. 
+	 */
 	private ArrayList<PCB> pcbList;
 	
+	/**
+	 * Scanner to read the file. 
+	 */
 	private Scanner reader;
-	private int diskIndex;
-	
-	public Loader(Disk disk, ArrayList<PCB> pcbList) {
+
+	public Loader(String fileName, Disk disk, ArrayList<PCB> pcbList) {
 		this.disk = disk;
 		this.pcbList = pcbList;
 		try {
-			reader = new Scanner(new File("DataFile2-Jobs1+2.txt"));
+			reader = new Scanner(new File(fileName));
 		}
 		catch (Exception e) {
 		}
-		diskIndex = 0;
 	}
 	
+	/**
+	 * Performs the task of loading. 
+	 */
 	public void load() {
+		int diskIndex = 0;
 		String line = "";
 		String[] tokens;
 		PCB pcb;
