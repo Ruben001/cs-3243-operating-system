@@ -13,13 +13,14 @@ public class OSDriver {
 		Loader loader = new Loader(disk, pcbList);
 		loader.load();
 		
-		/*Test
-		int[] ar = disk.readBinaryData(1);
+		//Test
+		/*
+		int[] ar = disk.readBinaryData(0);
 		for(int i = 0; i < ar.length;i++ )
 		{
 		System.out.print(ar[i]);
-		}*/
-		
+		}
+		*/
 		return;
 	}
 
