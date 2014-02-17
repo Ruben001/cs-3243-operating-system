@@ -11,7 +11,7 @@ import java.util.Scanner;
  * @author wmasters
  *
  */
-public class Loader {
+public final class Loader {
 
 	/**
 	 * Disk into which data from the job file will be written. 
