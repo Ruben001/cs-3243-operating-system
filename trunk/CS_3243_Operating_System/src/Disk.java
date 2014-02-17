@@ -2,7 +2,7 @@
  * Hard drive disk. Holds a fixed array of 2048 words of 32 bits each. 
  * @author wmasters
  */
-public class Disk {
+public final class Disk {
 
 	/**
 	 * Constant size of each word. 32 bits. 
@@ -60,12 +60,12 @@ public class Disk {
 	 * @param address the address to write the datum 
 	 * @param word the word to write
 	 */
-	public void writeBinaryData(int address, int[] word) {
+	public void writeBinaryData(int address, boolean[] word) {
 		long longWord = 0;
-		
-		for(int i = 1; i <= WORD_SIZE; i++) {
-			if(word[i-1] == 1) {
-				longWord = longWord + (i * 2);
+
+		for (int i = 0; i < WORD_SIZE; ++i) {
+			if(word[i]) {
+				longWord = longWord + ((i + 1) * 2);
 			}
 		}
 		
@@ -77,19 +77,15 @@ public class Disk {
 	 * @param address the location of the disk to read 
 	 * @return a bit-array of the datum in the addressed location
 	 */
-	public int[] readBinaryData(int address) {
-		String strAddr = Long.toBinaryString(readData(address));
-		int[] value = new int[WORD_SIZE];
+	public boolean[] readBinaryData(int address) {
+		String binaryString = Long.toBinaryString(data[address]);
+		for (int i = binaryString.length(); i < WORD_SIZE; ++i)
+			binaryString = "0" + binaryString;
 		
-		for(int i = 0; i < WORD_SIZE; i++){
-			value[i] = 0;
-		}
+		boolean[] bitArray = new boolean[WORD_SIZE];
+		for (int i = 0; i < WORD_SIZE; ++i)
+			bitArray[i] = (binaryString.charAt(i) == '1' ? true : false);
 		
-		for(int i = 0; i < strAddr.length(); i++){
-			//change char into int and add to array
-			value[i] = Character.getNumericValue(strAddr.charAt(i));
-		}
-		
-		return value;
+		return bitArray;
 	}
 }
