@@ -54,7 +54,7 @@ public final class Loader {
 			line = reader.nextLine();
 			tokens = line.split(" ");
 			pcb.priority = Integer.parseInt(tokens[4], 16);
-			pcb.processId = Integer.parseInt(tokens[2]);//Set the process ID
+			pcb.processId = Integer.parseInt(tokens[2], 16);//Set the process ID
 			pcb.jobFileAddress = diskIndex;
 			pcb.jobFileLength = Integer.parseInt(tokens[3], 16);
 			for (int i = 0; i < pcb.jobFileLength; ++i) {

@@ -5,7 +5,7 @@
  */
 public enum SchedulingAlgorithm {
 	FCFS,
-	SFJ,
+	SJF,
 	PRIORITY,
 	RR,
 }

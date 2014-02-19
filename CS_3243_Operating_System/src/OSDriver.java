@@ -5,7 +5,8 @@ public class OSDriver {
 	
 	private static CPU cpu;
 	private static Disk disk;
-	private static Ram ram;
+	private static Memory memory;
+	private static LongTermScheduler ltScheduler;
 
 	// list of all PCB's remaining in the disk
 	private static ArrayList<PCB> pcbList;
@@ -17,13 +18,20 @@ public class OSDriver {
 		// initialize components
 		cpu = new CPU();
 		disk = new Disk();
-		ram = new Ram();
+		memory = new Memory();
 		pcbList = new ArrayList<PCB>();
 		readyQueue = new ArrayList<PCB>();
+
+		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.PRIORITY);
 		
 		// call the loader to load the job file into the Disk
-		Loader loader = new Loader("DataFile2-Jobs1+2.txt", disk, pcbList);
+		Loader loader = new Loader("DataFile2-Cleaned.txt", disk, pcbList);
 		loader.load();
+		
+		
+		
+		ltScheduler.schedule();
+		
 
 		
 		
