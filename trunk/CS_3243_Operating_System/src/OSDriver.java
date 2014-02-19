@@ -7,8 +7,7 @@ public class OSDriver {
 	private static Disk disk;
 	private static Ram ram;
 
-	// list of all PCB's for the given job file
-
+	// list of all PCB's remaining in the disk
 	private static ArrayList<PCB> pcbList;
 	
 	// queues
