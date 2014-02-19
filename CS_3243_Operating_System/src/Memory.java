@@ -21,10 +21,16 @@ public final class Memory {
 	private long[] data;
 	
 	/**
+	 * Boolean array to keep track of the segments of data that are in use. 
+	 */
+	private boolean[] useIndex;
+	
+	/**
 	 * Contracts a new Memory, initializing the internal data array. 
 	 */
 	public Memory() {
 		data = new long[DISK_SIZE];
+		useIndex = new boolean[DISK_SIZE];
 	}
 	
 	/**
@@ -35,6 +41,7 @@ public final class Memory {
 	public void writeData(int address, long word) {
 		try {
 			data[address] = word;
+			useIndex[address] = true;
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
@@ -88,5 +95,41 @@ public final class Memory {
 			bitArray[i] = (binaryString.charAt(i) == '1' ? true : false);
 		
 		return bitArray;
+	}
+	
+	/**
+	 * Release a location in memory.
+	 * @param address the address of memory to free
+	 */
+	public void free(int address) {
+		try {
+			useIndex[address] = false;
+		}
+		catch (Exception e) {
+		}
+	}
+	
+	/**
+	 * Returns the largest piece of free memory in the following format: { address, size }.
+	 * @return largest piece of free memory
+	 */
+	public int[] GetLargestMemoryChunk() {
+		int longestAddress = 0, currentAddress = 0, longestLength = 0, currentLength = 0;
+		for (int i = 0; i < DISK_SIZE; ++i) {
+			if (!useIndex[i]) {
+				currentAddress = i;
+				currentLength = 1;
+				for (int j = 1; (j + i) < DISK_SIZE; ++j) {
+					if (!useIndex[i + j]) {
+						++currentLength;
+					}
+				}
+				if (currentLength > longestLength) {
+					longestAddress = currentAddress;
+					longestLength = currentLength;
+				}
+			}
+		}
+		return new int[]{ longestAddress, longestLength };
 	}
 }

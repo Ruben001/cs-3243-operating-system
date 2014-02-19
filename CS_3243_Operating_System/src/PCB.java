@@ -8,9 +8,6 @@ public class PCB {
 	public ProcessState state;
 	public int pc;
 	
-	public PCB parent;
-	public ArrayList<PCB> children;
-	
 	// file information
 	public int jobFileAddress;
 	public int jobFileLength;
@@ -20,10 +17,30 @@ public class PCB {
 	public int outputBufferLength;
 	public int tempBufferAddress;
 	public int tempBufferLength;
+	
+	// memory
+	public int memoryStart;
+	public int memoryLength;
+	
+	// progeny
+	public PCB parent;
+	public ArrayList<PCB> children;
+	
+	// registers
+	public long[] registers;
 
 
 	public PCB() {
 		children = new ArrayList<PCB>();
+		registers = new long[16];
+	}
+	
+	/**
+	 * Returns the estimated memory footprint of the process associated with this PCB. 
+	 * @return estimated memory footprint
+	 */
+	public int getMemoryFootprint() {
+		return jobFileLength + inputBufferLength + outputBufferLength + tempBufferLength;
 	}
 	
 	class Sched{
@@ -35,14 +52,6 @@ public class PCB {
 		public int remainTime;
 		
 		public Sched(){
-		}
-		
-	class Registers{
-			public int[][] register;
-			
-			public Registers(){
-				this.register=new int[16][32];
-			}
 		}
 	
 	class Accounts{
@@ -56,14 +65,6 @@ public class PCB {
 		public Accounts(){
 			
 		}
-	}
-	
-	class Memories{
-		
-		public Memories(){
-			
-		}
-		
 	}
 	
 	class Resources{
