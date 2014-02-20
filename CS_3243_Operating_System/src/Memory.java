@@ -72,8 +72,8 @@ public final class Memory {
 		long longWord = 0;
 
 		for (int i = 0; i < WORD_SIZE; ++i) {
-			if(word[i]) {
-				longWord = longWord + ((i + 1) * 2);
+			if(word[i]==true) {
+				longWord = (long) (longWord + Math.pow(2, i));
 			}
 		}
 		
@@ -92,7 +92,7 @@ public final class Memory {
 		
 		boolean[] bitArray = new boolean[WORD_SIZE];
 		for (int i = 0; i < WORD_SIZE; ++i)
-			bitArray[i] = (binaryString.charAt(i) == '1' ? true : false);
+			bitArray[i] = (binaryString.charAt(31-i) == '1' ? true : false);
 		
 		return bitArray;
 	}
