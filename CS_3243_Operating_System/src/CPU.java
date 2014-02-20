@@ -30,7 +30,7 @@ public class CPU {
 	private void fetch(int lineRam){
 		
 	}
-	public void decode(long[] binaryArray){
+	public void decode(boolean[] binaryArray){
 		
 		
 		String opcodeString = "";
@@ -45,60 +45,104 @@ public class CPU {
 		int count = 29;
 		
 		for(int i = 0; i < 6;i++){
-			opcodeString = opcodeString + binaryArray[count];
+			if(binaryArray[count] == true){
+				opcodeString = opcodeString + "1";
+			}
+			else{
+				opcodeString = opcodeString + "0";
+			}
+			 
 			count--;
 		}
 		opcode = Integer.parseInt(opcodeString,2);
 		System.out.println("Opcode: " + opcode);
 		//00
-		if(binaryArray[31] == 0 && binaryArray[30] == 0){
+		if(binaryArray[31] == false && binaryArray[30] == false){
 			System.out.println("Arithmetic instruction format: " );
 			for(int i = 0; i < 4;i++){
-				s1RegString = s1RegString + binaryArray[count];
+				if(binaryArray[count] == true){
+					s1RegString = s1RegString + "1";
+				}
+				else{
+					s1RegString = s1RegString + "0";
+				}
+				 
 				count--;
 			}
 			s1Reg = Integer.parseInt(s1RegString,2);
 			System.out.println("S1-Reg: " + s1Reg);
 			for(int i = 0; i < 4;i++){
-				s2RegString = s2RegString + binaryArray[count];
+				if(binaryArray[count] == true){
+					s2RegString = s2RegString + "1";
+				}
+				else{
+					s2RegString = s2RegString + "0";
+				}
 				count--;
 			}
 			s2Reg = Integer.parseInt(s2RegString,2);
 			System.out.println("S2-Reg: " + s2Reg);
 			for(int i = 0; i < 4;i++){
-				dRegString = dRegString + binaryArray[count];
+				if(binaryArray[count] == true){
+					dRegString = dRegString + "1";
+				}
+				else{
+					dRegString = dRegString + "0";
+				}
 				count--;
 			}
 			dReg = Integer.parseInt(dRegString,2);
 			System.out.println("D-Reg: " + dReg);
 		}
 		//01
-		else if(binaryArray[31] == 0 && binaryArray[30] == 1){
+		else if(binaryArray[31] == false && binaryArray[30] == true){
 			System.out.println("Conditional Branch and Immediate format: " );
 			for(int i = 0; i < 4;i++){
-				bRegString = bRegString + binaryArray[count];
+				if(binaryArray[count] == true){
+					bRegString = bRegString + "1";
+				}
+				else{
+					bRegString = bRegString + "0";
+				}
 				count--;
 			}
 			bReg = Integer.parseInt(bRegString,2);
 			System.out.println("B-Reg: " + bReg);
 			for(int i = 0; i < 4;i++){
-				dRegString = dRegString + binaryArray[count];
+				if(binaryArray[count] == true){
+					dRegString = dRegString + "1" ;
+				}
+				else{
+					dRegString = dRegString + "0" ;
+				}
 				count--;
 			}
 			dReg = Integer.parseInt(dRegString,2);
 			System.out.println("D-Reg: " + dReg);
 			for(int i = 0; i < 16;i++){
-				addressString = addressString + binaryArray[count];
+				if(binaryArray[count] == true){
+					addressString = addressString + "1";
+				}
+				else{
+					addressString = addressString + "0";
+				}
+				
 				count--;
 			}
 			address = Integer.parseInt(addressString,2);
 			System.out.println("address: " + address);
 		}
 		//10
-		else if(binaryArray[31] == 1 && binaryArray[30] == 0){
+		else if(binaryArray[31] == true && binaryArray[30] == false){
 			System.out.println("Unconditional Jump format: " );
 			for(int i = 0; i < 24;i++){
-				addressString = addressString + binaryArray[count];
+				if(binaryArray[count] == true){
+					addressString = addressString + "1";
+				}
+				else{
+					addressString = addressString + "0";
+				}
+				
 				count--;
 			}
 			address = Integer.parseInt(addressString,2);
@@ -106,22 +150,40 @@ public class CPU {
 			
 		}
 		//11
-		else if(binaryArray[31] == 1 && binaryArray[30] == 1){
+		else if(binaryArray[31] == true && binaryArray[30] == true){
 			System.out.println("Input and Output instruction format: " );
 			for(int i = 0; i < 4;i++){
-				reg1String = reg1String + binaryArray[count];
+				if(binaryArray[count] == true){
+					reg1String = reg1String + "1";
+				}
+				else{
+					reg1String = reg1String + "0";
+				}
+				
 				count--;
 			}
 			reg1 = Integer.parseInt(reg1String,2);
 			System.out.println("Reg1: " + reg1);
 			for(int i = 0; i < 4;i++){
-				reg2String = reg2String + binaryArray[count];
+				if(binaryArray[count] == true){
+					reg2String = reg2String + "1";
+				}
+				else{
+					reg2String = reg2String + "0";
+				}
+				
 				count--;
 			}
 			reg2 = Integer.parseInt(reg2String,2);
 			System.out.println("Reg2: " + reg2);
 			for(int i = 0; i < 16;i++){
-				addressString = addressString + binaryArray[count];
+				if(binaryArray[count] == true){
+					addressString = addressString + "1" ;
+				}
+				else{
+					addressString = addressString + "0";
+				}
+				
 				count--;
 			}
 			address = Integer.parseInt(addressString,2);
