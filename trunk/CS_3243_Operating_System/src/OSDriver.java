@@ -37,6 +37,7 @@ public class OSDriver {
 		
 		//test
 		//int[] ar = disk.readBinaryData(11);
+		/*
 		long test2 = 275087360;
 		
 		long[] ar = new long[]{0,0,0,1,0,0,0,0,0,1,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -47,7 +48,36 @@ public class OSDriver {
 			newCount--;
 		}
 		cpu.decode(new1);
+		*/
 		
+		//TEST
+		/*
+		cpu.decode(disk.readBinaryData(0));
+		cpu.decode(disk.readBinaryData(1));
+		cpu.decode(disk.readBinaryData(2));
+		cpu.decode(disk.readBinaryData(3));
+		cpu.decode(disk.readBinaryData(4));
+		cpu.decode(disk.readBinaryData(5));
+		cpu.decode(disk.readBinaryData(6));
+		cpu.decode(disk.readBinaryData(7));
+		cpu.decode(disk.readBinaryData(8));
+		cpu.decode(disk.readBinaryData(9));
+		cpu.decode(disk.readBinaryData(10));
+		cpu.decode(disk.readBinaryData(11));
+		cpu.decode(disk.readBinaryData(12));
+		cpu.decode(disk.readBinaryData(13));
+		cpu.decode(disk.readBinaryData(14));
+		cpu.decode(disk.readBinaryData(15));
+		cpu.decode(disk.readBinaryData(16));
+		cpu.decode(disk.readBinaryData(17));
+		cpu.decode(disk.readBinaryData(18));
+		cpu.decode(disk.readBinaryData(19));
+		cpu.decode(disk.readBinaryData(20));
+		cpu.decode(disk.readBinaryData(21));
+		*/
+		
+		//TEST
+		cpu.begin();
 		
 		//Test
 		/*

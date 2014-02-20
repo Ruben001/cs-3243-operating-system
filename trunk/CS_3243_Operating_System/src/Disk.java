@@ -84,7 +84,7 @@ public final class Disk {
 		
 		boolean[] bitArray = new boolean[WORD_SIZE];
 		for (int i = 0; i < WORD_SIZE; ++i)
-			bitArray[i] = (binaryString.charAt(i) == '1' ? true : false);
+			bitArray[i] = (binaryString.charAt(31-i) == '1' ? true : false);
 		
 		return bitArray;
 	}

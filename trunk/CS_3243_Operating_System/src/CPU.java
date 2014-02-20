@@ -1,5 +1,8 @@
 
 public class CPU {
+	private static Disk disk;
+	private static Memory memory;
+	
 	static int pc; // this variable is a program counter 
 	static int[][] register;
 	static int baseRegister;
@@ -19,16 +22,24 @@ public class CPU {
 	
 	
 	public CPU(){
+		disk = new Disk();
+		memory = new Memory();
+		
 		pc=0;
 		register=new int[16][32];
 		
 
 	}
-	private void begin(){
+	public void begin(){
+		for(int i = 0; i < 10;i++){
+			fetch(pc);
+			pc++;
+		}
 		
 	}
 	private void fetch(int lineRam){
 		
+		decode(disk.readBinaryData(lineRam));
 	}
 
 	/**
@@ -212,13 +223,16 @@ public class CPU {
 		switch(opcodeS){
 		case "000000":
 			System.out.println("Instruction: RD  Type: I/O" );
+			
 			break;
 		case "000001":
 			System.out.println("Instruction: WR  Type: I/O" );
+			
 			break;
 			
 		case "000010":
 			System.out.println("Instruction: ST  Type: I" );
+			
 			break;
 		case "000011":
 			System.out.println("Instruction: LW  Type: I" );
