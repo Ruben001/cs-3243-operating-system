@@ -30,6 +30,13 @@ public class CPU {
 	private void fetch(int lineRam){
 		
 	}
+
+	/**
+	 * Receives a instruction and decodes the instruction format then
+	 * it separates the appropriate sections of the instruction. 
+	 * @param boolean array the represents the instruction.
+	 * 
+	 */
 	public void decode(boolean[] binaryArray){
 		
 		
@@ -194,6 +201,12 @@ public class CPU {
 		execute(opcodeString);
 		
 	}
+	/**
+	 * Receives the Opcode and then sets it up with its
+	 * instruction set 
+	 * @param A binary string of the opcode.
+	 * 
+	 */
 	private void execute(String opcodeS){
 		
 		switch(opcodeS){
