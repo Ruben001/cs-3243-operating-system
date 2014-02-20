@@ -16,9 +16,9 @@ public class OSDriver {
 	
 	public static void main(String[] args) {
 		// initialize components
-		cpu = new CPU();
 		disk = new Disk();
 		memory = new Memory();
+		cpu = new CPU(disk, memory);
 		pcbList = new ArrayList<PCB>();
 		readyQueue = new ArrayList<PCB>();
 

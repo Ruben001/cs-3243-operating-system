@@ -21,9 +21,9 @@ public class CPU {
 	int reg2;
 	
 	
-	public CPU(){
-		disk = new Disk();
-		memory = new Memory();
+	public CPU(Disk disk, Memory memory){
+		this.disk = disk;
+		this.memory = memory;
 		
 		pc=0;
 		register=new int[16][32];
