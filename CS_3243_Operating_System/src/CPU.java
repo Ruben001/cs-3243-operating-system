@@ -1,13 +1,25 @@
+import java.util.ArrayList;
+
 
 public class CPU {
-	private static Disk disk;
 	private static Memory memory;
+	private ArrayList<PCB> pcbList;
+	private static ShortTermScheduler stScheduler;
 	
+	//Registers
 	static int pc; // this variable is a program counter 
-	static int[][] register;
+	//static int[][] register;
+	static long[] register;
 	static int baseRegister;
 	static int limitRegister;
 	
+	//Process 
+	int processId;
+	int processAddress;
+	int processLength;
+	int priority;
+	
+	//Decoding
 	String opcodeString = "";
 	
 	int instruction;
@@ -21,25 +33,33 @@ public class CPU {
 	int reg2;
 	
 	
-	public CPU(Disk disk, Memory memory){
-		this.disk = disk;
+	public CPU( Memory memory, ShortTermScheduler stScheduler){
+		
 		this.memory = memory;
+		this.stScheduler = stScheduler;
 		
-		pc=0;
-		register=new int[16][32];
 		
+		//register=new int[16][32];
+		register = new long[16];
 
 	}
 	public void begin(){
-		for(int i = 0; i < 10;i++){
-			fetch(pc);
-			pc++;
+		
+		
+		System.out.println("\n\n\n\n\nLoading Process number: " + processId  );
+		System.out.println("Loading Process length: " + processLength  );
+		
+		for(int i = pc; i < processLength;i++){
+			fetch(processAddress + pc);
+			pc = ++i;
 		}
+		
+		
 		
 	}
 	private void fetch(int lineRam){
 		
-		decode(disk.readBinaryData(lineRam));
+		decode(memory.readBinaryData(lineRam));
 	}
 
 	/**

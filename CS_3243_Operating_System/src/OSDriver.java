@@ -7,6 +7,7 @@ public class OSDriver {
 	private static Disk disk;
 	private static Memory memory;
 	private static LongTermScheduler ltScheduler;
+	private static ShortTermScheduler stScheduler;
 
 	// list of all PCB's remaining in the disk
 	private static ArrayList<PCB> pcbList;
@@ -18,12 +19,12 @@ public class OSDriver {
 		// initialize components
 		disk = new Disk();
 		memory = new Memory();
-		cpu = new CPU(disk, memory);
+		cpu = new CPU(memory,stScheduler);
 		pcbList = new ArrayList<PCB>();
 		readyQueue = new ArrayList<PCB>();
 
-		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.PRIORITY);
-		
+		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS);
+		stScheduler = new ShortTermScheduler(cpu,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS);
 		// call the loader to load the job file into the Disk
 		Loader loader = new Loader("DataFile2-Cleaned.txt", disk, pcbList);
 		loader.load();
@@ -31,9 +32,11 @@ public class OSDriver {
 		
 		
 		ltScheduler.schedule();
+		stScheduler.ScheduleAndDispatch();
 		
 
-		
+		//TEST
+		//cpu.begin();
 		
 		//test
 		//int[] ar = disk.readBinaryData(11);
@@ -76,8 +79,7 @@ public class OSDriver {
 		cpu.decode(disk.readBinaryData(21));
 		*/
 		
-		//TEST
-		cpu.begin();
+		
 		
 		//Test
 		/*
