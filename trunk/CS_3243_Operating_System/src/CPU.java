@@ -59,7 +59,7 @@ public class CPU {
 		
 		for(int i = pc; i < processLength;i++){
 			fetch(processAddress + pc);
-			pc = ++i;
+			pc = ++pc;
 		}
 		
 		
@@ -296,28 +296,30 @@ public class CPU {
 			
 			
 			break;
-		case "001100":
+		case "001100"://12
 			System.out.println("Instruction: ADDI  Type: I" );
 			break;
-		case "001101":
+		case "001101"://13
 			System.out.println("Instruction: MULI  Type: I" );
 			break;
 			
-		case "001110":
+		case "001110"://14
 			System.out.println("Instruction: DIVI  Type: I" );
 			break;
-		case "001111":
+		case "001111"://15
 			System.out.println("Instruction: LDI  Type: I" );
 			break;
-		case "010000":
+		case "010000"://16
 			System.out.println("Instruction: SLT  Type: R" );
 			break;
-		case "010001":
+		case "010001"://17
 			System.out.println("Instruction: SLTI  Type: I" );
 			break;
 			
-		case "010010":
+		case "010010"://18
 			System.out.println("Instruction: HLT  Type: J" );
+			//End of program
+			
 			break;
 		case "010011":
 			System.out.println("Instruction: NOP  Type: -" );
