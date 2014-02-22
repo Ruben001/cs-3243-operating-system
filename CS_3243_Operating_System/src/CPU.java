@@ -321,29 +321,29 @@ public class CPU {
 			//End of program
 			
 			break;
-		case "010011":
+		case "010011"://19
 			System.out.println("Instruction: NOP  Type: -" );
 			break;
-		case "010100":
+		case "010100"://20
 			System.out.println("Instruction: JMP  Type: J" );
 			break;
-		case "010101":
+		case "010101"://21
 			System.out.println("Instruction: BEQ  Type: I" );
 			break;
 			
-		case "010110":
+		case "010110"://22
 			System.out.println("Instruction: BNE  Type: I" );
 			break;
-		case "010111":
+		case "010111"://23
 			System.out.println("Instruction: BEZ  Type: I" );
 			break;
-		case "011000":
+		case "011000"://24
 			System.out.println("Instruction: BNZ  Type: I" );
 			break;
-		case "011001":
+		case "011001"://25
 			System.out.println("Instruction: BGZ  Type: I" );
 			break;
-		case "011010":
+		case "011010"://26
 			System.out.println("Instruction: BLZ  Type: I" );
 			break;
 		default:
