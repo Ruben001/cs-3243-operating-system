@@ -31,6 +31,10 @@ public class ShortTermScheduler {
 		cpu.register = nProcess.registers;
 		nProcess.state = ProcessState.RUNNING;
 		
+		//Buffers
+		cpu.inputBufferAddress = nProcess.inputBufferAddress;
+		cpu.inputBufferLength = nProcess.inputBufferLength;
+		
 		cpu.begin();
 	}
 	

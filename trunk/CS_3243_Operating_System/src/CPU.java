@@ -19,6 +19,14 @@ public class CPU {
 	int processLength;
 	int priority;
 	
+	//buffers
+	int inputBufferAddress;
+	int inputBufferLength;
+	int outputBufferAddress;
+	int outputBufferLength;
+	int tempBufferAddress;
+	int tempBufferLength;
+	
 	//Decoding
 	String opcodeString = "";
 	
@@ -119,7 +127,7 @@ public class CPU {
 				count--;
 			}
 			s2Reg = Integer.parseInt(s2RegString,2);
-			System.out.println("S2-Reg: " + s2Reg);
+			System.out.print(" S2-Reg: " + s2Reg);
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					dRegString = dRegString + "1";
@@ -130,7 +138,7 @@ public class CPU {
 				count--;
 			}
 			dReg = Integer.parseInt(dRegString,2);
-			System.out.println("D-Reg: " + dReg);
+			System.out.print(" D-Reg: " + dReg);
 		}
 		//01
 		else if(binaryArray[31] == false && binaryArray[30] == true){
@@ -145,7 +153,7 @@ public class CPU {
 				count--;
 			}
 			bReg = Integer.parseInt(bRegString,2);
-			System.out.println("B-Reg: " + bReg);
+			System.out.print(" B-Reg: " + bReg);
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					dRegString = dRegString + "1" ;
@@ -156,7 +164,7 @@ public class CPU {
 				count--;
 			}
 			dReg = Integer.parseInt(dRegString,2);
-			System.out.println("D-Reg: " + dReg);
+			System.out.print(" D-Reg: " + dReg);
 			for(int i = 0; i < 16;i++){
 				if(binaryArray[count] == true){
 					addressString = addressString + "1";
@@ -168,7 +176,7 @@ public class CPU {
 				count--;
 			}
 			address = Integer.parseInt(addressString,2);
-			System.out.println("address: " + address);
+			System.out.print(" address: " + address);
 		}
 		//10
 		else if(binaryArray[31] == true && binaryArray[30] == false){
@@ -184,7 +192,7 @@ public class CPU {
 				count--;
 			}
 			address = Integer.parseInt(addressString,2);
-			System.out.println("address: " + address);
+			System.out.print(" address: " + address);
 			
 		}
 		//11
@@ -201,7 +209,7 @@ public class CPU {
 				count--;
 			}
 			reg1 = Integer.parseInt(reg1String,2);
-			System.out.println("Reg1: " + reg1);
+			System.out.print(" Reg1: " + reg1);
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					reg2String = reg2String + "1";
@@ -213,7 +221,7 @@ public class CPU {
 				count--;
 			}
 			reg2 = Integer.parseInt(reg2String,2);
-			System.out.println("Reg2: " + reg2);
+			System.out.print(" Reg2: " + reg2);
 			for(int i = 0; i < 16;i++){
 				if(binaryArray[count] == true){
 					addressString = addressString + "1" ;
@@ -225,7 +233,7 @@ public class CPU {
 				count--;
 			}
 			address = Integer.parseInt(addressString,2);
-			System.out.println("address: " + address);
+			System.out.print(" address: " + address);
 			
 		}
 		
@@ -241,47 +249,52 @@ public class CPU {
 	private void execute(String opcodeS){
 		
 		switch(opcodeS){
-		case "000000":
+		case "000000"://0
 			System.out.println("Instruction: RD  Type: I/O" );
+			register[0] = memory.readData(inputBufferAddress);
 			
 			break;
-		case "000001":
+		case "000001"://1
 			System.out.println("Instruction: WR  Type: I/O" );
 			
 			break;
 			
-		case "000010":
+		case "000010"://2
 			System.out.println("Instruction: ST  Type: I" );
 			
 			break;
-		case "000011":
+		case "000011"://3
 			System.out.println("Instruction: LW  Type: I" );
 			break;
-		case "000100":
+		case "000100"://4
 			System.out.println("Instruction: MOV  Type: R" );
 			break;
-		case "000101":
+		case "000101"://5
 			System.out.println("Instruction: ADD  Type: R" );
 			break;
 			
-		case "000110":
+		case "000110"://6
 			System.out.println("Instruction: SUB  Type: R" );
 			break;
-		case "000111":
+		case "000111"://7
 			System.out.println("Instruction: MUL  Type: R" );
 			break;
-		case "001000":
+		case "001000"://8
 			System.out.println("Instruction: DIV  Type: R" );
 			break;
-		case "001001":
+		case "001001"://9
 			System.out.println("Instruction: AND  Type: R" );
 			break;
 			
-		case "001010":
+		case "001010"://10
 			System.out.println("Instruction: OR  Type: R" );
+			
+			
 			break;
-		case "001011":
+		case "001011"://11
 			System.out.println("Instruction: MOVI  Type: I" );
+			
+			
 			break;
 		case "001100":
 			System.out.println("Instruction: ADDI  Type: I" );
