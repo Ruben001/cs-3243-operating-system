@@ -1,14 +1,37 @@
 import java.util.ArrayList;
 
 public class ShortTermScheduler {
+	private static CPU cpu;
 	private Memory memory;
+	private ArrayList<PCB> pcbList;
+	
+	private PCB currentProcess;
+	private PCB nextProcess;
+	
 	private ArrayList<PCB> readyQueue;
+	private int currentQIndex;
 	private SchedulingAlgorithm algorithm;
 	
-	public ShortTermScheduler(Memory memory, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
+	public ShortTermScheduler(CPU cpu,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
+		this.cpu = cpu;
 		this.memory = memory;
+		this.pcbList = pcbList;
 		this.readyQueue = readyQueue;
 		this.algorithm = algo;
+		this.currentQIndex = 0;
+	}
+	
+	public void dispatch(PCB nProcess){
+		
+		cpu.pc = nProcess.pc;
+		cpu.priority = nProcess.priority;
+		cpu.processAddress = nProcess.jobFileAddress;
+		cpu.processLength = nProcess.jobFileLength;
+		cpu.processId = nProcess.processId;
+		cpu.register = nProcess.registers;
+		nProcess.state = ProcessState.RUNNING;
+		
+		cpu.begin();
 	}
 	
 	public void ScheduleAndDispatch()
@@ -30,6 +53,10 @@ public class ShortTermScheduler {
 	}
 	
 	private void fcfsSchedule() {
+		while(readyQueue.size() != 0){
+			nextProcess =  readyQueue.remove(0);
+			dispatch(nextProcess);
+		}
 		
 	}
 	
@@ -45,7 +72,4 @@ public class ShortTermScheduler {
 
 	}
 	
-	private void Dispatch() {
-		
-	}
 }

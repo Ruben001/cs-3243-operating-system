@@ -33,6 +33,7 @@ public class PCB {
 	public PCB() {
 		children = new ArrayList<PCB>();
 		registers = new long[16];
+		pc = 0;
 	}
 	
 	/**
