@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 public class CPU {
 	private static Memory memory;
+	int MemoryFootprint;
 	private ArrayList<PCB> pcbList;
 	private static ShortTermScheduler stScheduler;
 	
@@ -10,6 +11,7 @@ public class CPU {
 	static int pc; // this variable is a program counter 
 	//static int[][] register;
 	static long[] register;
+	long [] iRegister = new long[MemoryFootprint];
 	static int baseRegister;
 	static int limitRegister;
 	
@@ -49,6 +51,8 @@ public class CPU {
 		
 		//register=new int[16][32];
 		register = new long[16];
+		
+		
 
 	}
 	public void begin(){
@@ -68,6 +72,11 @@ public class CPU {
 	private void fetch(int lineRam){
 		
 		decode(memory.readBinaryData(lineRam));
+		instructionRegister(memory.readBinaryData(lineRam));
+	}
+	
+	private void instructionRegister(boolean[] binaryArray){
+		
 	}
 
 	/**
