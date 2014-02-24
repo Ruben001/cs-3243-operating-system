@@ -6,7 +6,7 @@ public class CPU {
 	//int MemoryFootprint;
 	private ArrayList<PCB> pcbList;
 	private static ShortTermScheduler stScheduler;
-	private ArrayList<boolean[]> iRegister;
+	public ArrayList<boolean[]> iRegister;
 	
 	//Registers
 	static int pc; // this variable is a program counter 
@@ -51,7 +51,6 @@ public class CPU {
 		this.stScheduler = stScheduler;
 		
 		
-		//register=new int[16][32];
 		register = new long[16];
 		iRegister = new ArrayList<boolean[]>();
 		
@@ -63,11 +62,7 @@ public class CPU {
 		
 		System.out.println("\n\n\n\n\nLoading Process number: " + processId  );
 		System.out.println("Loading Process length: " + processLength  );
-		/*
-		for(int i = pc; i < processLength;i++){
-			fetch(processAddress + pc);
-			pc = ++pc;
-			*/
+		
 		//Put the instructions into the instruction register
 		for(int i =0; i < processLength;i++){
 			fetch(processAddress + i);
@@ -108,6 +103,16 @@ public class CPU {
 		String reg1String = "";
 		String reg2String = "";
 		
+		instruction = 0;
+		opcode = 0;
+		s1Reg = 0;
+		s2Reg = 0;
+		dReg = 0;
+		bReg = 0;
+		address = 0;
+		reg1 = 0;
+		reg2 = 0;
+		
 		int count = 29;
 		
 		for(int i = 0; i < 6;i++){
@@ -123,10 +128,10 @@ public class CPU {
 			
 		}
 		opcode = Integer.parseInt(opcodeString,2);
-		System.out.println("Opcode: " + opcode);
+		//System.out.println("Opcode: " + opcode);
 		//00
 		if(binaryArray[31] == false && binaryArray[30] == false){
-			System.out.println("Arithmetic instruction format: " );
+			//System.out.println("Arithmetic instruction format: " );
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					s1RegString = s1RegString + "1";
@@ -136,11 +141,9 @@ public class CPU {
 					s1RegString = s1RegString + "0";
 					count--;
 				}
-				 
-				
 			}
 			s1Reg = Integer.parseInt(s1RegString,2);
-			System.out.println("S1-Reg: " + s1Reg);
+			//System.out.println("S1-Reg: " + s1Reg);
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					s2RegString = s2RegString + "1";
@@ -150,10 +153,9 @@ public class CPU {
 					s2RegString = s2RegString + "0";
 					count--;
 				}
-				
 			}
 			s2Reg = Integer.parseInt(s2RegString,2);
-			System.out.print(" S2-Reg: " + s2Reg);
+			//System.out.print(" S2-Reg: " + s2Reg);
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					dRegString = dRegString + "1";
@@ -163,14 +165,13 @@ public class CPU {
 					dRegString = dRegString + "0";
 					count--;
 				}
-				
 			}
 			dReg = Integer.parseInt(dRegString,2);
-			System.out.print(" D-Reg: " + dReg);
+			//System.out.print(" D-Reg: " + dReg);
 		}
 		//01
 		else if(binaryArray[31] == false && binaryArray[30] == true){
-			System.out.println("Conditional Branch and Immediate format: " );
+			//System.out.println("Conditional Branch and Immediate format: " );
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					bRegString = bRegString + "1";
@@ -183,7 +184,7 @@ public class CPU {
 				
 			}
 			bReg = Integer.parseInt(bRegString,2);
-			System.out.print(" B-Reg: " + bReg);
+			//System.out.print(" B-Reg: " + bReg);
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					dRegString = dRegString + "1" ;
@@ -196,7 +197,7 @@ public class CPU {
 				
 			}
 			dReg = Integer.parseInt(dRegString,2);
-			System.out.print(" D-Reg: " + dReg);
+			//System.out.print(" D-Reg: " + dReg);
 			for(int i = 0; i < 16;i++){
 				if(binaryArray[count] == true){
 					addressString = addressString + "1";
@@ -210,11 +211,11 @@ public class CPU {
 				
 			}
 			address = Integer.parseInt(addressString,2);
-			System.out.print(" address: " + address);
+			//System.out.print(" address: " + address);
 		}
 		//10
 		else if(binaryArray[31] == true && binaryArray[30] == false){
-			System.out.println("Unconditional Jump format: " );
+			//System.out.println("Unconditional Jump format: " );
 			for(int i = 0; i < 24;i++){
 				if(binaryArray[count] == true){
 					addressString = addressString + "1";
@@ -232,7 +233,7 @@ public class CPU {
 		}
 		//11
 		else if(binaryArray[31] == true && binaryArray[30] == true){
-			System.out.println("Input and Output instruction format: " );
+			//System.out.println("Input and Output instruction format: " );
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					reg1String = reg1String + "1";
@@ -245,7 +246,7 @@ public class CPU {
 				
 			}
 			reg1 = Integer.parseInt(reg1String,2);
-			System.out.print(" Reg1: " + reg1);
+			//System.out.print(" Reg1: " + reg1);
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					reg2String = reg2String + "1";
@@ -258,7 +259,7 @@ public class CPU {
 				
 			}
 			reg2 = Integer.parseInt(reg2String,2);
-			System.out.print(" Reg2: " + reg2);
+			//System.out.print(" Reg2: " + reg2);
 			for(int i = 0; i < 16;i++){
 				if(binaryArray[count] == true){
 					addressString = addressString + "1" ;
@@ -270,7 +271,7 @@ public class CPU {
 				}
 			}
 			address = Integer.parseInt(addressString,2);
-			System.out.print(" address: " + address);
+			//System.out.print(" address: " + address);
 			
 		}
 		
@@ -287,7 +288,7 @@ public class CPU {
 		
 		switch(opcodeS){
 		case "000000"://0
-			System.out.println("Instruction: RD  Type: I/O" );
+			//System.out.println("Instruction: RD  Type: I/O" );
 			//Reads content of I/P buffer into a accumulator
 			if(address > 0){
 				register[reg1] = memory.readData(inputBufferAddress);
@@ -303,39 +304,39 @@ public class CPU {
 			
 			
 		case "000001"://1
-			System.out.println("Instruction: WR  Type: I/O" );
+			//System.out.println("Instruction: WR  Type: I/O" );
 			//Writes the content of accumulator into O/P buffer
-			memory.writeData(outputBufferAddress, register[0]);
+			memory.writeData(outputBufferAddress, register[reg1]);
 			pc++;
 			break;
 			
 		case "000010"://2
-			System.out.println("Instruction: ST  Type: I" );
+			//System.out.println("Instruction: ST  Type: I" );
 			//Stores content of a reg. into an address
 			memory.writeData((int)register[dReg], register[bReg]);
 			pc++;
 			break;
 		case "000011"://3
-			System.out.println("Instruction: LW  Type: I" );
+			//System.out.println("Instruction: LW  Type: I" );
 			//Loads the content of an address into a reg.
 			register[dReg] = memory.readData((int)register[bReg]);
 			pc++;
 			break;
 		case "000100"://4
-			System.out.println("Instruction: MOV  Type: R" );
+			//System.out.println("Instruction: MOV  Type: R" );
 			//Transfers the content of two S2-reg into S1-reg
 			register[s1Reg] = register[s2Reg];
 			pc++;
 			break;
 		case "000101"://5
-			System.out.println("Instruction: ADD  Type: R" );
+			//System.out.println("Instruction: ADD  Type: R" );
 			//Adds content of two S-regs into D-reg
 			register[dReg] = register[s1Reg] + register[s2Reg];
 			pc++;
 			break;
 			
 		case "000110"://6
-			System.out.println("Instruction: SUB  Type: R" );
+			//System.out.println("Instruction: SUB  Type: R" );
 			//Subtracts content of two S-regs into D-reg
 			if(register[s1Reg] > register[s2Reg]){
 				register[dReg] = register[s1Reg] - register[s2Reg];
@@ -350,13 +351,13 @@ public class CPU {
 			
 			
 		case "000111"://7
-			System.out.println("Instruction: MUL  Type: R" );
+			//System.out.println("Instruction: MUL  Type: R" );
 			//Multiplies content of two S-regs into D-reg
 			register[dReg] = register[s1Reg] * register[s2Reg];
 			pc++;
 			break;
 		case "001000"://8
-			System.out.println("Instruction: DIV  Type: R" );
+			//System.out.println("Instruction: DIV  Type: R" );
 			//Divides content of two S-regs into D-reg
 			if(register[s1Reg] > register[s2Reg]){
 				register[dReg] = register[s1Reg] / register[s2Reg];
@@ -369,7 +370,7 @@ public class CPU {
 				break;
 			}
 		case "001001"://9
-			System.out.println("Instruction: AND  Type: R" );
+			//System.out.println("Instruction: AND  Type: R" );
 			//Logical AND of two S-regs into D-reg
 			if(register[s1Reg] == 1 && register[s2Reg] == 1){
 				register[dReg] = 1;
@@ -382,7 +383,7 @@ public class CPU {
 				break;
 			}
 		case "001010"://10
-			System.out.println("Instruction: OR  Type: R" );
+			//System.out.println("Instruction: OR  Type: R" );
 			//Logical OR of two S-regs into D-reg
 			if((register[s1Reg] == 1) || (register[s2Reg] == 1)){
 				register[dReg] = 1;
@@ -396,7 +397,7 @@ public class CPU {
 			}
 			
 		case "001011"://11
-			System.out.println("Instruction: MOVI  Type: I" );
+			//System.out.println("Instruction: MOVI  Type: I" );
 			//Transfers address/data directly into a register
 			if(bReg == 0){
 				register[dReg] = address;
@@ -407,7 +408,7 @@ public class CPU {
 			
 			
 		case "001100"://12
-			System.out.println("Instruction: ADDI  Type: I" );
+			//System.out.println("Instruction: ADDI  Type: I" );
 			//Adds a data directly to the content of a register
 			if (address % 4 == 0 && address != 1) {
 				register[dReg] = register[dReg] + (address/4);
@@ -419,7 +420,7 @@ public class CPU {
 				break;
 			}
 		case "001101"://13
-			System.out.println("Instruction: MULI  Type: I" );
+			//System.out.println("Instruction: MULI  Type: I" );
 			//Multiplies a data directly to the content of a register
 			if (address % 4 == 0 && address != 1) {
 				register[dReg] = register[dReg] * (address/4);
@@ -432,7 +433,7 @@ public class CPU {
 			}
 			
 		case "001110"://14
-			System.out.println("Instruction: DIVI  Type: I" );
+			//System.out.println("Instruction: DIVI  Type: I" );
 			//Divides a data directly to the content of a register
 			if (address % 4 == 0 && address != 1) {
 				register[dReg] = register[dReg] / (address/4);
@@ -444,10 +445,20 @@ public class CPU {
 				break;
 			}
 		case "001111"://15
-			System.out.println("Instruction: LDI  Type: I" );
+			//System.out.println("Instruction: LDI  Type: I" );
 			//Loads a data/address directly to the content of a register
-			if (address % 4 == 0) {
-				register[dReg] = (address/4);
+			if ((address/4) == processLength) {
+				register[dReg] = (inputBufferAddress);
+				pc++;
+				break;
+			}
+			else if((address/4) == (processLength + inputBufferLength)){
+				register[dReg] = (outputBufferAddress);
+				pc++;
+				break;
+			}
+			else if(((address/4) == (processLength + inputBufferLength + outputBufferAddress))){
+				register[dReg] = (tempBufferAddress);
 				pc++;
 				break;
 			}
@@ -458,11 +469,11 @@ public class CPU {
 			}
 			
 		case "010000"://16
-			System.out.println("Instruction: SLT  Type: R" );
+			//System.out.println("Instruction: SLT  Type: R" );
 			//Sets the D-reg to 1 if first S-reg is less than 
 			//second S-reg, 0 otherwise
-			System.out.println("s1Reg: " + register[s1Reg] +
-					"<" + " s2Reg" + register[s2Reg] );
+			//System.out.println("s1Reg: " + register[s1Reg] +
+			//		"<" + " s2Reg" + register[s2Reg] );
 			if(register[s1Reg] < register[s2Reg]){
 				register[dReg] = 1;
 				pc++;
@@ -474,7 +485,7 @@ public class CPU {
 				break;
 			}
 		case "010001"://17?? DATA?
-			System.out.println("Instruction: SLTI  Type: I" );
+			//System.out.println("Instruction: SLTI  Type: I" );
 			//Sets the D-reg to 1 if first S-reg is less 
 			//than a data, and 0 otherwise
 			if(register[s1Reg] < register[s2Reg]){
@@ -488,24 +499,24 @@ public class CPU {
 				break;
 			}
 		case "010010"://18
-			System.out.println("Instruction: HLT  Type: J" );
+			//System.out.println("Instruction: HLT  Type: J" );
 			//Logical end of program
 			System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
 			pc++;
 			break;
 		case "010011"://19
-			System.out.println("Instruction: NOP  Type: -" );
+			//System.out.println("Instruction: NOP  Type: -" );
 			//Does nothing and moves to next instruction
 			pc++;
 			break;
 		case "010100"://20
-			System.out.println("Instruction: JMP  Type: J" );
+			//System.out.println("Instruction: JMP  Type: J" );
 			//Jumps to a specified location
 			pc = address/4;
 			break;
 		case "010101"://21
-			System.out.println("Instruction: BEQ  Type: I" );
-			System.out.println("BReg= " + register[bReg] + "dReg= " + register[dReg]);
+			//System.out.println("Instruction: BEQ  Type: I" );
+			//System.out.println("BReg= " + register[bReg] + "dReg= " + register[dReg]);
 			//Branches to an address when content of B-reg = D-reg
 			if(register[bReg] == register[dReg]){
 				//Branch
@@ -520,8 +531,8 @@ public class CPU {
 			}
 			
 		case "010110"://22
-			System.out.println("Instruction: BNE  Type: I" );
-			System.out.println("BReg= " + register[bReg] + "dReg= " + register[dReg]);
+			//System.out.println("Instruction: BNE  Type: I" );
+			//System.out.println("BReg= " + register[bReg] + "dReg= " + register[dReg]);
 			//Branches to an address when content of B-reg != D-reg
 			if(register[bReg] != register[dReg]){
 				//Branch
@@ -536,7 +547,7 @@ public class CPU {
 			}
 			
 		case "010111"://23
-			System.out.println("Instruction: BEZ  Type: I" );
+			//System.out.println("Instruction: BEZ  Type: I" );
 			//Branches to an address when content of B-reg = 0
 			if(register[bReg] == 0 ){
 				//Branch
@@ -550,7 +561,7 @@ public class CPU {
 				break;
 			}
 		case "011000"://24
-			System.out.println("Instruction: BNZ  Type: I" );
+			//System.out.println("Instruction: BNZ  Type: I" );
 			//Branches to an address when content of B-reg <> 0
 			if(register[bReg] != 0 ){
 				//Branch
@@ -564,7 +575,7 @@ public class CPU {
 				break;
 			}
 		case "011001"://25
-			System.out.println("Instruction: BGZ  Type: I" );
+			//System.out.println("Instruction: BGZ  Type: I" );
 			//Branches to an address when content of B-reg > 0
 			if(register[bReg] > 0 ){
 				//Branch
@@ -578,7 +589,7 @@ public class CPU {
 				break;
 			}
 		case "011010"://26
-			System.out.println("Instruction: BLZ  Type: I" );
+			//System.out.println("Instruction: BLZ  Type: I" );
 			//Branches to an address when content of B-reg < 0
 			if(register[bReg] < 0 ){
 				//Branch
