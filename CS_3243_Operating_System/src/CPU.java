@@ -18,6 +18,11 @@ public class CPU {
 	static int baseRegister;
 	static int limitRegister;
 	
+	//Time
+	public ArrayList<Long> finishedPTurnAroundTime;
+	long startTime;
+	long endTime;
+	
 	//Process 
 	int processId;
 	int processAddress;
@@ -55,6 +60,7 @@ public class CPU {
 		
 		register = new long[16];
 		iRegister = new ArrayList<boolean[]>();
+		finishedPTurnAroundTime = new ArrayList<Long>();
 		
 		
 
@@ -134,6 +140,7 @@ public class CPU {
 		//00
 		if(binaryArray[31] == false && binaryArray[30] == false){
 			//System.out.println("Arithmetic instruction format: " );
+			
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					s1RegString = s1RegString + "1";
@@ -505,6 +512,9 @@ public class CPU {
 			//System.out.println("Instruction: HLT  Type: J" );
 			//Logical end of program
 			System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
+			
+			endTime = System.currentTimeMillis();
+			
 			pc++;
 			break;
 		case "010011"://19
