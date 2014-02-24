@@ -68,7 +68,7 @@ public final class Loader {
 			pcb.inputBufferLength = Integer.parseInt(tokens[2], 16);
 			for (int i = 0; i < pcb.inputBufferLength; ++i) {
 				line = reader.nextLine();
-				System.out.println(line);
+				//System.out.println(line);
 				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
 				++diskIndex;
 			}
