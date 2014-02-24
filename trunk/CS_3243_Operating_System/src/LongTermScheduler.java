@@ -57,6 +57,7 @@ public class LongTermScheduler {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
 			readyQueue.add(pcb);
+			pcb.startTime = System.currentTimeMillis();
 			pcbList.remove(pcb);
 		}
 	}
@@ -94,6 +95,7 @@ public class LongTermScheduler {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
 			readyQueue.add(pcb);
+			pcb.startTime = System.currentTimeMillis();
 			priorityList.remove(pcb);
 			pcbList.remove(pcb);
 		}
@@ -132,6 +134,7 @@ public class LongTermScheduler {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
 			readyQueue.add(pcb);
+			pcb.startTime = System.currentTimeMillis();
 			priorityList.remove(pcb);
 			pcbList.remove(pcb);
 		}

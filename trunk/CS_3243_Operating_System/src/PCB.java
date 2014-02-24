@@ -28,6 +28,15 @@ public class PCB {
 	
 	// registers
 	public long[] registers;
+	
+	//Time
+	long cpuTime;
+	long timeLimit;
+	long timeDelay;
+	long startTime;
+	long endTime;
+	long turnAroundTime;
+	long ioTime;
 
 
 	public PCB() {
