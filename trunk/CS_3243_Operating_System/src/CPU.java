@@ -8,6 +8,8 @@ public class CPU {
 	private static ShortTermScheduler stScheduler;
 	public ArrayList<boolean[]> iRegister;
 	
+	long numberIO = 0;
+	
 	//Registers
 	static int pc; // this variable is a program counter 
 	//static int[][] register;
@@ -234,6 +236,7 @@ public class CPU {
 		//11
 		else if(binaryArray[31] == true && binaryArray[30] == true){
 			//System.out.println("Input and Output instruction format: " );
+			numberIO++;
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					reg1String = reg1String + "1";
