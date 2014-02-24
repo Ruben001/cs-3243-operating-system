@@ -371,18 +371,33 @@ public class CPU {
 		case "001001"://9
 			System.out.println("Instruction: AND  Type: R" );
 			//Logical AND of two S-regs into D-reg
-			
-			pc++;
-			break;
-			
+			if(register[s1Reg] == 1 && register[s2Reg] == 1){
+				register[dReg] = 1;
+				pc++;
+				break;
+			}
+			else{
+				register[dReg] = 0;
+				pc++;
+				break;
+			}
 		case "001010"://10
 			System.out.println("Instruction: OR  Type: R" );
 			//Logical OR of two S-regs into D-reg
+			if((register[s1Reg] == 1) || (register[s2Reg] == 1)){
+				register[dReg] = 1;
+				pc++;
+				break;
+			}
+			else{
+				register[dReg] = 0;
+				pc++;
+				break;
+			}
 			
-			pc++;
-			break;
 		case "001011"://11
 			System.out.println("Instruction: MOVI  Type: I" );
+			//Transfers address/data directly into a register
 			if(bReg == 0){
 				register[dReg] = address;
 				pc++;
@@ -403,21 +418,34 @@ public class CPU {
 				pc++;
 				break;
 			}
-			
-			
 		case "001101"://13
 			System.out.println("Instruction: MULI  Type: I" );
-			
-			pc++;
-			break;
+			//Multiplies a data directly to the content of a register
+			if (address % 4 == 0 && address != 1) {
+				register[dReg] = register[dReg] * (address/4);
+				pc++;
+				break;
+			}else{
+				register[dReg] = register[dReg] * address;
+				pc++;
+				break;
+			}
 			
 		case "001110"://14
 			System.out.println("Instruction: DIVI  Type: I" );
-			
-			pc++;
-			break;
+			//Divides a data directly to the content of a register
+			if (address % 4 == 0 && address != 1) {
+				register[dReg] = register[dReg] / (address/4);
+				pc++;
+				break;
+			}else{
+				register[dReg] = register[dReg] / address;
+				pc++;
+				break;
+			}
 		case "001111"://15
 			System.out.println("Instruction: LDI  Type: I" );
+			//Loads a data/address directly to the content of a register
 			if (address % 4 == 0) {
 				register[dReg] = (address/4);
 				pc++;
@@ -431,7 +459,10 @@ public class CPU {
 			
 		case "010000"://16
 			System.out.println("Instruction: SLT  Type: R" );
-			System.out.println("s1Reg: " + register[s1Reg] + "<" + " s2Reg" + register[s2Reg] );
+			//Sets the D-reg to 1 if first S-reg is less than 
+			//second S-reg, 0 otherwise
+			System.out.println("s1Reg: " + register[s1Reg] +
+					"<" + " s2Reg" + register[s2Reg] );
 			if(register[s1Reg] < register[s2Reg]){
 				register[dReg] = 1;
 				pc++;
@@ -442,29 +473,35 @@ public class CPU {
 				pc++;
 				break;
 			}
-			
-			
-		case "010001"://17
+		case "010001"://17?? DATA?
 			System.out.println("Instruction: SLTI  Type: I" );
-			
-			pc++;
-			break;
-			
+			//Sets the D-reg to 1 if first S-reg is less 
+			//than a data, and 0 otherwise
+			if(register[s1Reg] < register[s2Reg]){
+				register[dReg] = 1;
+				pc++;
+				break;
+			}
+			else{
+				register[dReg] = 0;
+				pc++;
+				break;
+			}
 		case "010010"://18
 			System.out.println("Instruction: HLT  Type: J" );
-			//End of program
+			//Logical end of program
 			System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
 			pc++;
 			break;
 		case "010011"://19
 			System.out.println("Instruction: NOP  Type: -" );
-			
+			//Does nothing and moves to next instruction
 			pc++;
 			break;
 		case "010100"://20
 			System.out.println("Instruction: JMP  Type: J" );
-			
-			pc++;
+			//Jumps to a specified location
+			pc = address/4;
 			break;
 		case "010101"://21
 			System.out.println("Instruction: BEQ  Type: I" );
@@ -500,24 +537,60 @@ public class CPU {
 			
 		case "010111"://23
 			System.out.println("Instruction: BEZ  Type: I" );
-			
-			pc++;
-			break;
+			//Branches to an address when content of B-reg = 0
+			if(register[bReg] == 0 ){
+				//Branch
+				pc = (address/4);
+				
+				break;
+			}
+			else{
+				//keep going
+				pc++;
+				break;
+			}
 		case "011000"://24
 			System.out.println("Instruction: BNZ  Type: I" );
-			
-			pc++;
-			break;
+			//Branches to an address when content of B-reg <> 0
+			if(register[bReg] != 0 ){
+				//Branch
+				pc = (address/4);
+				
+				break;
+			}
+			else{
+				//keep going
+				pc++;
+				break;
+			}
 		case "011001"://25
 			System.out.println("Instruction: BGZ  Type: I" );
-			
-			pc++;
-			break;
+			//Branches to an address when content of B-reg > 0
+			if(register[bReg] > 0 ){
+				//Branch
+				pc = (address/4);
+				
+				break;
+			}
+			else{
+				//keep going
+				pc++;
+				break;
+			}
 		case "011010"://26
 			System.out.println("Instruction: BLZ  Type: I" );
-			
-			pc++;
-			break;
+			//Branches to an address when content of B-reg < 0
+			if(register[bReg] < 0 ){
+				//Branch
+				pc = (address/4);
+				
+				break;
+			}
+			else{
+				//keep going
+				pc++;
+				break;
+			}
 		default:
 			System.out.println("Did not read Opcode");
 			
