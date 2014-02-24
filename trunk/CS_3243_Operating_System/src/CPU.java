@@ -355,12 +355,19 @@ public class CPU {
 			register[dReg] = register[s1Reg] * register[s2Reg];
 			pc++;
 			break;
-		case "001000"://8?
+		case "001000"://8
 			System.out.println("Instruction: DIV  Type: R" );
 			//Divides content of two S-regs into D-reg
-			register[dReg] = register[s1Reg] / register[s2Reg];
-			pc++;
-			break;
+			if(register[s1Reg] > register[s2Reg]){
+				register[dReg] = register[s1Reg] / register[s2Reg];
+				pc++;
+				break;
+			}
+			else{
+				register[dReg] = register[s2Reg] / register[s1Reg];
+				pc++;
+				break;
+			}
 		case "001001"://9
 			System.out.println("Instruction: AND  Type: R" );
 			//Logical AND of two S-regs into D-reg
@@ -519,26 +526,6 @@ public class CPU {
 		
 	}
 	
-	public void Arithmetic(int i){
-		
-		/*
-		0 = add
-		1 = sub
-		2 = mul
-		3 = div
-		*/
-		if(i == 0){
-			dReg = s1Reg + s2Reg;
-		}
-		else if(i == 1){
-			dReg = s1Reg - s2Reg;
-		}
-		else if(i == 2){
-			dReg = s1Reg * s2Reg;
-		}
-		else if(i == 3){
-			dReg = s1Reg / s2Reg;
-		}
-	}
+	
 	
 }
