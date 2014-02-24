@@ -34,6 +34,7 @@ public class OSDriver {
 		ltScheduler.schedule();
 		stScheduler.ScheduleAndDispatch();
 		
+		System.out.println("\n\nNumber of I/O Requests: " + cpu.numberIO);
 
 		return;
 	}
