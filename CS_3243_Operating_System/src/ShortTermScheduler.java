@@ -4,6 +4,7 @@ public class ShortTermScheduler {
 	private static CPU cpu;
 	private Memory memory;
 	private ArrayList<PCB> pcbList;
+	private static LongTermScheduler ltScheduler;
 	
 	private PCB currentProcess;
 	private PCB nextProcess;
@@ -12,8 +13,9 @@ public class ShortTermScheduler {
 	private int currentQIndex;
 	private SchedulingAlgorithm algorithm;
 	
-	public ShortTermScheduler(CPU cpu,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
+	public ShortTermScheduler(CPU cpu,LongTermScheduler ltScheduler,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
 		this.cpu = cpu;
+		this.ltScheduler = ltScheduler;
 		this.memory = memory;
 		this.pcbList = pcbList;
 		this.readyQueue = readyQueue;
@@ -66,6 +68,8 @@ public class ShortTermScheduler {
 		while(readyQueue.size() != 0){
 			nextProcess =  readyQueue.remove(0);
 			dispatch(nextProcess);
+			
+			
 		}
 		
 	}

@@ -30,6 +30,7 @@ public class CPU {
 	int priority;
 	
 	
+	
 	//buffers
 	int inputBufferAddress;
 	int inputBufferLength;
@@ -68,7 +69,7 @@ public class CPU {
 	public void begin(){
 		
 		
-		System.out.println("\n\n\n\n\nLoading Process number: " + processId  );
+		System.out.println("Loading Process number: " + processId  );
 		System.out.println("Loading Process length: " + processLength  );
 		
 		//Put the instructions into the instruction register
@@ -514,7 +515,7 @@ public class CPU {
 			System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
 			
 			endTime = System.currentTimeMillis();
-			
+			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
 			pc++;
 			break;
 		case "010011"://19
