@@ -134,7 +134,6 @@ public class LongTermScheduler {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
 			readyQueue.add(pcb);
-			pcb.startTime = System.currentTimeMillis();
 			priorityList.remove(pcb);
 			pcbList.remove(pcb);
 		}

@@ -101,9 +101,12 @@ public final class Memory {
 	 * Release a location in memory.
 	 * @param address the address of memory to free
 	 */
-	public void free(int address) {
+	public void free(int address,int length) {
 		try {
-			useIndex[address] = false;
+			for(int i = 0 ; i <length;i++){
+				useIndex[address] = false;
+				address++;
+			}
 		}
 		catch (Exception e) {
 		}
