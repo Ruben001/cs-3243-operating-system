@@ -28,6 +28,7 @@ public class PCB {
 	
 	// registers
 	public long[] registers;
+	public ArrayList<boolean[]> iRegister;
 	
 	//Time
 	long cpuTime;
@@ -42,6 +43,7 @@ public class PCB {
 	public PCB() {
 		children = new ArrayList<PCB>();
 		registers = new long[16];
+		iRegister = new ArrayList<boolean[]>();
 		pc = 0;
 	}
 	
