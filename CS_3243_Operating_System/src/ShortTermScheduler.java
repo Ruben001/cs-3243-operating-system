@@ -25,13 +25,23 @@ public class ShortTermScheduler {
 	
 	public void dispatch(PCB nProcess){
 		
+		//CPU time
+				cpu.cpuStartTime = nProcess.startTime;
+				cpu.cpuEndTime = nProcess.endTime;
+				cpu.cpuBurstTime = nProcess.cpuBurstTime;
+		//If its the first time the job gets the CPU
+		if(nProcess.pc == 0){
+			cpu.cpuStartTime = System.currentTimeMillis();
+		}
+		
+		
 		cpu.pc = nProcess.pc;
 		cpu.priority = nProcess.priority;
 		cpu.processAddress = nProcess.jobFileAddress;
 		cpu.processLength = nProcess.jobFileLength;
 		cpu.processId = nProcess.processId;
 		cpu.register = nProcess.registers;
-		cpu.startTime = nProcess.startTime;
+		
 		nProcess.state = ProcessState.RUNNING;
 		cpu.iRegister.clear();
 		//Buffers
@@ -41,7 +51,23 @@ public class ShortTermScheduler {
 		cpu.outputBufferLength = nProcess.outputBufferLength;
 		cpu.tempBufferAddress = nProcess.tempBufferAddress;
 		cpu.tempBufferLength = nProcess.tempBufferLength;
+		//TIME
+		
+		//Turn around time
+		cpu.startTime = nProcess.startTime;
+		cpu.endTime = nProcess.endTime;
+		cpu.turnAroundTime = nProcess.turnAroundTime;
+		
+		cpu.waitTime = nProcess.waitTime;
+		cpu.numberIO = nProcess.numberIO;
+		
 		cpu.begin();
+		if(readyQueue.size() == 0){
+			cpu.averageTurnAroundTime();
+			cpu.averageWaitTime();
+			cpu.averageNumberOfIORequests();
+			
+		}
 		
 		
 	}

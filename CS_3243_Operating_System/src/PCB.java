@@ -31,13 +31,23 @@ public class PCB {
 	public ArrayList<boolean[]> iRegister;
 	
 	//Time
-	long cpuTime;
-	long timeLimit;
-	long timeDelay;
+	
+	
+	//Process CPU time
+	long cpuStartTime;
+	long cpuEndTime;
+	long cpuBurstTime;
+	//Turn around time
 	long startTime;
 	long endTime;
 	long turnAroundTime;
-	long ioTime;
+	
+	long timeLimit;
+	long timeDelay;
+	
+	
+	long waitTime;
+	long numberIO;
 
 
 	public PCB() {
