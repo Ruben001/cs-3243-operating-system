@@ -35,21 +35,6 @@ public class OSDriver {
 		stScheduler.ScheduleAndDispatch();
 		
 		
-		
-		System.out.println("\n\nNumber of I/O Requests: " + cpu.numberIO);
-		
-		long end_time = System.nanoTime();
-		long end_time2 = System.currentTimeMillis();
-		
-		long start_time = System.nanoTime();
-		long start_time2 = System.currentTimeMillis();
-		
-		long timeDef = start_time - end_time  ;
-		long timeDef2 = start_time -  end_time;
-		
-		
-		System.out.println("TIME: " + timeDef/1e6);
-		System.out.println("TIME: " + timeDef2/1e6);
 
 		return;
 	}

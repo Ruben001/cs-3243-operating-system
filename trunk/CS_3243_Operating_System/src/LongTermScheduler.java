@@ -60,6 +60,8 @@ public class LongTermScheduler {
 			pcb.startTime = System.currentTimeMillis();
 			pcbList.remove(pcb);
 		}
+		
+		
 	}
 	
 	private void prioritySchedule() {

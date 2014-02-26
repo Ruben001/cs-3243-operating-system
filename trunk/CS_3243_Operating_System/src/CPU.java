@@ -8,7 +8,7 @@ public class CPU {
 	private static ShortTermScheduler stScheduler;
 	public ArrayList<boolean[]> iRegister;
 	
-	long numberIO = 0;
+	
 	
 	//Registers
 	static int pc; // this variable is a program counter 
@@ -19,9 +19,61 @@ public class CPU {
 	static int limitRegister;
 	
 	//Time
-	public ArrayList<Long> finishedPTurnAroundTime;
+	public ArrayList<Long> turnAroundTimeList;
+	public ArrayList<Long> waitTimeList;
+	
+	long waitTime;
+	
+	//Process CPU time
+	long cpuStartTime;
+	long cpuEndTime;
+	long cpuBurstTime;
+	
+	//Process start time and end time
 	long startTime;
 	long endTime;
+	long turnAroundTime;
+	
+	//Number of IO requests
+	public ArrayList<Long> numberIOList;
+	long numberIO;
+	
+	//Calculates the average turn around time
+	public void averageTurnAroundTime(){
+		long averageTurnAroundTime = 0;
+		long numberOfProcesses = turnAroundTimeList.size();
+		long answer = 0;
+		for(int i =0; i < turnAroundTimeList.size(); i++){
+			averageTurnAroundTime += turnAroundTimeList.remove(i);
+		}
+		answer = averageTurnAroundTime/numberOfProcesses;
+		System.out.println("\nAverage turnaround time: " + answer);
+	}
+	//Calculates the average wait time
+	public void averageWaitTime(){
+		
+		long averageWaitTime = 0;
+		long numberOfProcesses = waitTimeList.size();
+		long answer = 0;
+		for(int i =0; i < waitTimeList.size(); i++){
+			averageWaitTime += waitTimeList.remove(i);
+		}
+		answer = averageWaitTime/numberOfProcesses;
+		System.out.println("Average wait time: " + answer);
+
+	}
+	//Calculates the average number of IO requests
+	public void averageNumberOfIORequests(){
+		long averageNumberOfIO = 0;
+		long numberOfIO = numberIOList.size();
+		long answer = 0;
+		for(int i =0; i < numberIOList.size(); i++){
+			averageNumberOfIO += numberIOList.remove(i);
+		}	
+		answer = averageNumberOfIO/numberOfIO;
+		System.out.println("Average IO requests: " + answer);
+
+		}
 	
 	//Process 
 	int processId;
@@ -61,7 +113,9 @@ public class CPU {
 		
 		register = new long[16];
 		iRegister = new ArrayList<boolean[]>();
-		finishedPTurnAroundTime = new ArrayList<Long>();
+		turnAroundTimeList = new ArrayList<Long>();
+		waitTimeList = new ArrayList<Long>();
+		numberIOList = new ArrayList<Long>();
 		
 		
 
@@ -513,8 +567,21 @@ public class CPU {
 			//System.out.println("Instruction: HLT  Type: J" );
 			//Logical end of program
 			System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
-			
+			//End process time
 			endTime = System.currentTimeMillis();
+			//Process CPU time
+			cpuEndTime = System.currentTimeMillis();
+			cpuBurstTime = cpuEndTime - cpuStartTime;
+			//Process turn around time
+			turnAroundTime = endTime - startTime;
+			turnAroundTimeList.add(turnAroundTime);
+			//Process wait time
+			waitTime = turnAroundTime - cpuBurstTime;
+			waitTimeList.add(waitTime);
+			//number of IO requests put onto a Array
+			numberIOList.add(numberIO);
+			System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
+			//Free up memory for next process
 			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
 			pc++;
 			break;
