@@ -105,6 +105,7 @@ public final class Memory {
 		try {
 			for(int i = 0 ; i <length;i++){
 				useIndex[address] = false;
+				data[address] = 0;
 				address++;
 			}
 		}

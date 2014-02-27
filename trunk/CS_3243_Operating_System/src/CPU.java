@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * CPU 
+ * @author rmunive
+ */
+
 
 public class CPU {
 	private static Memory memory;
@@ -292,7 +297,7 @@ public class CPU {
 				
 			}
 			address = Integer.parseInt(addressString,2);
-			System.out.print(" address: " + address);
+			//System.out.print(" address: " + address);
 			
 		}
 		//11
