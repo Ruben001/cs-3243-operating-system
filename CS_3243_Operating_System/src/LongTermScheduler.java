@@ -44,18 +44,26 @@ public class LongTermScheduler {
 				return;
 			PCB pcb = pcbList.get(0);
 			int memoryIndex = memoryChunk[0];
+			int tempIndex = memoryIndex;
 			for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
+			pcb.jobFileAddress = tempIndex;
+			tempIndex = memoryIndex;
 			for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
+			pcb.inputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
 			for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
+			pcb.outputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
 			for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
+			pcb.tempBufferAddress = tempIndex;
 			readyQueue.add(pcb);
 			pcb.startTime = System.currentTimeMillis();
 			pcbList.remove(pcb);

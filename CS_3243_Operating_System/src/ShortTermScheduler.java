@@ -23,6 +23,7 @@ public class ShortTermScheduler {
 		this.currentQIndex = 0;
 	}
 	
+	//The dispatcher gives jobs to the CPU and does context switching
 	public void dispatch(PCB nProcess){
 		
 		//CPU time
@@ -62,6 +63,12 @@ public class ShortTermScheduler {
 		cpu.numberIO = nProcess.numberIO;
 		
 		cpu.begin();
+		//Long term scheduler runs again if the Ready queue falls under 5 jobs
+		if(readyQueue.size() < 5){
+			ltScheduler.schedule();
+		}
+		
+		//Once all the jobs are done you calculate averages 
 		if(readyQueue.size() == 0){
 			cpu.averageTurnAroundTime();
 			cpu.averageWaitTime();
