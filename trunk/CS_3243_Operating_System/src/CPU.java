@@ -585,7 +585,7 @@ public class CPU {
 			waitTimeList.add(waitTime);
 			//number of IO requests put onto a Array
 			numberIOList.add(numberIO);
-			//System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
+			System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
 			//Free up memory for next process
 			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
 			pc++;
