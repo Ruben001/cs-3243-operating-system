@@ -48,8 +48,8 @@ public class CPU {
 		long averageTurnAroundTime = 0;
 		long numberOfProcesses = turnAroundTimeList.size();
 		long answer = 0;
-		for(int i =0; i < turnAroundTimeList.size(); i++){
-			averageTurnAroundTime += turnAroundTimeList.remove(i);
+		while(0 < turnAroundTimeList.size()){
+			averageTurnAroundTime += turnAroundTimeList.remove(0);
 		}
 		answer = averageTurnAroundTime/numberOfProcesses;
 		System.out.println("\nAverage turnaround time: " + answer);
@@ -60,8 +60,8 @@ public class CPU {
 		long averageWaitTime = 0;
 		long numberOfProcesses = waitTimeList.size();
 		long answer = 0;
-		for(int i =0; i < waitTimeList.size(); i++){
-			averageWaitTime += waitTimeList.remove(i);
+		while(0 < waitTimeList.size()){
+			averageWaitTime += waitTimeList.remove(0);
 		}
 		answer = averageWaitTime/numberOfProcesses;
 		System.out.println("Average wait time: " + answer);
@@ -72,8 +72,8 @@ public class CPU {
 		long averageNumberOfIO = 0;
 		long numberOfIO = numberIOList.size();
 		long answer = 0;
-		for(int i =0; i < numberIOList.size(); i++){
-			averageNumberOfIO += numberIOList.remove(i);
+		while(0 < numberIOList.size()){
+			averageNumberOfIO += numberIOList.remove(0);
 		}	
 		answer = averageNumberOfIO/numberOfIO;
 		System.out.println("Average IO requests: " + answer);
@@ -303,7 +303,7 @@ public class CPU {
 		//11
 		else if(binaryArray[31] == true && binaryArray[30] == true){
 			//System.out.println("Input and Output instruction format: " );
-			numberIO++;
+			//numberIO++;
 			for(int i = 0; i < 4;i++){
 				if(binaryArray[count] == true){
 					reg1String = reg1String + "1";
@@ -360,6 +360,7 @@ public class CPU {
 		case "000000"://0
 			//System.out.println("Instruction: RD  Type: I/O" );
 			//Reads content of I/P buffer into a accumulator
+			numberIO++;
 			if(address > 0){
 				register[reg1] = memory.readData(inputBufferAddress);
 				pc++;
@@ -376,6 +377,7 @@ public class CPU {
 		case "000001"://1
 			//System.out.println("Instruction: WR  Type: I/O" );
 			//Writes the content of accumulator into O/P buffer
+			numberIO++;
 			memory.writeData(outputBufferAddress, register[reg1]);
 			pc++;
 			break;
@@ -527,7 +529,7 @@ public class CPU {
 				pc++;
 				break;
 			}
-			else if(((address/4) == (processLength + inputBufferLength + outputBufferAddress))){
+			else if(((address/4) == (processLength + inputBufferLength + outputBufferLength))){
 				register[dReg] = (tempBufferAddress);
 				pc++;
 				break;
