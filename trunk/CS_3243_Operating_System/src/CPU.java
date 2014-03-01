@@ -533,7 +533,7 @@ public class CPU {
 				break;
 			}
 			else{
-				register[dReg] = address;
+				register[dReg] = address/4;
 				pc++;
 				break;
 			}
@@ -543,7 +543,7 @@ public class CPU {
 			//Sets the D-reg to 1 if first S-reg is less than 
 			//second S-reg, 0 otherwise
 			//System.out.println("s1Reg: " + register[s1Reg] +
-			//		"<" + " s2Reg" + register[s2Reg] );
+				//	"<" + " s2Reg" + register[s2Reg] );
 			if(register[s1Reg] < register[s2Reg]){
 				register[dReg] = 1;
 				pc++;
@@ -585,7 +585,7 @@ public class CPU {
 			waitTimeList.add(waitTime);
 			//number of IO requests put onto a Array
 			numberIOList.add(numberIO);
-			System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
+			//System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
 			//Free up memory for next process
 			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
 			pc++;
