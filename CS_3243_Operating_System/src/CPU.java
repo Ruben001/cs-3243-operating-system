@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -43,6 +46,8 @@ public class CPU {
 	public ArrayList<Long> numberIOList;
 	long numberIO;
 	
+	
+	
 	//Calculates the average completion time
 	public void averagecompletionTime(){
 		double averagecompletionTime = 0;
@@ -52,8 +57,24 @@ public class CPU {
 			averagecompletionTime += completionTimeList.remove(0);
 		}
 		answer = averagecompletionTime/numberOfProcesses;
-		 DecimalFormat f = new DecimalFormat("##.000");
-		System.out.println("\nAverage completion time: " + f.format(answer));
+		
+		try{
+			
+			FileOutputStream fos = new FileOutputStream("results.txt",true);
+			PrintWriter pw = new PrintWriter( fos );
+			
+			pw.print("\nAverage turnaround time: ");
+			pw.print(answer);
+			pw.println();
+			pw.close();
+		}
+		catch(FileNotFoundException fnfe){
+			
+			fnfe.printStackTrace();
+			
+			
+		}
+		//System.out.println("\nAverage turnaround time: " + answer);
 	}
 	//Calculates the average wait time
 	public void averageWaitTime(){
@@ -65,7 +86,24 @@ public class CPU {
 			averageWaitTime += waitTimeList.remove(0);
 		}
 		answer = averageWaitTime/numberOfProcesses;
-		System.out.println("Average wait time: " + answer);
+		
+		try{
+			
+			FileOutputStream fos = new FileOutputStream("results.txt",true);
+			PrintWriter pw = new PrintWriter( fos );
+			
+			pw.print("\nAverage wait time: ");
+			pw.print(answer);
+			pw.println();
+			pw.close();
+		}
+		catch(FileNotFoundException fnfe){
+			
+			fnfe.printStackTrace();
+			
+			
+		}
+		//System.out.println("Average wait time: " + answer);
 
 	}
 	//Calculates the average number of IO requests
@@ -77,7 +115,24 @@ public class CPU {
 			averageNumberOfIO += numberIOList.remove(0);
 		}	
 		answer = averageNumberOfIO/numberOfIO;
-		System.out.println("Average IO requests: " + answer);
+		
+		try{
+			
+			FileOutputStream fos = new FileOutputStream("results.txt",true);
+			PrintWriter pw = new PrintWriter( fos );
+			
+			pw.print("\nAverage IO requests: ");
+			pw.print(answer);
+			pw.println();
+			pw.close();
+		}
+		catch(FileNotFoundException fnfe){
+			
+			fnfe.printStackTrace();
+			
+			
+		}
+		//System.out.println("Average IO requests: " + answer);
 
 		}
 	
@@ -129,8 +184,30 @@ public class CPU {
 	public void begin(){
 		
 		
-		System.out.println("Loading Process number: " + processId  );
-		System.out.println("Loading Process length: " + processLength  );
+		//System.out.println("Loading Process number: " + processId  );
+		//System.out.println("Loading Process length: " + processLength  );
+		
+		try{
+			
+			FileOutputStream fos = new FileOutputStream("results.txt",true);
+			PrintWriter pw = new PrintWriter( fos );
+			
+			pw.print("\nLoading Process number: ");
+			pw.print(processId);
+			pw.println();
+			pw.print("\nLoading Process length: ");
+			pw.print(processLength);
+			pw.println();
+			pw.close();
+		}
+		catch(FileNotFoundException fnfe){
+			
+			fnfe.printStackTrace();
+			
+			
+		}
+		
+		
 		
 		//Put the instructions into the Cache
 		for(int i =0; i < processLength;i++){
@@ -574,7 +651,27 @@ public class CPU {
 		case "010010"://18
 			//System.out.println("Instruction: HLT  Type: J" );
 			//Logical end of program
-			System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
+			//System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
+			
+			try{
+				
+				FileOutputStream fos = new FileOutputStream("results.txt",true);
+				PrintWriter pw = new PrintWriter( fos );
+				
+				pw.print("\n****************Job");
+				pw.print(processId);
+				pw.print(": ");
+				pw.print(register[0]);
+				pw.print("*************");
+				pw.println();
+				pw.close();
+			}
+			catch(FileNotFoundException fnfe){
+				
+				fnfe.printStackTrace();
+				
+				
+			}
 			//End process time
 			endTime = System.currentTimeMillis();
 			//Process CPU time
@@ -588,7 +685,28 @@ public class CPU {
 			waitTimeList.add(waitTime);
 			//number of IO requests put onto a Array
 			numberIOList.add(numberIO);
-			System.out.println("completion time: " + completionTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
+			//System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
+			try{
+				
+				FileOutputStream fos = new FileOutputStream("results.txt",true);
+				PrintWriter pw = new PrintWriter( fos );
+				
+				pw.print("\nTurnaround time: ");
+				pw.print(completionTime);
+				pw.print(" Wait time: ");
+				pw.print(waitTime);
+				pw.print(" Number IO requests: ");
+				pw.print(numberIO);
+				pw.println();
+				pw.close();
+			}
+			catch(FileNotFoundException fnfe){
+				
+				fnfe.printStackTrace();
+				
+				
+			}
+			
 			//Free up memory for next process
 			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
 			pc++;
@@ -692,7 +810,26 @@ public class CPU {
 				break;
 			}
 		default:
-			System.out.println("Did not read Opcode");
+			
+			
+			try{
+				
+				FileOutputStream fos = new FileOutputStream("results.txt",true);
+				PrintWriter pw = new PrintWriter( fos );
+				
+				pw.print("\nDid not read Opcode");
+				pw.println();
+				pw.close();
+			}
+			catch(FileNotFoundException fnfe){
+				
+				fnfe.printStackTrace();
+				
+				
+			}
+			
+			
+			//System.out.println("Did not read Opcode");
 			
 			break;
 		}
