@@ -59,8 +59,11 @@ public class ShortTermScheduler {
 		cpu.endTime = nProcess.endTime;
 		cpu.completionTime = nProcess.completionTime;
 		
+		//Average times
 		cpu.waitTime = nProcess.waitTime;
 		cpu.numberIO = nProcess.numberIO;
+		cpu.ramUsage = nProcess.ramUsage;
+		cpu.cacheUsage = nProcess.cacheUsage;
 		
 		cpu.begin();
 		//Long term scheduler runs again if the Ready queue falls under 5 jobs
@@ -73,6 +76,8 @@ public class ShortTermScheduler {
 			cpu.averagecompletionTime();
 			cpu.averageWaitTime();
 			cpu.averageNumberOfIORequests();
+			cpu.averageRamUsageTime();
+			cpu.averageCacheUsageTime();
 			
 		}
 		

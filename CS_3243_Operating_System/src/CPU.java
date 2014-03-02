@@ -1,7 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +29,8 @@ public class CPU {
 	public ArrayList<Long> completionTimeList;
 	public ArrayList<Long> waitTimeList;
 	
+	
+	
 	long waitTime;
 	
 	//Process CPU time
@@ -41,6 +42,12 @@ public class CPU {
 	long startTime;
 	long endTime;
 	long completionTime;
+	
+	public ArrayList<Long> ramUsageList;
+	long ramUsage;
+	public ArrayList<Long> cacheUsageList;
+	long cacheUsage;
+	
 	
 	//Number of IO requests
 	public ArrayList<Long> numberIOList;
@@ -136,6 +143,72 @@ public class CPU {
 
 		}
 	
+	
+	
+	//Calculates the average Ram Usage time
+		public void averageRamUsageTime(){
+			double averageRamUsageTime = 0;
+			double numberOfProcesses = ramUsageList.size();
+			double answer = 0;
+			while(0 < ramUsageList.size()){
+				averageRamUsageTime += ramUsageList.remove(0);
+			}
+			answer = averageRamUsageTime/numberOfProcesses;
+			
+			try{
+				
+				FileOutputStream fos = new FileOutputStream("results.txt",true);
+				PrintWriter pw = new PrintWriter( fos );
+				
+				pw.print("\nAverage Ram usage time: ");
+				pw.print(answer);
+				pw.println();
+				pw.close();
+			}
+			catch(FileNotFoundException fnfe){
+				
+				fnfe.printStackTrace();
+				
+				
+			}
+			//System.out.println("\nAverage turnaround time: " + answer);
+		}
+	
+	
+
+		//Calculates the average Cache Usage time
+			public void averageCacheUsageTime(){
+				double averageCacheUsageTime = 0;
+				double numberOfProcesses = cacheUsageList.size();
+				double answer = 0;
+				while(0 < cacheUsageList.size()){
+					averageCacheUsageTime += cacheUsageList.remove(0);
+				}
+				answer = averageCacheUsageTime/numberOfProcesses;
+				
+				try{
+					
+					FileOutputStream fos = new FileOutputStream("results.txt",true);
+					PrintWriter pw = new PrintWriter( fos );
+					
+					pw.print("\nAverage Cache usage time: ");
+					pw.print(answer);
+					pw.println();
+					pw.close();
+				}
+				catch(FileNotFoundException fnfe){
+					
+					fnfe.printStackTrace();
+					
+					
+				}
+				//System.out.println("\nAverage turnaround time: " + answer);
+			}
+		
+		
+	
+	
+	
 	//Process 
 	int processId;
 	int processAddress;
@@ -174,7 +247,10 @@ public class CPU {
 		
 		register = new long[16];
 		cache = new ArrayList<boolean[]>();
+		//Average Times
 		completionTimeList = new ArrayList<Long>();
+		ramUsageList = new ArrayList<Long>();
+		cacheUsageList = new ArrayList<Long>();
 		waitTimeList = new ArrayList<Long>();
 		numberIOList = new ArrayList<Long>();
 		
@@ -212,17 +288,20 @@ public class CPU {
 		//Put the instructions into the Cache
 		for(int i =0; i < processLength;i++){
 			fetch(processAddress + i);
+			cacheUsage++;
 		}
 		
 		//Starts decoding from cache
 		while(pc < processLength){
 			decode(cache.get(pc));
+			cacheUsage++;
 			
 		}
 		
 	}
 	private void fetch(int lineRam){
 		setCache(memory.readBinaryData(lineRam));
+		ramUsage++;
 		//decode(memory.readBinaryData(lineRam));
 		
 	}
@@ -438,6 +517,7 @@ public class CPU {
 		case "000000"://0
 			//System.out.println("Instruction: RD  Type: I/O" );
 			//Reads content of I/P buffer into a accumulator
+			ramUsage++;
 			numberIO++;
 			if(address > 0){
 				register[reg1] = memory.readData(inputBufferAddress);
@@ -455,6 +535,7 @@ public class CPU {
 		case "000001"://1
 			//System.out.println("Instruction: WR  Type: I/O" );
 			//Writes the content of accumulator into O/P buffer
+			ramUsage++;
 			numberIO++;
 			memory.writeData(outputBufferAddress, register[reg1]);
 			pc++;
@@ -685,13 +766,17 @@ public class CPU {
 			waitTimeList.add(waitTime);
 			//number of IO requests put onto a Array
 			numberIOList.add(numberIO);
+			
+			ramUsageList.add(ramUsage);
+			cacheUsageList.add(cacheUsage);
+			
 			//System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
 			try{
 				
 				FileOutputStream fos = new FileOutputStream("results.txt",true);
 				PrintWriter pw = new PrintWriter( fos );
 				
-				pw.print("\nTurnaround time: ");
+				pw.print("\nCompletion time: ");
 				pw.print(completionTime);
 				pw.print(" Wait time: ");
 				pw.print(waitTime);
