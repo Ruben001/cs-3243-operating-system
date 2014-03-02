@@ -11,9 +11,6 @@ import java.util.ArrayList;
 
 public class CPU {
 	private static Memory memory;
-	//int MemoryFootprint;
-	private ArrayList<PCB> pcbList;
-	private static ShortTermScheduler stScheduler;
 	public ArrayList<boolean[]> cache;
 	
 	
@@ -242,7 +239,6 @@ public class CPU {
 	public CPU( Memory memory, ShortTermScheduler stScheduler){
 		
 		this.memory = memory;
-		this.stScheduler = stScheduler;
 		
 		
 		register = new long[16];
@@ -253,9 +249,6 @@ public class CPU {
 		cacheUsageList = new ArrayList<Long>();
 		waitTimeList = new ArrayList<Long>();
 		numberIOList = new ArrayList<Long>();
-		
-		
-
 	}
 	public void begin(){
 		
@@ -276,10 +269,7 @@ public class CPU {
 			pw.close();
 		}
 		catch(FileNotFoundException fnfe){
-			
 			fnfe.printStackTrace();
-			
-			
 		}
 		
 		
@@ -294,15 +284,12 @@ public class CPU {
 		while(pc < processLength){
 			decode(cache.get(pc));
 			cacheUsage++;
-			
 		}
 		
 	}
 	private void fetch(int lineRam){
 		setCache(memory.readBinaryData(lineRam));
 		ramUsage++;
-		//decode(memory.readBinaryData(lineRam));
-		
 	}
 	
 	private void setCache(boolean[] binaryArray){
@@ -905,9 +892,6 @@ public class CPU {
 				
 				
 			}
-			
-			
-			//System.out.println("Did not read Opcode");
 			
 			break;
 		}
