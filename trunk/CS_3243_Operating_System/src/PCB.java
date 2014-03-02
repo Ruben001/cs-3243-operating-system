@@ -45,7 +45,7 @@ public class PCB {
 	long timeLimit;
 	long timeDelay;
 	
-	
+	//used to calculate averages
 	long waitTime;
 	long numberIO;
 	long ramUsage;
