@@ -268,10 +268,9 @@ public class CPU {
 			FileOutputStream fos = new FileOutputStream("results.txt",true);
 			PrintWriter pw = new PrintWriter( fos );
 			
-			pw.print("\nLoading Process number: ");
+			pw.print("\nJob: ");
 			pw.print(processId);
-			pw.println();
-			pw.print("\nLoading Process length: ");
+			pw.print("\nJob length: ");
 			pw.print(processLength);
 			pw.println();
 			pw.close();
