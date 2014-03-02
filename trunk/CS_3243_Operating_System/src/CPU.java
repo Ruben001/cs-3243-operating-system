@@ -70,7 +70,7 @@ public class CPU {
 			FileOutputStream fos = new FileOutputStream("results.txt",true);
 			PrintWriter pw = new PrintWriter( fos );
 			
-			pw.print("\nAverage turnaround time: ");
+			pw.print("\nAverage completion time: ");
 			pw.print(answer);
 			pw.println();
 			pw.close();
@@ -81,7 +81,7 @@ public class CPU {
 			
 			
 		}
-		//System.out.println("\nAverage turnaround time: " + answer);
+		//System.out.println("\nAverage completion time: " + answer);
 	}
 	//Calculates the average wait time
 	public void averageWaitTime(){
@@ -171,7 +171,7 @@ public class CPU {
 				
 				
 			}
-			//System.out.println("\nAverage turnaround time: " + answer);
+			//System.out.println("\nAverage completion time: " + answer);
 		}
 	
 	
@@ -202,7 +202,7 @@ public class CPU {
 					
 					
 				}
-				//System.out.println("\nAverage turnaround time: " + answer);
+				//System.out.println("\nAverage completion time: " + answer);
 			}
 		
 		
@@ -734,25 +734,6 @@ public class CPU {
 			//Logical end of program
 			//System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
 			
-			try{
-				
-				FileOutputStream fos = new FileOutputStream("results.txt",true);
-				PrintWriter pw = new PrintWriter( fos );
-				
-				pw.print("\n****************Job");
-				pw.print(processId);
-				pw.print(": ");
-				pw.print(register[0]);
-				pw.print("*************");
-				pw.println();
-				pw.close();
-			}
-			catch(FileNotFoundException fnfe){
-				
-				fnfe.printStackTrace();
-				
-				
-			}
 			//End process time
 			endTime = System.currentTimeMillis();
 			//Process CPU time
@@ -770,7 +751,7 @@ public class CPU {
 			ramUsageList.add(ramUsage);
 			cacheUsageList.add(cacheUsage);
 			
-			//System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
+			//System.out.println("completion time: " + completionTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
 			try{
 				
 				FileOutputStream fos = new FileOutputStream("results.txt",true);
@@ -782,6 +763,19 @@ public class CPU {
 				pw.print(waitTime);
 				pw.print(" Number IO requests: ");
 				pw.print(numberIO);
+				pw.print(" \nRam Usage: ");
+				pw.print(ramUsage);
+				pw.print(" Cache Usage: ");
+				pw.print(cacheUsage);
+				
+				pw.print("\n****************Accumulator");
+				pw.print(": ");
+				pw.print(register[0]);
+				pw.print("*************");
+				
+				
+				
+				
 				pw.println();
 				pw.close();
 			}

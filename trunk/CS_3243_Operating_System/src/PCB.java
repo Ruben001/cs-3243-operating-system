@@ -67,42 +67,9 @@ public class PCB {
 		return jobFileLength + inputBufferLength + outputBufferLength + tempBufferLength;
 	}
 	
-	class Sched{
-		
-		public int burstTime;
-		public int priority;
-		public int queueTime;
-		public int timeSlice;
-		public int remainTime;
-		
-		public Sched(){
-		}
 	
-	class Accounts{
-		public int cpuTime;
-		public int timeLimit;
-		public int timeDelay;
-		public int startTime;
-		public int endTime;
-		public int ioTime;
 		
-		public Accounts(){
-			
-		}
-	}
+		
 	
-	class Resources{
-		public int filePointer;
-		public int ioDevice;
-		public int unitNumber;
-		public int openFileTables;
-		
-		public Resources(){
-			
-		}
-	}
-		
-		
-	}
 	
 }
