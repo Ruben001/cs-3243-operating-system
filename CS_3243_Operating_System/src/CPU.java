@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -11,20 +12,19 @@ public class CPU {
 	//int MemoryFootprint;
 	private ArrayList<PCB> pcbList;
 	private static ShortTermScheduler stScheduler;
-	public ArrayList<boolean[]> iRegister;
+	public ArrayList<boolean[]> cache;
 	
 	
 	
 	//Registers
 	static int pc; // this variable is a program counter 
-	//static int[][] register;
 	static long[] register;
 	
 	static int baseRegister;
 	static int limitRegister;
 	
 	//Time
-	public ArrayList<Long> turnAroundTimeList;
+	public ArrayList<Long> completionTimeList;
 	public ArrayList<Long> waitTimeList;
 	
 	long waitTime;
@@ -37,22 +37,23 @@ public class CPU {
 	//Process start time and end time
 	long startTime;
 	long endTime;
-	long turnAroundTime;
+	long completionTime;
 	
 	//Number of IO requests
 	public ArrayList<Long> numberIOList;
 	long numberIO;
 	
-	//Calculates the average turn around time
-	public void averageTurnAroundTime(){
-		long averageTurnAroundTime = 0;
-		long numberOfProcesses = turnAroundTimeList.size();
-		long answer = 0;
-		while(0 < turnAroundTimeList.size()){
-			averageTurnAroundTime += turnAroundTimeList.remove(0);
+	//Calculates the average completion time
+	public void averagecompletionTime(){
+		double averagecompletionTime = 0;
+		double numberOfProcesses = completionTimeList.size();
+		double answer = 0;
+		while(0 < completionTimeList.size()){
+			averagecompletionTime += completionTimeList.remove(0);
 		}
-		answer = averageTurnAroundTime/numberOfProcesses;
-		System.out.println("\nAverage turnaround time: " + answer);
+		answer = averagecompletionTime/numberOfProcesses;
+		 DecimalFormat f = new DecimalFormat("##.000");
+		System.out.println("\nAverage completion time: " + f.format(answer));
 	}
 	//Calculates the average wait time
 	public void averageWaitTime(){
@@ -117,8 +118,8 @@ public class CPU {
 		
 		
 		register = new long[16];
-		iRegister = new ArrayList<boolean[]>();
-		turnAroundTimeList = new ArrayList<Long>();
+		cache = new ArrayList<boolean[]>();
+		completionTimeList = new ArrayList<Long>();
 		waitTimeList = new ArrayList<Long>();
 		numberIOList = new ArrayList<Long>();
 		
@@ -131,26 +132,26 @@ public class CPU {
 		System.out.println("Loading Process number: " + processId  );
 		System.out.println("Loading Process length: " + processLength  );
 		
-		//Put the instructions into the instruction register
+		//Put the instructions into the Cache
 		for(int i =0; i < processLength;i++){
 			fetch(processAddress + i);
 		}
 		
-		//Starts decoding from iRegister
+		//Starts decoding from cache
 		while(pc < processLength){
-			decode(iRegister.get(pc));
+			decode(cache.get(pc));
 			
 		}
 		
 	}
 	private void fetch(int lineRam){
-		instructionRegister(memory.readBinaryData(lineRam));
+		setCache(memory.readBinaryData(lineRam));
 		//decode(memory.readBinaryData(lineRam));
 		
 	}
 	
-	private void instructionRegister(boolean[] binaryArray){
-		iRegister.add(binaryArray);
+	private void setCache(boolean[] binaryArray){
+		cache.add(binaryArray);
 	}
 
 	/**
@@ -578,16 +579,16 @@ public class CPU {
 			endTime = System.currentTimeMillis();
 			//Process CPU time
 			cpuEndTime = System.currentTimeMillis();
-			cpuBurstTime = cpuEndTime - cpuStartTime;
+			completionTime = cpuEndTime - cpuStartTime;
 			//Process turn around time
-			turnAroundTime = endTime - startTime;
-			turnAroundTimeList.add(turnAroundTime);
+			//completionTime = endTime - startTime;
+			completionTimeList.add(completionTime);
 			//Process wait time
-			waitTime = turnAroundTime - cpuBurstTime;
+			waitTime = cpuStartTime - startTime;
 			waitTimeList.add(waitTime);
 			//number of IO requests put onto a Array
 			numberIOList.add(numberIO);
-			System.out.println("Turnaround time: " + turnAroundTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
+			System.out.println("completion time: " + completionTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
 			//Free up memory for next process
 			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
 			pc++;

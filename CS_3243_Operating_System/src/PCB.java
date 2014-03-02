@@ -40,7 +40,7 @@ public class PCB {
 	//Turn around time
 	long startTime;
 	long endTime;
-	long turnAroundTime;
+	long completionTime;
 	
 	long timeLimit;
 	long timeDelay;
