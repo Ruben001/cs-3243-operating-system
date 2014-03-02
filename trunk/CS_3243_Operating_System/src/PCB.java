@@ -48,6 +48,8 @@ public class PCB {
 	
 	long waitTime;
 	long numberIO;
+	long ramUsage;
+	long cacheUsage;
 
 
 	public PCB() {
