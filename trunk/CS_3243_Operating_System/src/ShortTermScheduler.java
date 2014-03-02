@@ -44,7 +44,7 @@ public class ShortTermScheduler {
 		cpu.register = nProcess.registers;
 		
 		nProcess.state = ProcessState.RUNNING;
-		cpu.iRegister.clear();
+		cpu.cache.clear();
 		//Buffers
 		cpu.inputBufferAddress = nProcess.inputBufferAddress;
 		cpu.inputBufferLength = nProcess.inputBufferLength;
@@ -57,7 +57,7 @@ public class ShortTermScheduler {
 		//Turn around time
 		cpu.startTime = nProcess.startTime;
 		cpu.endTime = nProcess.endTime;
-		cpu.turnAroundTime = nProcess.turnAroundTime;
+		cpu.completionTime = nProcess.completionTime;
 		
 		cpu.waitTime = nProcess.waitTime;
 		cpu.numberIO = nProcess.numberIO;
@@ -70,7 +70,7 @@ public class ShortTermScheduler {
 		
 		//Once all the jobs are done you calculate averages 
 		if(readyQueue.size() == 0){
-			cpu.averageTurnAroundTime();
+			cpu.averagecompletionTime();
 			cpu.averageWaitTime();
 			cpu.averageNumberOfIORequests();
 			
