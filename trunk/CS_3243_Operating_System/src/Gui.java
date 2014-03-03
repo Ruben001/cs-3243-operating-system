@@ -6,7 +6,17 @@ import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.*;
 
-
+/**
+ * This class behaves as an Interface to the OSDriver
+ * It display results from the cpu to GUI console
+ * Group members:Corey Masters
+				Mitchell Byrd
+				Mohil Patel 
+				Rahat Shahwar
+				Ruben Munive
+				Ivan Mba
+ *
+ */
 public class Gui extends JFrame{	
 	
 	
@@ -89,7 +99,7 @@ public class Gui extends JFrame{
 		
 		
 		
-		start = new JButton("Run");
+		start = new JButton("Run OS");
 		
 		start.setBorder(labelBorder);
 		
@@ -135,7 +145,11 @@ public class Gui extends JFrame{
 		return finalLayout;
 
 		}
-
+	/**
+	 * Action listener for  button in Gui interface to run OS
+	 * 
+	 *
+	 */
 	public class StartHandler implements ActionListener
 	
 	{
@@ -167,7 +181,10 @@ public class Gui extends JFrame{
 		
 		
 	}
-	
+	/**
+	 * Main method for Gui.java
+	 * @param args
+	 */
 	
 	public static void main(String[] args) {
 

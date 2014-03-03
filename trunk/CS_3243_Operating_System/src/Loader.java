@@ -8,7 +8,12 @@ import java.util.Scanner;
  * @author wmasters
  */
 /**
- * @author wmasters
+ * Group members:Corey Masters
+				Mitchell Byrd
+				Mohil Patel 
+				Rahat Shahwar
+				Ruben Munive
+				Ivan Mba
  *
  */
 public final class Loader {

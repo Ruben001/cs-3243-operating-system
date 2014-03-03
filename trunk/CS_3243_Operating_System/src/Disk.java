@@ -1,6 +1,11 @@
 /**
  * Hard drive disk. Holds a fixed array of 2048 words of 32 bits each. 
- * @author wmasters
+ * Group members:Corey Masters
+				Mitchell Byrd
+				Mohil Patel 
+				Rahat Shahwar
+				Ruben Munive
+				Ivan Mba
  */
 public final class Disk {
 

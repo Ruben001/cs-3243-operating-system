@@ -1,5 +1,14 @@
 import java.util.ArrayList;
-
+/**
+ * This class behaves as Process Context Block
+ * Group members:Corey Masters
+				Mitchell Byrd
+				Mohil Patel 
+				Rahat Shahwar
+				Ruben Munive
+				Ivan Mba
+ *
+ */
 public class PCB {
 	
 	public int processId;
@@ -51,7 +60,9 @@ public class PCB {
 	long ramUsage;
 	long cacheUsage;
 
-
+	/**
+	 * Constructor for the PCB class
+	 */
 	public PCB() {
 		children = new ArrayList<PCB>();
 		registers = new long[16];

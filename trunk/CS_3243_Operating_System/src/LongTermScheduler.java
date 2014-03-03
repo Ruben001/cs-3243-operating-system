@@ -1,14 +1,33 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
+/**
+ * This class behaves as a Long Term Scheduler
+ * Group members:Corey Masters
+				Mitchell Byrd
+				Mohil Patel 
+				Rahat Shahwar
+				Ruben Munive
+				Ivan Mba
+ *
+ */
 public class LongTermScheduler {
-	private Disk disk;
+	/*
+	 * Field variables for LongTermScheduler
+	 */
+	private Disk disk; 
 	private Memory memory;
 	private ArrayList<PCB> pcbList;
 	private ArrayList<PCB> readyQueue;
 	private SchedulingAlgorithm algorithm;
-	
+	/**
+	 * Constructor for LongTermScheduler
+	 * @param takes in disk
+	 * @param takes in memory
+	 * @param takes in pcbList
+	 * @param takes in readyQueue
+	 * @param take is scheduling algorithm
+	 */
 	public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
 		this.disk = disk;
 		this.memory = memory;
@@ -16,7 +35,10 @@ public class LongTermScheduler {
 		this.readyQueue = readyQueue;
 		this.algorithm = algo;
 	}
-	
+	/**
+	 * This methods selects the proper method for scheduling i.e. FCFS, Priority, or SJF
+	 * 
+	 */
 	public void schedule() {
 		switch(algorithm)
 		{
@@ -34,7 +56,10 @@ public class LongTermScheduler {
 			break;
 		}
 	}
-	
+	/**
+	 * This method behaves as FCFS
+	 * It sorts job according to the first come first serve rule
+	 */
 	private void fcfsSchedule() {
 		while (true) {
 			if (pcbList.size() == 0)
@@ -71,7 +96,10 @@ public class LongTermScheduler {
 		
 		
 	}
-	
+	/**
+	 * This method behaves as PrioritySchedule
+	 * It sorts job according to the priority of the jobs
+	 */
 	private void prioritySchedule() {
 		ArrayList<PCB> priorityList = (ArrayList<PCB>)pcbList.clone();
 		Collections.sort(priorityList, new Comparator<PCB>() {
@@ -110,7 +138,10 @@ public class LongTermScheduler {
 			pcbList.remove(pcb);
 		}
 	}
-
+	/**
+	 * This method behaves as Shortest Job First
+	 * It sorts job according to the shortest job first
+	 */
 	private void shortestJobFirstSchedule() {
 		ArrayList<PCB> priorityList = (ArrayList<PCB>)pcbList.clone();
 		Collections.sort(priorityList, new Comparator<PCB>() {
