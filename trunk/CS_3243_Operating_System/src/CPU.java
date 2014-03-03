@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -62,6 +63,7 @@ public class CPU {
 	public ArrayList<Long> numberIOList;
 	long numberIO;
 	
+	DecimalFormat form = new DecimalFormat("#.00");
 	
 	
 	//Calculates the average completion time
@@ -72,7 +74,7 @@ public class CPU {
 		while(0 < completionTimeList.size()){
 			averagecompletionTime += completionTimeList.remove(0);
 		}
-		answer = averagecompletionTime/numberOfProcesses;
+		answer = Double.valueOf(form.format(averagecompletionTime/numberOfProcesses));
 		
 		try{
 			
@@ -95,14 +97,13 @@ public class CPU {
 	//Calculates the average wait time
 	public void averageWaitTime(){
 		
-		long averageWaitTime = 0;
-		long numberOfProcesses = waitTimeList.size();
-		long answer = 0;
+		double averageWaitTime = 0;
+		double numberOfProcesses = waitTimeList.size();
+		double answer = 0;
 		while(0 < waitTimeList.size()){
 			averageWaitTime += waitTimeList.remove(0);
 		}
-		answer = averageWaitTime/numberOfProcesses;
-		
+		answer = Double.valueOf(form.format(averageWaitTime/numberOfProcesses));
 		try{
 			
 			FileOutputStream fos = new FileOutputStream("results.txt",true);
@@ -124,14 +125,13 @@ public class CPU {
 	}
 	//Calculates the average number of IO requests
 	public void averageNumberOfIORequests(){
-		long averageNumberOfIO = 0;
-		long numberOfIO = numberIOList.size();
-		long answer = 0;
+		double averageNumberOfIO = 0;
+		double numberOfIO = numberIOList.size();
+		double answer = 0;
 		while(0 < numberIOList.size()){
 			averageNumberOfIO += numberIOList.remove(0);
 		}	
-		answer = averageNumberOfIO/numberOfIO;
-		
+		answer = Double.valueOf(form.format(averageNumberOfIO/numberOfIO));
 		try{
 			
 			FileOutputStream fos = new FileOutputStream("results.txt",true);
@@ -162,8 +162,7 @@ public class CPU {
 			while(0 < ramUsageList.size()){
 				averageRamUsageTime += ramUsageList.remove(0);
 			}
-			answer = averageRamUsageTime/numberOfProcesses;
-			
+			answer = Double.valueOf(form.format(averageRamUsageTime/numberOfProcesses));
 			try{
 				
 				FileOutputStream fos = new FileOutputStream("results.txt",true);
@@ -193,8 +192,8 @@ public class CPU {
 				while(0 < cacheUsageList.size()){
 					averageCacheUsageTime += cacheUsageList.remove(0);
 				}
-				answer = averageCacheUsageTime/numberOfProcesses;
 				
+				answer = Double.valueOf(form.format(averageCacheUsageTime/numberOfProcesses));
 				try{
 					
 					FileOutputStream fos = new FileOutputStream("results.txt",true);
