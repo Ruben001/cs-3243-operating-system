@@ -1,5 +1,19 @@
 import java.util.ArrayList;
 
+/**
+ * The Short term scheduler keeps its scheduling algorithms that 
+ * are called by ScheduleAndDispatch().  The dispatcher puts jobs 
+ * into the CPU according to he algorithm used.
+ * 
+ * @Group Members Corey Masters
+ * 			Mitchell Byrd
+ * 			Mohil Patel 
+ * 			Rahat Shahwar
+ * 			Ruben Munive
+ * 			Ivan Mba
+ */
+
+
 public class ShortTermScheduler {
 	private static CPU cpu;
 	private Memory memory;
@@ -8,11 +22,12 @@ public class ShortTermScheduler {
 	
 	private PCB currentProcess;
 	private PCB nextProcess;
-	
+	//
 	private ArrayList<PCB> readyQueue;
 	private int currentQIndex;
 	private SchedulingAlgorithm algorithm;
 	
+	//Constructor
 	public ShortTermScheduler(CPU cpu,LongTermScheduler ltScheduler,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
 		this.cpu = cpu;
 		this.ltScheduler = ltScheduler;
@@ -29,21 +44,21 @@ public class ShortTermScheduler {
 		//CPU time
 				cpu.cpuStartTime = nProcess.startTime;
 				cpu.cpuEndTime = nProcess.endTime;
-				cpu.cpuBurstTime = nProcess.cpuBurstTime;
 		//If its the first time the job gets the CPU
 		if(nProcess.pc == 0){
 			cpu.cpuStartTime = System.currentTimeMillis();
 		}
 		
-		
+		//Sets the CPU variables from the PCB
 		cpu.pc = nProcess.pc;
 		cpu.priority = nProcess.priority;
 		cpu.processAddress = nProcess.jobFileAddress;
 		cpu.processLength = nProcess.jobFileLength;
 		cpu.processId = nProcess.processId;
 		cpu.register = nProcess.registers;
-		
+		//
 		nProcess.state = ProcessState.RUNNING;
+		
 		cpu.cache.clear();
 		//Buffers
 		cpu.inputBufferAddress = nProcess.inputBufferAddress;
