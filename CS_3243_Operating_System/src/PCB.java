@@ -37,7 +37,9 @@ public class PCB {
 	
 	// registers
 	public long[] registers;
-	public ArrayList<boolean[]> iRegister;
+	
+	//Cache
+	public ArrayList<boolean[]> cache; // field variable for CPU cache
 	
 	//Time
 	
@@ -66,7 +68,7 @@ public class PCB {
 	public PCB() {
 		children = new ArrayList<PCB>();
 		registers = new long[16];
-		iRegister = new ArrayList<boolean[]>();
+		cache = new ArrayList<boolean[]>();
 		pc = 0;
 	}
 	
