@@ -33,7 +33,6 @@ public class CPU {
 	//Process CPU time
 	long cpuStartTime;
 	long cpuEndTime;
-	long cpuBurstTime;
 	
 	//Process start time and end time
 	long startTime;
