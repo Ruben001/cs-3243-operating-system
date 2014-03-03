@@ -25,6 +25,7 @@ public class ShortTermScheduler {
 	//
 	private ArrayList<PCB> readyQueue;
 	private int currentQIndex;
+	
 	private SchedulingAlgorithm algorithm;
 	
 	//Constructor
