@@ -56,10 +56,10 @@ public class ShortTermScheduler {
 		cpu.processLength = nProcess.jobFileLength;
 		cpu.processId = nProcess.processId;
 		cpu.register = nProcess.registers;
-		//
+		//sets the statues to Running
 		nProcess.state = ProcessState.RUNNING;
-		
-		cpu.cache.clear();
+		//Brings in the cache
+		cpu.cache = nProcess.cache;
 		//Buffers
 		cpu.inputBufferAddress = nProcess.inputBufferAddress;
 		cpu.inputBufferLength = nProcess.inputBufferLength;
