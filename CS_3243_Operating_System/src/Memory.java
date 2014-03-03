@@ -1,7 +1,12 @@
 
 /**
  * The Memory/Ram of the virtual computer.
- * @author wmasters
+ *Group members:Corey Masters
+				Mitchell Byrd
+				Mohil Patel 
+				Rahat Shahwar
+				Ruben Munive
+				Ivan Mba
  */
 public final class Memory {
 

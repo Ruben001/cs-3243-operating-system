@@ -4,31 +4,43 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
- * CPU 
- * @author rmunive
+ * This class behaves as a CPU in this simulator.
+ * It fetches jobs, decodes jobs, and executes job.
+ * Group members:Corey Masters
+				Mitchell Byrd
+				Mohil Patel 
+				Rahat Shahwar
+				Ruben Munive
+				Ivan Mba
  */
 
 
 public class CPU {
-	private static Memory memory;
-	public ArrayList<boolean[]> cache;
+	private static Memory memory; // field variable for Memory
+
+	//int MemoryFootprint;
+	private ArrayList<PCB> pcbList; // field variable for PCB List
+	private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
+	public ArrayList<boolean[]> cache; // field variable for CPU cache
+
+
 	
 	
 	
 	//Registers
 	static int pc; // this variable is a program counter 
-	static long[] register;
+	static long[] register; // field variables for Register in CPU
 	
-	static int baseRegister;
-	static int limitRegister;
+	static int baseRegister; // base register not implemented
+	static int limitRegister; // limit register not implemented
 	
 	//Time
-	public ArrayList<Long> completionTimeList;
-	public ArrayList<Long> waitTimeList;
+	public ArrayList<Long> completionTimeList; // field variable to keep track of processes completion time
+	public ArrayList<Long> waitTimeList; // field variable to keep track of processes waiting time
 	
 	
 	
-	long waitTime;
+	long waitTime; // field variable for wait time 
 	
 	//Process CPU time
 	long cpuStartTime;
@@ -38,10 +50,11 @@ public class CPU {
 	long startTime;
 	long endTime;
 	long completionTime;
-	
-	public ArrayList<Long> ramUsageList;
+	//keeps track of RAM usage
+	public ArrayList<Long> ramUsageList; 
 	long ramUsage;
-	public ArrayList<Long> cacheUsageList;
+	//keeps track of Cache usage
+	public ArrayList<Long> cacheUsageList; // field
 	long cacheUsage;
 	
 	
@@ -234,7 +247,11 @@ public class CPU {
 	int reg1;
 	int reg2;
 	
-	
+	/**
+	 * Construct for the CPU
+	 * @param takes in memory
+	 * @param takes in stScheduler
+	 */
 	public CPU( Memory memory, ShortTermScheduler stScheduler){
 		
 		this.memory = memory;
@@ -249,6 +266,9 @@ public class CPU {
 		waitTimeList = new ArrayList<Long>();
 		numberIOList = new ArrayList<Long>();
 	}
+	/*
+	 * This method begins CPU
+	 */
 	public void begin(){
 		
 		
@@ -286,11 +306,18 @@ public class CPU {
 		}
 		
 	}
+	/**
+	 * This method fetches an instruction from the Memory
+	 * @param takes in memory address
+	 */
 	private void fetch(int lineRam){
 		setCache(memory.readBinaryData(lineRam));
 		ramUsage++;
 	}
-	
+	/**
+	 * This is a setter for cache
+	 * @param takes in a binaryArray of boolean
+	 */
 	private void setCache(boolean[] binaryArray){
 		cache.add(binaryArray);
 	}

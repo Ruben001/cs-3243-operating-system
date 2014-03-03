@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,25 +7,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+/**
+ * OSDriver is the main class to run this program. 
+ * It can also be run through Gui.java to run with graphical interface.
+ * Group members:Corey Masters
+				Mitchell Byrd
+				Mohil Patel 
+				Rahat Shahwar
+				Ruben Munive
+				Ivan Mba
+ 
+ */
 
 
-
-public class OSDriver {
+public class OSDriver implements Runnable{
 	
-	private static CPU cpu;
-	private static Disk disk;
-	private static Memory memory;
-	private static LongTermScheduler ltScheduler;
-	private static ShortTermScheduler stScheduler;
-	public static String content;
-	private static String filename;
+	private static CPU cpu; // CPU field varaible
+	private static Disk disk; // Disk field variable
+	private static Memory memory; //Memory field variable
+	private static LongTermScheduler ltScheduler; //LongTermScheduler field variable
+	private static ShortTermScheduler stScheduler; // ShortTermScheduler field variable
+	public static String content;  // this variable is used to return result to GUI interface
+	private static String filename; // this variable gets the the filename from GUI interface to run
 	// list of all PCB's remaining in the disk
-	private static ArrayList<PCB> pcbList;
+	private static ArrayList<PCB> pcbList; // ArrayList of PCB class, it behaves as list of PCB
 	
 	// queues
-	private static ArrayList<PCB> readyQueue;
+	private static ArrayList<PCB> readyQueue; // ArrayList of readyQueue
 	
+	private static Thread longtermSchedulingThread; // Thread has not been implemented yet
 	
+	/**
+	 * It is setter method to filename
+	 * @param it takes in string value as a filename
+	 */
 	public static void setFileName(String name){
 		
 		filename = name;
@@ -32,21 +48,27 @@ public class OSDriver {
 	}
 	
 	
-	
+	/**
+	 * Main method for the class OSDriver
+	 * 
+	 */
 	public static void main(String[] args) {
 		// initialize components
-		disk = new Disk();
-		memory = new Memory();
-		cpu = new CPU(memory,stScheduler);
-		pcbList = new ArrayList<PCB>();
-		readyQueue = new ArrayList<PCB>();
+		disk = new Disk(); // initiated disk
+		memory = new Memory(); // initiated memory
+		cpu = new CPU(memory,stScheduler); // initiated cpu
+		pcbList = new ArrayList<PCB>(); // initiated pcbList
+		readyQueue = new ArrayList<PCB>(); // initiated readyQueue
 		
 		//filename = "DataFile2-Cleaned.txt";//if you don't want to use the GUI, uncomment this line
 
-		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS);
-		stScheduler = new ShortTermScheduler(cpu,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS);
+		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
+		stScheduler = new ShortTermScheduler(cpu,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS); // initiated stScheduler
 		// call the loader to load the job file into the Disk
 		
+		/**
+		 * Initiated loader and loads it
+		 */
 		try{
 		Loader loader = new Loader(filename, disk, pcbList);
 		loader.load();
@@ -63,11 +85,13 @@ public class OSDriver {
 		
 		
 		
-		ltScheduler.schedule();
-		stScheduler.ScheduleAndDispatch();
+		ltScheduler.schedule(); // calls schedule method to process a FCFS, Priority, Shortest Job First
+		stScheduler.ScheduleAndDispatch(); // it calls the short term scheduler and dispatch jobs
 		
 		content = "";
-		
+		/**
+		 * This block of codes get the results from cpu and display on the GUI console
+		 */
 		try{
 			
 			File f = new File("results.txt");
@@ -102,6 +126,16 @@ public class OSDriver {
 			ioe.printStackTrace();
 		}
 		return;
+	}
+
+
+	/**
+	 * This method is not implemented yet
+	 */
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
