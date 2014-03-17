@@ -86,17 +86,13 @@ public class LongTermScheduler {
 	 * It sorts job according to the first come first serve rule
 	 */
 	private void fcfsSchedule() {
-		int count = 0;
 		while (true) {
 			if (pcbList.size() == 0)
 				return;
 			int[] memoryChunk = memory.GetLargestMemoryChunk();
 			if (memoryChunk[1] < pcbList.get(0).getMemoryFootprint())
 				return;
-			count++;
 			PCB pcb = pcbList.get(0);
-			//System.out.println(pcbList.get(0));
-			//System.out.println("Size of job is " + pcbList.get(0).getMemoryFootprint() );
 			int memoryIndex = memoryChunk[0];
 			int tempIndex = memoryIndex;
 			for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
@@ -121,7 +117,6 @@ public class LongTermScheduler {
 			readyQueue.add(pcb);
 			pcb.startTime = System.currentTimeMillis();
 			pcbList.remove(pcb);
-			System.out.println(count);
 		}
 		
 		
