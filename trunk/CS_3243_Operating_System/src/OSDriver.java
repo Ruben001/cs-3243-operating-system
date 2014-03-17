@@ -62,7 +62,7 @@ public class OSDriver implements Runnable{
 		
 		//filename = "DataFile2-Cleaned.txt";//if you don't want to use the GUI, uncomment this line
 
-		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.SJF); // initiated ltScheduler
+		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
 		stScheduler = new ShortTermScheduler(cpu,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS); // initiated stScheduler
 		// call the loader to load the job file into the Disk
 		
