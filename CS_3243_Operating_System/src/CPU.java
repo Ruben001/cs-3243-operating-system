@@ -16,15 +16,16 @@ import java.util.ArrayList;
  */
 
 
-public class CPU {
+public class CPU implements Runnable {
 	private static Memory memory; // field variable for Memory
 
 	//int MemoryFootprint;
-	private ArrayList<PCB> pcbList; // field variable for PCB List
 	private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
 	public ArrayList<boolean[]> cache; // field variable for CPU cache
 
-
+	//Holds jobs PCB
+	public ArrayList<PCB> pcbHolder;
+	
 	
 	
 	
@@ -152,8 +153,6 @@ public class CPU {
 
 		}
 	
-	
-	
 	//Calculates the average Ram Usage time
 		public void averageRamUsageTime(){
 			double averageRamUsageTime = 0;
@@ -182,8 +181,6 @@ public class CPU {
 			//System.out.println("\nAverage completion time: " + answer);
 		}
 	
-	
-
 		//Calculates the average Cache Usage time
 			public void averageCacheUsageTime(){
 				double averageCacheUsageTime = 0;
@@ -258,6 +255,7 @@ public class CPU {
 		
 		register = new long[16];
 		cache = new ArrayList<boolean[]>();
+		pcbHolder = new ArrayList<PCB>();
 		//Average Times
 		completionTimeList = new ArrayList<Long>();
 		ramUsageList = new ArrayList<Long>();
@@ -268,6 +266,11 @@ public class CPU {
 	/*
 	 * This method begins CPU
 	 */
+	public void run(){
+		
+		begin();
+		
+	}
 	public void begin(){
 		
 		
@@ -305,6 +308,8 @@ public class CPU {
 		}
 		
 	}
+	
+	
 	/**
 	 * This method fetches an instruction from the Memory
 	 * @param takes in memory address
