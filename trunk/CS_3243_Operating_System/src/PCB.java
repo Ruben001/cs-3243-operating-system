@@ -9,6 +9,10 @@ import java.util.ArrayList;
 				Ivan Mba
  *
  */
+/**
+ * @author RAMI
+ *
+ */
 public class PCB {
 	
 	public int processId;
@@ -71,7 +75,7 @@ public class PCB {
 		cache = new ArrayList<boolean[]>();
 		pc = 0;
 	}
-	
+
 	/**
 	 * Returns the estimated memory footprint of the process associated with this PCB. 
 	 * @return estimated memory footprint
@@ -81,7 +85,39 @@ public class PCB {
 	}
 	
 	
+	/**
+	 * Gets Process State - interested in the running state of process currently running on CPU
+	 * @return
+	 */
+	public ProcessState getState() {
+		return state;
+	}
+
+	/**
+	 * Sets Process State -interested in setting state of process currently running on CPU i.e. swapping
+	 * 
+	 */
+
+	public void setState(ProcessState state) {
+		this.state = state;
+	}
+
+
+    /**
+     * Gets the priority of the process currently running on CPU -
+     *
+     * @return The priority of the running process.
+     */
+	public int getPriority() {
+		return priority;
 		
+		//TODO as interested in priority of process running on cpu, 
+		//to see if good to have a list of running processes ordered by priority and size
+	}
+	
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}	
 		
 	
 	
