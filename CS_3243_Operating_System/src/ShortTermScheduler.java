@@ -138,6 +138,7 @@ public class ShortTermScheduler {
 			cpu.cacheUsage = nProcess.cacheUsage;
 			//Gives jobs PCB to CPU
 			cpu.pcbHolder.add(nProcess);
+			
 			cpu.begin();
 			//Long term scheduler runs again if the Ready queue falls under 5 jobs
 			if(readyQueue.size() < 5){
