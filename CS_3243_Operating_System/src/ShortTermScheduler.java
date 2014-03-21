@@ -186,6 +186,11 @@ public class ShortTermScheduler {
 			//Long term scheduler runs again if the Ready queue falls under 5 jobs
 			if(readyQueue.size() < 5){
 				ltScheduler.schedule();
+				
+			/** Phase 1 -Part 2 NON PRE EMPTIVE each of 4 cpu threads upon finishing a job call stScheduler 
+			 * to get the next job from one readyQueue   
+			 *  TO DO-To Lock readyQueue so that at one time only one thread access readyQueue 
+			*/  
 			}
 			
 			//Once all the jobs are done you calculate averages 
