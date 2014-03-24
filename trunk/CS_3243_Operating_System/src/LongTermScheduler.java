@@ -75,6 +75,23 @@ public class LongTermScheduler {
 		}
       
     }
+	
+	
+	
+	
+	/**
+	 * This method sorts an arrayList of jobs
+	 * It sorts jobs in ascending order
+	 */
+	private static class PriorityComparator implements Comparator<PCB>{
+
+		@Override
+		public int compare(PCB o1, PCB o2) {
+			return (o1.priority < o2.priority ) ? -1: (o1.priority > o2.priority) ? 1:0 ;
+	
+		}
+      
+    }
 
 	
 	
@@ -131,42 +148,60 @@ public class LongTermScheduler {
 	 * It sorts job according to the priority of the jobs
 	 */
 	private void prioritySchedule() {
-		ArrayList<PCB> priorityList2 = (ArrayList<PCB>)pcbList.clone();
-		Collections.sort(priorityList2, new Comparator<PCB>() {
-			@Override
-			public int compare(PCB p1, PCB p2) {
-				if (p1.priority == p2.priority)
-					return 0;
-				if (p1.priority > p2.priority)
-					return 1;
-				return -1;
-			}
-		});
+		ArrayList<PCB> priorityList = new ArrayList<PCB>(pcbList);
+		
+		System.out.println("initial list");
+		
+		for(int i=0; i<priorityList.size();i++)
+			System.out.println(priorityList.get(i).getMemoryFootprint());
+		
+		
+		
+		Collections.sort(priorityList, new PriorityComparator());
+		
+		System.out.println("priority list");
+		
+		for(int i=0; i<priorityList.size();i++)
+			System.out.println(priorityList.get(i).getPriority());
+				
+		int count=0;
 		while (true) {
-			if (priorityList2.size() == 0)
+			if (priorityList.size() == 0)
 				return;
 			int[] memoryChunk = memory.GetLargestMemoryChunk();
-			if (memoryChunk[1] < pcbList.get(0).getMemoryFootprint())
+			if (memoryChunk[1] < priorityList.get(0).getMemoryFootprint()){
+				System.out.println("return called here");
 				return;
-			System.out.println("Hello");
-			PCB pcb = priorityList2.get(0);
+			}
+			
+			count++;
+			PCB pcb = priorityList.get(0);
 			int memoryIndex = memoryChunk[0];
+			int tempIndex = memoryIndex;
 			for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
+			pcb.jobFileAddress = tempIndex;
+			tempIndex = memoryIndex;
 			for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
+			pcb.inputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
 			for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
+			pcb.outputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
 			for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
 				memory.writeData(memoryIndex++, disk.readData(i));
 			}
+			pcb.tempBufferAddress = tempIndex;
 			readyQueue.add(pcb);
 			pcb.startTime = System.currentTimeMillis();
-			priorityList2.remove(pcb);
 			pcbList.remove(pcb);
+			priorityList.remove(pcb);
+			System.out.println(count);
 		}
 	}
 	/**
@@ -198,9 +233,8 @@ public class LongTermScheduler {
 			if (priorityList.size() == 0)
 				return;
 			int[] memoryChunk = memory.GetLargestMemoryChunk();
-			if (memoryChunk[1] < pcbList.get(0).getMemoryFootprint()){
+			if (memoryChunk[1] < priorityList.get(0).getMemoryFootprint()){
 				System.out.println("Return called here");
-				System.out.println("Size of job is " + priorityList.get(0).getMemoryFootprint() );
 				return;
 			}
 			
