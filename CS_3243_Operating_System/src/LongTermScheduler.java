@@ -40,6 +40,9 @@ public class LongTermScheduler implements Runnable{
 	
 	
 	public void run(){
+		
+		schedule();
+	}	
 	/**
 	 * This methods selects the proper method for scheduling i.e. FCFS, Priority, or SJF
 	 * 
@@ -63,7 +66,7 @@ public class LongTermScheduler implements Runnable{
 	}
 	
 	
-	
+	}	
 	
 
 	/**
