@@ -99,9 +99,9 @@ public class OSDriver{
 		
 		//ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
 
-		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.SJF); // initiated ltScheduler
+		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
 
-		stScheduler = new ShortTermScheduler(dispatcher,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.SJF, averageCalculator); // initiated stScheduler
+		stScheduler = new ShortTermScheduler(dispatcher,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS, averageCalculator); // initiated stScheduler
 		// call the loader to load the job file into the Disk
 		
 		//filename = "DataFile2-Cleaned.txt";

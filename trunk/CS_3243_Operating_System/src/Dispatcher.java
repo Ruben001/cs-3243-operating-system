@@ -15,7 +15,7 @@ import java.util.concurrent.Semaphore;
 public  class  Dispatcher {
 	
 	//Lock that has to be acquired to access this class is created 
-	static Semaphore writeLock = new Semaphore(1);
+	static Semaphore dispatcherLock = new Semaphore(1);
 	
 	//set to true when there is a job for the CPU 
 	private  boolean cpuHasProcess = false;

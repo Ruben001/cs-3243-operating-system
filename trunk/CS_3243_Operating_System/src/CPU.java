@@ -153,7 +153,7 @@ public class CPU implements Runnable {
 			
 			
 			try {
-				dispatcher.writeLock.acquire();
+				dispatcher.dispatcherLock.acquire();
 				//writeLock.acquire();
 				
 			} catch (InterruptedException e) {
@@ -165,7 +165,7 @@ public class CPU implements Runnable {
 				dispatcher.setHasProcessForCPU(false);
 				this.begin();
 			}
-			dispatcher.writeLock.release();
+			dispatcher.dispatcherLock.release();
 			//writeLock.release();
 			try {
 				Thread.sleep(10);
@@ -233,7 +233,14 @@ public class CPU implements Runnable {
 	 * @param takes in memory address
 	 */
 	private void fetch(int lineRam){
+		try {
+			memory.memoryLock.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setCache(memory.readBinaryData(lineRam));
+		memory.memoryLock.release();
 		ramUsage++;
 	}
 	/**
@@ -454,13 +461,27 @@ public class CPU implements Runnable {
 			ramUsage++;
 			numberIO++;
 			if(address > 0){
+				try {
+					memory.memoryLock.acquire();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				register[reg1] = memory.readData(inputBufferAddress);
+				memory.memoryLock.release();
 				pc++;
 				break;
 				
 			}
 			else{
+				try {
+					memory.memoryLock.acquire();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				register[reg1] = memory.readData((int)register[reg2]);
+				memory.memoryLock.release();
 				pc++;
 				break;
 			}
@@ -471,20 +492,41 @@ public class CPU implements Runnable {
 			//Writes the content of accumulator into O/P buffer
 			ramUsage++;
 			numberIO++;
+			try {
+				memory.memoryLock.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			memory.writeData(outputBufferAddress, register[reg1]);
+			memory.memoryLock.release();
 			pc++;
 			break;
 			
 		case "000010"://2
 			//System.out.println("Instruction: ST  Type: I" );
 			//Stores content of a reg. into an address
+			try {
+				memory.memoryLock.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			memory.writeData((int)register[dReg], register[bReg]);
+			memory.memoryLock.release();
 			pc++;
 			break;
 		case "000011"://3
 			//System.out.println("Instruction: LW  Type: I" );
 			//Loads the content of an address into a reg.
+			try {
+				memory.memoryLock.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			register[dReg] = memory.readData((int)register[bReg]);
+			memory.memoryLock.release();
 			pc++;
 			break;
 		case "000100"://4
@@ -497,6 +539,7 @@ public class CPU implements Runnable {
 			//System.out.println("Instruction: ADD  Type: R" );
 			//Adds content of two S-regs into D-reg
 			register[dReg] = register[s1Reg] + register[s2Reg];
+			
 			pc++;
 			break;
 			
@@ -682,19 +725,33 @@ public class CPU implements Runnable {
 			//Process turn around time
 			//completionTime = endTime - startTime;
 			//completionTimeList.add(completionTime);
-			averageCalculator.addToCompletionTimeList(completionTime);
+			
 			//Process wait time
 			waitTime = cpuStartTime - startTime;
 			//waitTimeList.add(waitTime);
-			averageCalculator.addToWaitTimeList(waitTime);
+			
 			//number of IO requests put onto a Array
 			//numberIOList.add(numberIO);
-			averageCalculator.addToNumberIOList(numberIO);
+			
 			
 			//ramUsageList.add(ramUsage);
-			averageCalculator.addToRamUsageListt(ramUsage);
+			
 			//cacheUsageList.add(cacheUsage);
+			
+			try {
+				averageCalculator.calculatorLock.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			averageCalculator.addToCompletionTimeList(completionTime);
+			averageCalculator.addToWaitTimeList(waitTime);
+			averageCalculator.addToNumberIOList(numberIO);
+			averageCalculator.addToRamUsageListt(ramUsage);
 			averageCalculator.addToCacheUsageList(cacheUsage);
+			
+			averageCalculator.calculatorLock.release();
 			
 			System.out.println("completion time: " + completionTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
 			try{
