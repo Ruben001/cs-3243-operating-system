@@ -79,6 +79,12 @@ public class ShortTermScheduler {
 		
 		//Once all the jobs are done you calculate averages 
 				if(readyQueue.size() == 0){
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					averageCalculator.averagecompletionTime();
 					averageCalculator.averageWaitTime();
 					averageCalculator.averageNumberOfIORequests();
