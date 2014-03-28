@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 /**
  * This class behaves as a CPU in this simulator.
@@ -18,16 +19,35 @@ import java.util.ArrayList;
 
 public class CPU implements Runnable {
 	private static Memory memory; // field variable for Memory
-
+	public static Dispatcher dispatcher;
+	public static AverageCalculator averageCalculator;
 	//int MemoryFootprint;
-	private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
+	//private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
 	public ArrayList<boolean[]> cache; // field variable for CPU cache
 
 	//Holds jobs PCB
 	public ArrayList<PCB> pcbHolder;
 	
+	/*
+	 * Phase 1 part-2
+	 * If false the CPU does not do anything.  
+	 * The dispatcher sets to true once it give a process to the CPU
+	 */
+	/*
+	volatile boolean cpuIsRunning = true;
+	volatile boolean cpuHasProcess = false;
+	volatile boolean processIsDone = false;
 	
+	public synchronized void setCPUHasProcess(boolean has){
+		this.cpuHasProcess = has;
+	}
 	
+	public synchronized boolean getCPUHasProcess(){
+		return this.cpuHasProcess;
+	}
+	*/
+	
+	private int cpuNumber = 0;
 	
 	//Registers
 	static int pc; // this variable is a program counter 
@@ -36,10 +56,11 @@ public class CPU implements Runnable {
 	static int baseRegister; // base register not implemented
 	static int limitRegister; // limit register not implemented
 	
+	/*
 	//Time
 	public ArrayList<Long> completionTimeList; // field variable to keep track of processes completion time
 	public ArrayList<Long> waitTimeList; // field variable to keep track of processes waiting time
-	
+	*/
 	
 	
 	long waitTime; // field variable for wait time 
@@ -56,162 +77,15 @@ public class CPU implements Runnable {
 	public ArrayList<Long> ramUsageList; 
 	long ramUsage;
 	//keeps track of Cache usage
-	public ArrayList<Long> cacheUsageList; // field
+	//public ArrayList<Long> cacheUsageList; // field
 	long cacheUsage;
 	
 	
 	//Number of IO requests
-	public ArrayList<Long> numberIOList;
+	//public ArrayList<Long> numberIOList;
 	long numberIO;
 	
 	DecimalFormat form = new DecimalFormat("#.00");
-	
-	
-	//Calculates the average completion time
-	public void averagecompletionTime(){
-		double averagecompletionTime = 0;
-		double numberOfProcesses = completionTimeList.size();
-		double answer = 0;
-		while(0 < completionTimeList.size()){
-			averagecompletionTime += completionTimeList.remove(0);
-		}
-		answer = Double.valueOf(form.format(averagecompletionTime/numberOfProcesses));
-		
-		try{
-			
-			FileOutputStream fos = new FileOutputStream("results.txt",true);
-			PrintWriter pw = new PrintWriter( fos );
-			
-			pw.print("\nAverage completion time: ");
-			pw.print(answer);
-			pw.println();
-			pw.close();
-		}
-		catch(FileNotFoundException fnfe){
-			
-			fnfe.printStackTrace();
-			
-			
-		}
-		//System.out.println("\nAverage completion time: " + answer);
-	}
-	//Calculates the average wait time
-	public void averageWaitTime(){
-		
-		double averageWaitTime = 0;
-		double numberOfProcesses = waitTimeList.size();
-		double answer = 0;
-		while(0 < waitTimeList.size()){
-			averageWaitTime += waitTimeList.remove(0);
-		}
-		answer = Double.valueOf(form.format(averageWaitTime/numberOfProcesses));
-		try{
-			
-			FileOutputStream fos = new FileOutputStream("results.txt",true);
-			PrintWriter pw = new PrintWriter( fos );
-			
-			pw.print("\nAverage wait time: ");
-			pw.print(answer);
-			pw.println();
-			pw.close();
-		}
-		catch(FileNotFoundException fnfe){
-			
-			fnfe.printStackTrace();
-			
-			
-		}
-		//System.out.println("Average wait time: " + answer);
-
-	}
-	//Calculates the average number of IO requests
-	public void averageNumberOfIORequests(){
-		double averageNumberOfIO = 0;
-		double numberOfIO = numberIOList.size();
-		double answer = 0;
-		while(0 < numberIOList.size()){
-			averageNumberOfIO += numberIOList.remove(0);
-		}	
-		answer = Double.valueOf(form.format(averageNumberOfIO/numberOfIO));
-		try{
-			
-			FileOutputStream fos = new FileOutputStream("results.txt",true);
-			PrintWriter pw = new PrintWriter( fos );
-			
-			pw.print("\nAverage IO requests: ");
-			pw.print(answer);
-			pw.println();
-			pw.close();
-		}
-		catch(FileNotFoundException fnfe){
-			
-			fnfe.printStackTrace();
-			
-			
-		}
-		//System.out.println("Average IO requests: " + answer);
-
-		}
-	
-	//Calculates the average Ram Usage time
-		public void averageRamUsageTime(){
-			double averageRamUsageTime = 0;
-			double numberOfProcesses = ramUsageList.size();
-			double answer = 0;
-			while(0 < ramUsageList.size()){
-				averageRamUsageTime += ramUsageList.remove(0);
-			}
-			answer = Double.valueOf(form.format(averageRamUsageTime/numberOfProcesses));
-			try{
-				
-				FileOutputStream fos = new FileOutputStream("results.txt",true);
-				PrintWriter pw = new PrintWriter( fos );
-				
-				pw.print("\nAverage Ram usage time: ");
-				pw.print(answer);
-				pw.println();
-				pw.close();
-			}
-			catch(FileNotFoundException fnfe){
-				
-				fnfe.printStackTrace();
-				
-				
-			}
-			//System.out.println("\nAverage completion time: " + answer);
-		}
-	
-		//Calculates the average Cache Usage time
-			public void averageCacheUsageTime(){
-				double averageCacheUsageTime = 0;
-				double numberOfProcesses = cacheUsageList.size();
-				double answer = 0;
-				while(0 < cacheUsageList.size()){
-					averageCacheUsageTime += cacheUsageList.remove(0);
-				}
-				
-				answer = Double.valueOf(form.format(averageCacheUsageTime/numberOfProcesses));
-				try{
-					
-					FileOutputStream fos = new FileOutputStream("results.txt",true);
-					PrintWriter pw = new PrintWriter( fos );
-					
-					pw.print("\nAverage Cache usage time: ");
-					pw.print(answer);
-					pw.println();
-					pw.close();
-				}
-				catch(FileNotFoundException fnfe){
-					
-					fnfe.printStackTrace();
-					
-					
-				}
-				//System.out.println("\nAverage completion time: " + answer);
-			}
-		
-		
-	
 	
 	
 	//Process 
@@ -248,32 +122,74 @@ public class CPU implements Runnable {
 	 * @param takes in memory
 	 * @param takes in stScheduler
 	 */
-	public CPU( Memory memory, ShortTermScheduler stScheduler){
+	public CPU( int cpuNumber, Memory memory, Dispatcher dispatcher, AverageCalculator averageCalculator){
+		this.cpuNumber = cpuNumber;
+		this.averageCalculator = averageCalculator;
+		this.dispatcher = dispatcher;
 		
 		this.memory = memory;
-		
-		
 		register = new long[16];
 		cache = new ArrayList<boolean[]>();
 		pcbHolder = new ArrayList<PCB>();
+		/*
 		//Average Times
 		completionTimeList = new ArrayList<Long>();
 		ramUsageList = new ArrayList<Long>();
 		cacheUsageList = new ArrayList<Long>();
 		waitTimeList = new ArrayList<Long>();
 		numberIOList = new ArrayList<Long>();
+		*/
 	}
 	/*
-	 * This method begins CPU
+	 * Phase 1 part-2
+	 * Starts the thread and executes once startCPU is true
 	 */
-	public void run(){
+	
+	
+	public synchronized void run(){
 		
-		begin();
+		while(true){
+			
+			
+			
+			try {
+				dispatcher.writeLock.acquire();
+				//writeLock.acquire();
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(dispatcher.hasProcessForCPU() == true){
+				dispatcher.setHasProcessForCPU(false);
+				this.begin();
+			}
+			dispatcher.writeLock.release();
+			//writeLock.release();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		//this.run();
 		
 	}
 	public void begin(){
 		
+		try {
+			dispatcher.cpuConsume(this);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		System.out.println("CPU number: " + cpuNumber + " is starting..with Process number: " +processId );
 		//System.out.println("Loading Process number: " + processId  );
 		//System.out.println("Loading Process length: " + processLength  );
 		
@@ -306,6 +222,8 @@ public class CPU implements Runnable {
 			decode(cache.get(pc));
 			cacheUsage++;
 		}
+		
+		//this.cpuHasProcess = false;
 		
 	}
 	
@@ -606,7 +524,13 @@ public class CPU implements Runnable {
 		case "001000"://8
 			//System.out.println("Instruction: DIV  Type: R" );
 			//Divides content of two S-regs into D-reg
-			if(register[s1Reg] > register[s2Reg]){
+			if(register[s2Reg] == 0){
+				System.out.println("Process number: " + processId + "didn't execute becuase it divided by 0");
+				pc++;
+				break;
+			}
+			else if(register[s1Reg] > register[s2Reg]){
+				
 				register[dReg] = register[s1Reg] / register[s2Reg];
 				pc++;
 				break;
@@ -757,17 +681,22 @@ public class CPU implements Runnable {
 			completionTime = cpuEndTime - cpuStartTime;
 			//Process turn around time
 			//completionTime = endTime - startTime;
-			completionTimeList.add(completionTime);
+			//completionTimeList.add(completionTime);
+			averageCalculator.addToCompletionTimeList(completionTime);
 			//Process wait time
 			waitTime = cpuStartTime - startTime;
-			waitTimeList.add(waitTime);
+			//waitTimeList.add(waitTime);
+			averageCalculator.addToWaitTimeList(waitTime);
 			//number of IO requests put onto a Array
-			numberIOList.add(numberIO);
+			//numberIOList.add(numberIO);
+			averageCalculator.addToNumberIOList(numberIO);
 			
-			ramUsageList.add(ramUsage);
-			cacheUsageList.add(cacheUsage);
+			//ramUsageList.add(ramUsage);
+			averageCalculator.addToRamUsageListt(ramUsage);
+			//cacheUsageList.add(cacheUsage);
+			averageCalculator.addToCacheUsageList(cacheUsage);
 			
-			//System.out.println("completion time: " + completionTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
+			System.out.println("completion time: " + completionTime + " Wait time: " + waitTime + " Number IO requests: " + numberIO);
 			try{
 				
 				FileOutputStream fos = new FileOutputStream("results.txt",true);
