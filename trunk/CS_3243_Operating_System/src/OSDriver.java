@@ -20,9 +20,17 @@ import javax.swing.JOptionPane;
  */
 
 
-public class OSDriver implements Runnable{
+public class OSDriver{
 	
-	private static CPU cpu; // CPU field varaible
+	/*
+	 * These two classes are new to Phase1 part-2
+	 * 
+	 */
+	public static Dispatcher dispatcher;
+	public static AverageCalculator averageCalculator;
+	
+	public static Runnable cpu;
+	//private static CPU cpu; // CPU field varaible
 	private static Disk disk; // Disk field variable
 	private static Memory memory; //Memory field variable
 	private static LongTermScheduler ltScheduler; //LongTermScheduler field variable
@@ -45,6 +53,7 @@ public class OSDriver implements Runnable{
 		
 		filename = name;
 		
+		
 	}
 	
 	
@@ -53,22 +62,53 @@ public class OSDriver implements Runnable{
 	 * 
 	 */
 	public static void main(String[] args) {
+		
+		//Does Context switching called by CPU and StScheduler
+		dispatcher = new Dispatcher();
+		//Calculates the averages between the CPUs
+		averageCalculator = new AverageCalculator();
+		
+		
 		// initialize components
 		disk = new Disk(); // initiated disk
 		memory = new Memory(); // initiated memory
-		cpu = new CPU(memory,stScheduler); // initiated cpu
+		
+		
+		//cpu = new CPU(memory,stScheduler); // initiated cpu
 		pcbList = new ArrayList<PCB>(); // initiated pcbList
 		readyQueue = new ArrayList<PCB>(); // initiated readyQueue
 		
 		//filename = "DataFile2-Cleaned.txt";//if you don't want to use the GUI, uncomment this line
 
-		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.PRIORITY); // initiated ltScheduler
-		stScheduler = new ShortTermScheduler(cpu,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS); // initiated stScheduler
+		/*
+		 * Phase 1 part-2 
+		 * Creates a new CPU thread using the Runnable interface
+		 */
+		
+		Runnable cpu1 = new CPU(1,memory,dispatcher,averageCalculator);
+		Runnable cpu2 = new CPU(2,memory,dispatcher,averageCalculator);
+		Runnable cpu3 = new CPU(3,memory,dispatcher,averageCalculator);
+		Runnable cpu4 = new CPU(4,memory,dispatcher,averageCalculator);
+		
+		new Thread(cpu1).start();
+		new Thread(cpu2).start();
+		new Thread(cpu3).start();
+		new Thread(cpu4).start();
+		
+		
+		
+		//ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
+
+		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.SJF); // initiated ltScheduler
+
+		stScheduler = new ShortTermScheduler(dispatcher,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.SJF, averageCalculator); // initiated stScheduler
 		// call the loader to load the job file into the Disk
 		
+		//filename = "DataFile2-Cleaned.txt";
 		/**
 		 * Initiated loader and loads it
 		 */
+		
 		try{
 		Loader loader = new Loader(filename, disk, pcbList);
 		loader.load();
@@ -126,16 +166,10 @@ public class OSDriver implements Runnable{
 			ioe.printStackTrace();
 		}
 		return;
-	}
-
-
-	/**
-	 * This method is not implemented yet
-	 */
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
 		
 	}
 
+
+	
+	
 }
