@@ -105,7 +105,7 @@ public class ShortTermScheduler {
 			 * Thread tries to acquire the lock
 			 */
 			try {
-				dispatcher.writeLock.acquire();
+				dispatcher.dispatcherLock.acquire();
 				//writeLock.acquire();
 				
 			} catch (InterruptedException e) {
@@ -127,7 +127,7 @@ public class ShortTermScheduler {
 			/**
 			 * lock is released after exit of critical section
 			 */
-			dispatcher.writeLock.release();
+			dispatcher.dispatcherLock.release();
 			//writeLock.release();
 			
 			try {
@@ -202,7 +202,7 @@ public class ShortTermScheduler {
 				ltScheduler.schedule();
 			}
 			try {
-				dispatcher.writeLock.acquire();
+				dispatcher.dispatcherLock.acquire();
 				//writeLock.acquire();
 				
 			} catch (InterruptedException e) {
@@ -219,7 +219,7 @@ public class ShortTermScheduler {
 				}
 			}
 			
-			dispatcher.writeLock.release();
+			dispatcher.dispatcherLock.release();
 			//writeLock.release();
 			try {
 				Thread.sleep(10);

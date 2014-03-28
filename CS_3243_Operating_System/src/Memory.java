@@ -1,3 +1,5 @@
+import java.util.concurrent.Semaphore;
+
 
 /**
  * The Memory/Ram of the virtual computer.
@@ -9,7 +11,9 @@
 				Ivan Mba
  */
 public final class Memory {
-
+	
+	static Semaphore memoryLock = new Semaphore(1);
+	
 	/**
 	 * Constant size of each word. 32 bits. 
 	 */

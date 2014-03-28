@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 import java.text.DecimalFormat;
 
 /**
@@ -15,6 +16,8 @@ import java.text.DecimalFormat;
  */
 
 public class AverageCalculator {
+	
+	static Semaphore calculatorLock = new Semaphore(1);
 	
 	//Holds Times
 	private ArrayList<Long> completionTimeList = new ArrayList<Long>();
