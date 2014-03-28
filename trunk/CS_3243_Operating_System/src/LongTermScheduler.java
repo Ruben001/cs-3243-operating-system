@@ -18,7 +18,7 @@ public class LongTermScheduler {
 	private Disk disk; 
 	private Memory memory;
 	private ArrayList<PCB> pcbList;
-	private ArrayList<PCB> readyQueue;
+	private static ArrayList<PCB> readyQueue;
 	private SchedulingAlgorithm algorithm;
 
 	/**

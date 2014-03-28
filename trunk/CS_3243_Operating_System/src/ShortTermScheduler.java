@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.io.*;
 
 /**
  * The Short term scheduler keeps its scheduling algorithms that 
@@ -21,30 +22,34 @@ import java.util.Comparator;
  * 
  */
 public class ShortTermScheduler {
-	private static CPU cpu;
+	 static Runnable cpu;
+	//private static CPU cpu;
 	private Memory memory;
 	private ArrayList<PCB> pcbList;
 	private static LongTermScheduler ltScheduler;
+	private static Dispatcher dispatcher;
+	public static AverageCalculator averageCalculator;
 	
 	private PCB currentProcess;
 	private PCB nextProcess;
 	
 	//All process in one readyQueue in single processor but scheduling 4 readyQueue private to each processor in 4cpu each self scheduling 
 	//to avoid more than one cpu accessing one process making scheduling difficult.
-	private ArrayList<PCB> readyQueue;
+	private static ArrayList<PCB> readyQueue;
 	private int currentQIndex;
 	
 	private SchedulingAlgorithm algorithm;
 	
 	//public Constructor instantiated in OSDriver.java
-	public ShortTermScheduler(CPU cpu,LongTermScheduler ltScheduler,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
-		this.cpu = cpu;
+	public ShortTermScheduler(Dispatcher dispatcher,LongTermScheduler ltScheduler,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo, AverageCalculator averageCalculator) {
+		this.dispatcher = dispatcher;
 		this.ltScheduler = ltScheduler;
 		this.memory = memory;
 		this.pcbList = pcbList;
 		this.readyQueue = readyQueue;
 		this.algorithm = algo;
 		this.currentQIndex = 0;	
+		this.averageCalculator = averageCalculator;
 				
 	}
 	
@@ -71,13 +76,69 @@ public class ShortTermScheduler {
 			sjfSchedule();
 			break;
 		}
+		
+		//Once all the jobs are done you calculate averages 
+				if(readyQueue.size() == 0){
+					averageCalculator.averagecompletionTime();
+					averageCalculator.averageWaitTime();
+					averageCalculator.averageNumberOfIORequests();
+					averageCalculator.averageRamUsageTime();
+					averageCalculator.averageCacheUsageTime();
+					
+				}
+		
 	}
 	
 	private void fcfsSchedule() {
+		
+		
 		while(readyQueue.size() != 0){
-			nextProcess =  readyQueue.remove(0);
-			dispatch(nextProcess);			
-		}		
+			//nextProcess =  readyQueue.remove(0);
+			//dispatch(nextProcess);
+			
+			
+			//Long term scheduler runs again if the Ready queue falls under 5 jobs
+			if(readyQueue.size() < 5){
+				ltScheduler.schedule();
+			}
+			/**
+			 * Thread tries to acquire the lock
+			 */
+			try {
+				dispatcher.writeLock.acquire();
+				//writeLock.acquire();
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/**
+			 * if it acquires the lock it goes into critical section
+			 */
+			if(dispatcher.hasProcessForCPU() == false){
+				try {
+					nextProcess =  readyQueue.remove(0);
+					dispatcher.shortTermProduce(nextProcess);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			/**
+			 * lock is released after exit of critical section
+			 */
+			dispatcher.writeLock.release();
+			//writeLock.release();
+			
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}	
+		
 	}
 	
 	private void prioritySchedule() {
@@ -104,7 +165,12 @@ public class ShortTermScheduler {
 		    */
 			
 			nextProcess =  readyQueue.remove(0);
-			dispatch(nextProcess);				
+			try {
+				dispatcher.shortTermProduce(nextProcess);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
 		}
 			
 	}
@@ -115,7 +181,12 @@ public class ShortTermScheduler {
 		while(readyQueue.size() != 0){
 			//see long term scheduling 
 			nextProcess =  readyQueue.remove(0);
-			dispatch(nextProcess);				
+			try {
+				dispatcher.shortTermProduce(nextProcess);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
 		}
 		
 	}
@@ -127,84 +198,37 @@ public class ShortTermScheduler {
 				
 		while(readyQueue.size() != 0){
 			//see long term scheduling 
-			nextProcess =  readyQueue.remove(0);
-			dispatch(nextProcess);				
-		}
-		
-				
-	}
-	
-	
-	//The dispatcher gives jobs to the CPU and does context switching
-		public void dispatch(PCB nProcess){
-			
-			//CPU time
-					cpu.cpuStartTime = nProcess.startTime;
-					cpu.cpuEndTime = nProcess.endTime;
-			//If its the first time the job gets the CPU
-			if(nProcess.pc == 0){
-				cpu.cpuStartTime = System.currentTimeMillis();
-			}
-			
-			//Sets the CPU variables from the PCB
-			cpu.pc = nProcess.pc;
-			cpu.priority = nProcess.priority;
-			cpu.processAddress = nProcess.jobFileAddress;
-			cpu.processLength = nProcess.jobFileLength;
-			cpu.processId = nProcess.processId;
-			cpu.register = nProcess.registers;
-			
-			//sets the status to Running
-			nProcess.state = ProcessState.RUNNING;
-			
-			//Brings in the cache
-			cpu.cache = nProcess.cache;
-			
-			//Buffers
-			cpu.inputBufferAddress = nProcess.inputBufferAddress;
-			cpu.inputBufferLength = nProcess.inputBufferLength;
-			cpu.outputBufferAddress = nProcess.outputBufferAddress;
-			cpu.outputBufferLength = nProcess.outputBufferLength;
-			cpu.tempBufferAddress = nProcess.tempBufferAddress;
-			cpu.tempBufferLength = nProcess.tempBufferLength;
-			//TIME
-			
-			//Turn around time
-			cpu.startTime = nProcess.startTime;
-			cpu.endTime = nProcess.endTime;
-			cpu.completionTime = nProcess.completionTime;
-			
-			//Average times
-			cpu.waitTime = nProcess.waitTime;
-			cpu.numberIO = nProcess.numberIO;
-			cpu.ramUsage = nProcess.ramUsage;
-			cpu.cacheUsage = nProcess.cacheUsage;
-			
-			//Begins CPU running the process
-			cpu.begin();
-			
-			//Long term scheduler runs again if the Ready queue falls under 5 jobs
 			if(readyQueue.size() < 5){
 				ltScheduler.schedule();
+			}
+			try {
+				dispatcher.writeLock.acquire();
+				//writeLock.acquire();
 				
-			/** Phase 1 -Part 2 NON PRE EMPTIVE each of 4 cpu threads upon finishing a job call stScheduler 
-			 * to get the next job from one readyQueue   
-			 *  TO DO-To Lock readyQueue so that at one time only one thread access readyQueue 
-			*/  
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(dispatcher.hasProcessForCPU() == false){
+				try {
+					nextProcess =  readyQueue.remove(0);
+					dispatcher.shortTermProduce(nextProcess);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
-			//Once all the jobs are done you calculate averages 
-			if(readyQueue.size() == 0){
-				cpu.averagecompletionTime();
-				cpu.averageWaitTime();
-				cpu.averageNumberOfIORequests();
-				cpu.averageRamUsageTime();
-				cpu.averageCacheUsageTime();
-				
+			dispatcher.writeLock.release();
+			//writeLock.release();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			
+						
 		}
-		
+	}
 	
 }
