@@ -11,12 +11,7 @@ import java.util.Comparator;
 				Ivan Mba
  *
  */
-<<<<<<< .mine
 public class LongTermScheduler implements Runnable{
-=======
-
-public class LongTermScheduler implements Runnable{
->>>>>>> .r122
 	/*
 	 * Field variables for LongTermScheduler
 	 */
@@ -38,23 +33,14 @@ public class LongTermScheduler implements Runnable{
 		this.disk = disk;
 		this.memory = memory;
 		this.pcbList = pcbList;
-		this.readyQueue = readyQueue;
+		LongTermScheduler.readyQueue = readyQueue;
 		this.algorithm = algo;
 	}
-<<<<<<< .mine
 	
 	public void run(){
 		this.schedule();
 	}
 
-=======
-	
-	
-	public void run(){
-		
-		schedule();
-	}	
->>>>>>> .r122
 	/**
 	 * This methods selects the proper method for scheduling i.e. FCFS, Priority, or SJF
 	 * 
@@ -79,8 +65,6 @@ public class LongTermScheduler implements Runnable{
 		}
 	}
 	
-	
-<<<<<<< .mine
 		private void shortestJobFirstSchedule() {
 			
 			/*
@@ -179,10 +163,6 @@ public class LongTermScheduler implements Runnable{
 			
 		}
 		
-=======
-	}	
->>>>>>> .r122
-	
 
 		private void prioritySchedule() {
 			
@@ -319,17 +299,7 @@ public class LongTermScheduler implements Runnable{
 		public int compare(PCB o1, PCB o2) {
 			return (o1.priority < o2.priority ) ? -1: (o1.priority > o2.priority) ? 1:0 ;
 	
-		}
-      	
-	}
-	
-	
-	
-	
-	
-	
-<<<<<<< .mine
-=======
 }
-	
-}>>>>>>> .r122
+	}
+      	
+
