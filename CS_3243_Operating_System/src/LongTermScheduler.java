@@ -11,7 +11,8 @@ import java.util.Comparator;
 				Ivan Mba
  *
  */
-public class LongTermScheduler {
+
+public class LongTermScheduler implements Runnable{
 	/*
 	 * Field variables for LongTermScheduler
 	 */
@@ -36,6 +37,9 @@ public class LongTermScheduler {
 		this.readyQueue = readyQueue;
 		this.algorithm = algo;
 	}
+	
+	
+	public void run(){
 	/**
 	 * This methods selects the proper method for scheduling i.e. FCFS, Priority, or SJF
 	 * 
@@ -274,5 +278,7 @@ public class LongTermScheduler {
 	
 	
 	
+	
+}
 	
 }
