@@ -22,16 +22,14 @@ public class CPU implements Runnable {
 	public static Dispatcher dispatcher;
 	public static AverageCalculator averageCalculator;
 	//int MemoryFootprint;
-<<<<<<< .mine
-//<<<<<<< .mine
+
 	//private ArrayList<PCB> pcbList; // field variable for PCB List
 	//private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
 //=======
 	private ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
-//>>>>>>> .r112
-=======
+
 	//private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
->>>>>>> .r122
+
 	public ArrayList<boolean[]> cache; // field variable for CPU cache
 
 	//Holds jobs PCB
@@ -232,7 +230,7 @@ public class CPU implements Runnable {
 			cacheUsage++;
 		}
 		
-<<<<<<< .mine
+
 		
 		/** Phase 1 -Part 2 NON PRE EMPTIVE 
 		 *  As part of redesigning stScheduler, each of 4 cpu threads, 
@@ -243,13 +241,13 @@ public class CPU implements Runnable {
 		//stScheduler.ScheduleAndDispatch(); // it calls the short term scheduler and dispatch next jobs
 		
 }	
-=======
+
 		//this.cpuHasProcess = false;
 		
-	}
+	//}
 	
 	
->>>>>>> .r122
+
 	/**
 	 * This method fetches an instruction from the Memory
 	 * @param takes in memory address
