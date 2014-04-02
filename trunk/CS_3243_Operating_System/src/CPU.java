@@ -199,6 +199,23 @@ public class CPU implements Runnable {
 		System.out.println("CPU number: " + cpuNumber + " is starting..with Process number: " +processId );
 		//System.out.println("Loading Process number: " + processId  );
 		//System.out.println("Loading Process length: " + processLength  );
+		try{
+			
+			FileOutputStream fos = new FileOutputStream("cpu.txt",true);
+			PrintWriter pw = new PrintWriter( fos );
+			
+			pw.print("\nCPU number: ");
+			pw.print(cpuNumber);
+			pw.print("\nis starting..with Process number");
+			pw.print(processId);
+			pw.println();
+			pw.close();
+		}
+		catch(FileNotFoundException fnfe){
+			fnfe.printStackTrace();
+		}
+		
+		
 		
 		try{
 			
