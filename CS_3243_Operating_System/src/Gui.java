@@ -234,9 +234,9 @@ public class Gui extends JFrame{
 				OSDriver.setParameters(selected,algo,cpu);
 				OSDriver.main(args);
 				
-				display.setText("File Selected : " + selected + "\n" + "Algorithm Selected : " + algo + "\n" + "Number of CPU : " + cpu + "\n" + OSDriver.content);
+				display.setText("Start \nFile Selected : " + selected + "\n" + "Algorithm Selected : " + algo + "\n" + "Number of CPU : " + cpu + "\n" + OSDriver.content + "\n\nComplete");
 				
-				cpuDisplay.setText("\n" + OSDriver.cpuContent);
+				cpuDisplay.setText("Start " + "\n" + OSDriver.cpuContent + "\n\nComplete");
 				
 				
 				
