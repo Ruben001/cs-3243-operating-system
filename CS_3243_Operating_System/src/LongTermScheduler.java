@@ -19,7 +19,10 @@ public class LongTermScheduler implements Runnable{
 	private Memory memory;
 	private ArrayList<PCB> pcbList;
 	private static ArrayList<PCB> readyQueue;
-	private SchedulingAlgorithm algorithm;
+	private String algorithm;
+	//private SchedulingAlgorithm algorithm;
+	//Update, algorithm has been changed from type ShedulingAlgorithm to String
+	//to enable input type from the GUI to be used
 
 	/**
 	 * Constructor for LongTermScheduler
@@ -29,7 +32,8 @@ public class LongTermScheduler implements Runnable{
 	 * @param takes in readyQueue
 	 * @param take is scheduling algorithm
 	 */
-	public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
+	//public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
+	public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, String algo) {
 		this.disk = disk;
 		this.memory = memory;
 		this.pcbList = pcbList;
@@ -48,18 +52,18 @@ public class LongTermScheduler implements Runnable{
 	public void schedule() {
 		switch(algorithm)
 		{
-		case FCFS:	
+		case "FCFS":	
 					
 			fcfsSchedule();
 						
 			break;
-		case PRIORITY:
+		case "PRIORITY":
 			prioritySchedule();
 			break;
-		case RR:
+		case "RR":
 			prioritySchedule();
 			break;
-		case SJF:
+		case "SJF":
 			shortestJobFirstSchedule();
 			break;
 		}
