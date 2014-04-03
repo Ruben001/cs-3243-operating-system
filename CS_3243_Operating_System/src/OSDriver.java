@@ -33,7 +33,8 @@ public class OSDriver{
 	//private static CPU cpu; // CPU field varaible
 	private static Disk disk; // Disk field variable
 	private static Memory memory; //Memory field variable
-	private static LongTermScheduler ltScheduler; //LongTermScheduler field variable
+	//private static LongTermScheduler ltScheduler; //Un-threaded LongTermScheduler field variable
+	public static Runnable longtermSchedulingThread;//threaded LongTerm Scheduler
 	private static ShortTermScheduler stScheduler; // ShortTermScheduler field variable
 	public static String content;  // this variable is used to return result to GUI interface
 	public static String cpuContent;  // this variable is used to return result to GUI interface
@@ -46,17 +47,13 @@ public class OSDriver{
 	// queues
 	private static ArrayList<PCB> readyQueue; // ArrayList of readyQueue
 	
-	private static Thread longtermSchedulingThread; // Thread has not been implemented yet
-	
+		
 	/**
 	 * It is setter method to filename
 	 * @param it takes in string value as a filename
 	 */
-	public static void setFileName(String name){
-		
-		filename = name;
-		
-		
+	public static void setFileName(String name){		
+		filename = name;			
 	}
 	
 	
@@ -154,55 +151,53 @@ public class OSDriver{
 		pcbList = new ArrayList<PCB>(); // initiated pcbList
 		readyQueue = new ArrayList<PCB>(); // initiated readyQueue
 		
-		//filename = "DataFile2-Cleaned.txt";//if you don't want to use the GUI, uncomment this line
-
+		filename = "DataFile2-Cleaned.txt";//if you don't want to use the GUI, uncomment this line
+		
+		
+		// call the loader to load the job file into the Disk
+				//filename = "DataFile2-Cleaned.txt";
+				/**
+				 * Initiated loader and loads it
+				 */
+				
+				try{
+				Loader loader = new Loader(filename, disk, pcbList);
+				loader.load();
+				
+				}
+				
+				catch(Exception e){
+					
+				
+					JOptionPane.showMessageDialog(null, "Sorry, the file was not found or a wrong path was entered", "File not found", JOptionPane.ERROR_MESSAGE);
+					
+				}
+				
+		//ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
+		//ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, algorithm); // initiated ltScheduler
+		//Changed the last parameter from SchedulingAlgorithm type to string to be able to use selected algorithm from GUI
+		
+		Runnable longtermSchedulingThread = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler//Threaded LongTermScheduler to run from GUI
+		//Runnable longtermSchedulingThread = new LongTermScheduler(disk, memory, pcbList, readyQueue, algorithm); // initiated ltScheduler
+		new Thread(longtermSchedulingThread).start(); 
+		
+		//stScheduler = new ShortTermScheduler(dispatcher,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS, averageCalculator); // initiated stScheduler
+		//stscheduler without ltscheduler parameter which is now a thread-also change constructor as well
+		stScheduler = new ShortTermScheduler(dispatcher, memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS, averageCalculator); // initiated stScheduler
 		
 		
 		
+		//not needed in presence of Threaded LongTermScheduler's run()	
+		//ltScheduler.schedule(); // calls schedule method to process a FCFS, Priority, Shortest Job First
+		
+		stScheduler.ScheduleAndDispatch(); // it calls the short term scheduler and dispatch jobs
 		
 		/*
 		 * Phase 1 part-2 
 		 * Creates a new CPU thread using the Runnable interface
 		 */
-		
-		
-		createCpu(cpuNumber);
-		
-		
-		//ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
-
-		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, algorithm); // initiated ltScheduler
-		//Changed the last parameter from SchedulingAlgorithm type to string to be able to use selected algorithm from GUI
-		
-		longtermSchedulingThread = new Thread(ltScheduler);		
-		longtermSchedulingThread.start(); 
-		
-		stScheduler = new ShortTermScheduler(dispatcher,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS, averageCalculator); // initiated stScheduler
-		// call the loader to load the job file into the Disk
-		
-		//filename = "DataFile2-Cleaned.txt";
-		/**
-		 * Initiated loader and loads it
-		 */
-		
-		try{
-		Loader loader = new Loader(filename, disk, pcbList);
-		loader.load();
-		
-		}
-		
-		catch(Exception e){
-			
-		
-			JOptionPane.showMessageDialog(null, "Sorry, the file was not found or a wrong path was entered", "File not found", JOptionPane.ERROR_MESSAGE);
-			
-		}
-		
-		
-		
-		
-		ltScheduler.schedule(); // calls schedule method to process a FCFS, Priority, Shortest Job First
-		stScheduler.ScheduleAndDispatch(); // it calls the short term scheduler and dispatch jobs
+		//createCpu(cpuNumber);
+		createCpu(4); //To Test Threaded LT Scheduler
 		
 		content = "";
 		cpuContent = "";

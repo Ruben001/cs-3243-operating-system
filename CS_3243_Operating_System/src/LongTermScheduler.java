@@ -19,11 +19,12 @@ public class LongTermScheduler implements Runnable{
 	private Memory memory;
 	private ArrayList<PCB> pcbList;
 	private static ArrayList<PCB> readyQueue;
-	private String algorithm;
-	//private SchedulingAlgorithm algorithm;
+	//private String algorithm; for GUI
+	private SchedulingAlgorithm algorithm;
 	//Update, algorithm has been changed from type ShedulingAlgorithm to String
 	//to enable input type from the GUI to be used
-
+	
+	
 	/**
 	 * Constructor for LongTermScheduler
 	 * @param takes in disk
@@ -32,8 +33,9 @@ public class LongTermScheduler implements Runnable{
 	 * @param takes in readyQueue
 	 * @param take is scheduling algorithm
 	 */
-	//public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
-	public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, String algo) {
+	public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
+	//Following constructor is for GUI
+	//public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, String algo) {
 		this.disk = disk;
 		this.memory = memory;
 		this.pcbList = pcbList;
@@ -42,14 +44,21 @@ public class LongTermScheduler implements Runnable{
 	}
 	
 	public void run(){
+		//while (pcbList.size() != 0) {
+		//while (true){
+		while (memory.getMemoryAvailability()) {
+		System.out.println("I am LT's run() calling schedule");
 		this.schedule();
+		}
+	//}
+		//}
 	}
 
 	/**
 	 * This methods selects the proper method for scheduling i.e. FCFS, Priority, or SJF
 	 * 
 	 */
-	public void schedule() {
+	/**public void schedule() {
 		switch(algorithm)
 		{
 		case "FCFS":	
@@ -67,7 +76,27 @@ public class LongTermScheduler implements Runnable{
 			shortestJobFirstSchedule();
 			break;
 		}
+	}*/
+	
+	public void schedule() {
+	switch(algorithm)
+	{
+	case FCFS:	
+		System.out.println("I am in LT schedule calling FCFS");	
+		fcfsSchedule();
+					
+		break;
+	case PRIORITY:
+		prioritySchedule();
+		break;
+	case RR:
+		prioritySchedule();
+		break;
+	case SJF:
+		shortestJobFirstSchedule();
+		break;
 	}
+}
 	
 		private void shortestJobFirstSchedule() {
 			
@@ -78,16 +107,6 @@ public class LongTermScheduler implements Runnable{
 				Disk.diskLock.acquire();
 			} catch (InterruptedException e2) {
 				e2.printStackTrace();
-			}
-			
-			/*
-			 * pcb lock
-			 */
-			 try {
-			
-				PCB.pcbLock.acquire();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
 			}
 			
 			ArrayList<PCB> priorityList = new ArrayList<PCB>(pcbList);
@@ -162,7 +181,7 @@ public class LongTermScheduler implements Runnable{
 				priorityList.remove(pcb);
 				System.out.println(count);
 				
-				PCB.pcbLock.release();
+				
 			}
 			
 		}
@@ -229,14 +248,26 @@ public class LongTermScheduler implements Runnable{
 	}
 
 		private void fcfsSchedule() {
-			
+			System.out.println("I am within LT FCFS");
 			int count = 0;
 			while (true) {
-				if (pcbList.size() == 0)
+				if (pcbList.size() == 0){
+					System.out.printf("I check if pcbLIST==0, pcbListsize%d",pcbList.size());
 					return;
+					}
+				
+				System.out.println("i have passed test to be greater than pcblistsize==0");
+								
 				int[] memoryChunk = memory.GetLargestMemoryChunk();
-				if (memoryChunk[1] < pcbList.get(0).getMemoryFootprint())
+				if (memoryChunk[1] < pcbList.get(0).getMemoryFootprint()){
+					System.out.println("there is 'nt enough memeory to write job in memory");
+					//set to false
+					memory.setMemoryAvailability(false);
 					return;
+					
+				}
+				System.out.println("there IS enough memeory to write job in memory");
+				
 				count++;
 				PCB pcb = pcbList.get(0);
 				//System.out.println(pcbList.get(0));
@@ -266,7 +297,7 @@ public class LongTermScheduler implements Runnable{
 				readyQueue.add(pcb);
 				pcb.startTime = System.currentTimeMillis();
 				pcbList.remove(pcb);
-				System.out.println(count);
+				System.out.printf("I am job No %d being placed in memeory by LT", count);
 			}
 			
 			
