@@ -827,6 +827,7 @@ public class CPU implements Runnable {
 			
 			//Free up memory for next process
 			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
+			memory.setMemoryAvailability(true);
 			pc++;
 			break;
 		case "010011"://19

@@ -63,8 +63,8 @@ public class AverageCalculator {
 			while(0 < completionTimeList.size()){
 				averagecompletionTime += completionTimeList.remove(0);
 			}
-			answer = Double.valueOf(form.format(averagecompletionTime/numberOfProcesses));
-			
+			//answer = Double.valueOf(form.format(averagecompletionTime/numberOfProcesses));
+			answer = Double.valueOf(averagecompletionTime/numberOfProcesses);
 			try{
 				
 				FileOutputStream fos = new FileOutputStream("results.txt",true);
@@ -92,7 +92,8 @@ public class AverageCalculator {
 			while(0 < waitTimeList.size()){
 				averageWaitTime += waitTimeList.remove(0);
 			}
-			answer = Double.valueOf(form.format(averageWaitTime/numberOfProcesses));
+			//answer = Double.valueOf(form.format(averageWaitTime/numberOfProcesses));
+			answer = Double.valueOf(averageWaitTime/numberOfProcesses);
 			try{
 				
 				FileOutputStream fos = new FileOutputStream("results.txt",true);
@@ -120,7 +121,9 @@ public class AverageCalculator {
 			while(0 < numberIOList.size()){
 				averageNumberOfIO += numberIOList.remove(0);
 			}	
-			answer = Double.valueOf(form.format(averageNumberOfIO/numberOfIO));
+			//answer = Double.valueOf(form.format(averageNumberOfIO/numberOfIO));
+			answer = Double.valueOf(averageNumberOfIO/numberOfIO);
+			
 			try{
 				
 				FileOutputStream fos = new FileOutputStream("results.txt",true);
@@ -149,7 +152,8 @@ public class AverageCalculator {
 				while(0 < ramUsageList.size()){
 					averageRamUsageTime += ramUsageList.remove(0);
 				}
-				answer = Double.valueOf(form.format(averageRamUsageTime/numberOfProcesses));
+				//answer = Double.valueOf(form.format(averageRamUsageTime/numberOfProcesses));
+				answer = Double.valueOf(averageRamUsageTime/numberOfProcesses);
 				try{
 					
 					FileOutputStream fos = new FileOutputStream("results.txt",true);
@@ -178,7 +182,8 @@ public class AverageCalculator {
 						averageCacheUsageTime += cacheUsageList.remove(0);
 					}
 					
-					answer = Double.valueOf(form.format(averageCacheUsageTime/numberOfProcesses));
+					//answer = Double.valueOf(form.format(averageCacheUsageTime/numberOfProcesses));
+					answer = Double.valueOf(averageCacheUsageTime/numberOfProcesses);
 					try{
 						
 						FileOutputStream fos = new FileOutputStream("results.txt",true);
