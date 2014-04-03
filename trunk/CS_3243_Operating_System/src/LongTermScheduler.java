@@ -262,6 +262,7 @@ public class LongTermScheduler implements Runnable{
 					memory.writeData(memoryIndex++, disk.readData(i));
 				}
 				pcb.tempBufferAddress = tempIndex;
+				pcb.startTime = System.currentTimeMillis();
 				readyQueue.add(pcb);
 				pcb.startTime = System.currentTimeMillis();
 				pcbList.remove(pcb);
