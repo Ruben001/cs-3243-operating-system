@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 /**
  * This class behaves as Process Context Block
  * Group members:Corey Masters
@@ -15,9 +14,6 @@ import java.util.concurrent.Semaphore;
  *
  */
 public class PCB {
-	//Lock that has to be acquired to access this class is created 
-	static Semaphore pcbLock = new Semaphore(1);
-
 	
 	public int processId;
 	public int priority;

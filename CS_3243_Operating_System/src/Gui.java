@@ -23,10 +23,6 @@ public class Gui extends JFrame{
 	
 	JLabel locateFile; 
 	
-	JLabel cpuSelect;
-	
-	JLabel algorithmSelect;
-	
 	JLabel empty;
 	
 	JTextField locateFileField;
@@ -35,17 +31,7 @@ public class Gui extends JFrame{
 	
 	JTextArea display;
 	
-	JTextArea cpuDisplay;
-	
 	Border labelBorder;
-	
-	String [] cpu = { "1", "2", "3", "4"};
-	
-	String [] algo = {"FCFS","SJF","PRIORITY"};
-	
-	JComboBox<String> algorithm;
-	
-	JComboBox<String> cpuNumber;
 	
 	
 	
@@ -69,15 +55,9 @@ public class Gui extends JFrame{
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
-		JScrollPane cpuScrollPane = new JScrollPane();
-		
-		
-		
 		labelBorder = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 		
-		Font font = new Font("Cambria",17,17);
-		
-		Font displayFont = new Font("Cambria",13,13);
+		Font font = new Font("Verdana", Font.BOLD, 18);
 		
 		
 		
@@ -86,9 +66,9 @@ public class Gui extends JFrame{
 		
 		
 		
-		finalLayout.setLayout(new GridLayout(1,3));//2 rows and 2 column
+		finalLayout.setLayout(new GridLayout(1,2));//1 rows and 2 column
 		
-		option.setLayout(new GridLayout(4,2,5,20));
+		option.setLayout(new GridLayout(2,1,2,20));
 		
 		
 		
@@ -106,28 +86,12 @@ public class Gui extends JFrame{
 		locateFile.setOpaque(true);
 		
 		
-		cpuSelect = new JLabel("Number of CPUs");
-		
-		cpuSelect.setFont(font);
-		
-		cpuNumber = new JComboBox<String>(cpu);
-		
-		cpuNumber.setSelectedIndex(0);
-		
-		
-		algorithmSelect = new JLabel("Algorithm");
-		
-		algorithmSelect.setFont(font);
-		
-		algorithm = new JComboBox<String>(algo);
-		
-		algorithm.setSelectedIndex(0);
 		
 		
 		empty = new JLabel();
 		
 		
-		locateFileField = new JTextField("DataFile2-Cleaned.txt", 12);
+		locateFileField = new JTextField("DataFile2-Cleaned.txt", 15);
 		
 		locateFileField.setBorder(labelBorder);
 		
@@ -141,18 +105,9 @@ public class Gui extends JFrame{
 		
 		
 		
-		display = new JTextArea("Click Run to start", 23, 30);
-		
-		display.setFont(displayFont);
+		display = new JTextArea("Click Run to start", 20, 30);
 		
 		display.setEditable(false);
-		
-		
-		cpuDisplay = new JTextArea("Various Cpus are displayed here\nSJF algorithm was modified and no longer works\nI suppose whoever is working on it has not yet finished\nSo choose any CPU number and algorithm except SJF", 23, 30);
-		
-		cpuDisplay.setFont(displayFont);
-		
-		cpuDisplay.setEditable(false);
 		
 		
 		
@@ -161,13 +116,6 @@ public class Gui extends JFrame{
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		scrollPane.setViewportView(display);
 		
-		DefaultCaret cpuCaret = (DefaultCaret)cpuDisplay.getCaret();
-		cpuCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		cpuScrollPane.setViewportView(cpuDisplay);
-		
-		
-		
-		
 		
 		
 		
@@ -175,20 +123,12 @@ public class Gui extends JFrame{
 		option.add(locateFile);
 		option.add(locateFileField);
 		
-		option.add(algorithmSelect);
-		option.add(algorithm);
-		
-		option.add(cpuSelect);
-		option.add(cpuNumber);
-		
-		
 		option.add(empty);
 		option.add(start);
 		
 		pane.add(option);
 		
 		finalLayout.add(scrollPane);
-		finalLayout.add(cpuScrollPane);
 		finalLayout.add(pane);
 		
 		
@@ -224,20 +164,11 @@ public class Gui extends JFrame{
 				
 				String[] args = {};
 				
-				int cpu = Integer.parseInt((String)cpuNumber.getSelectedItem());
-				
-				String algo = (String)algorithm.getSelectedItem();
-				
 				String selected = locateFileField.getText();
-				
 				OSDriver.setFileName(selected);
-				OSDriver.setParameters(selected,algo,cpu);
 				OSDriver.main(args);
 				
-				display.setText("Start \nFile Selected : " + selected + "\n" + "Algorithm Selected : " + algo + "\n" + "Number of CPU : " + cpu + "\n" + OSDriver.content + "\n\nComplete");
-				
-				cpuDisplay.setText("Start " + "\n" + OSDriver.cpuContent + "\n\nComplete");
-				
+				display.setText("File Selected : " + selected + "\n" + OSDriver.content);
 				
 				
 				
@@ -265,7 +196,7 @@ public class Gui extends JFrame{
 
 		frame.setVisible(true);
 
-		frame.setSize(1100,600);
+		frame.setSize(800,700);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

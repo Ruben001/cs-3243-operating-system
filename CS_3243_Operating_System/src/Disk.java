@@ -1,5 +1,3 @@
-import java.util.concurrent.Semaphore;
-
 /**
  * Hard drive disk. Holds a fixed array of 2048 words of 32 bits each. 
  * Group members:Corey Masters
@@ -10,9 +8,6 @@ import java.util.concurrent.Semaphore;
 				Ivan Mba
  */
 public final class Disk {
-	
-	//Lock that has to be acquired to access this class is created 
-		static Semaphore diskLock = new Semaphore(1);
 
 	/**
 	 * Constant size of each word. 32 bits. 

@@ -11,7 +11,7 @@ import java.util.Comparator;
 				Ivan Mba
  *
  */
-public class LongTermScheduler implements Runnable{
+public class LongTermScheduler {
 	/*
 	 * Field variables for LongTermScheduler
 	 */
@@ -19,12 +19,8 @@ public class LongTermScheduler implements Runnable{
 	private Memory memory;
 	private ArrayList<PCB> pcbList;
 	private static ArrayList<PCB> readyQueue;
-	//private String algorithm; for GUI
 	private SchedulingAlgorithm algorithm;
-	//Update, algorithm has been changed from type ShedulingAlgorithm to String
-	//to enable input type from the GUI to be used
-	
-	
+
 	/**
 	 * Constructor for LongTermScheduler
 	 * @param takes in disk
@@ -34,288 +30,43 @@ public class LongTermScheduler implements Runnable{
 	 * @param take is scheduling algorithm
 	 */
 	public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo) {
-	//Following constructor is for GUI
-	//public LongTermScheduler(Disk disk, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, String algo) {
 		this.disk = disk;
 		this.memory = memory;
 		this.pcbList = pcbList;
-		LongTermScheduler.readyQueue = readyQueue;
+		this.readyQueue = readyQueue;
 		this.algorithm = algo;
 	}
-	
-	public void run(){
-		//while (pcbList.size() != 0) {
-		//while (true){
-		while (memory.getMemoryAvailability()) {
-		System.out.println("I am LT's run() calling schedule");
-		this.schedule();
-		}
-	//}
-		//}
-	}
-
 	/**
 	 * This methods selects the proper method for scheduling i.e. FCFS, Priority, or SJF
 	 * 
 	 */
-	/**public void schedule() {
+	public void schedule() {
 		switch(algorithm)
 		{
-		case "FCFS":	
-					
+		case FCFS:
 			fcfsSchedule();
-						
 			break;
-		case "PRIORITY":
+		case PRIORITY:
 			prioritySchedule();
 			break;
-		case "RR":
+		case RR:
 			prioritySchedule();
 			break;
-		case "SJF":
+		case SJF:
 			shortestJobFirstSchedule();
 			break;
 		}
-	}*/
+	}
 	
-	public void schedule() {
-	switch(algorithm)
-	{
-	case FCFS:	
-		System.out.println("I am in LT schedule calling FCFS");	
-		fcfsSchedule();
-					
-		break;
-	case PRIORITY:
-		prioritySchedule();
-		break;
-	case RR:
-		prioritySchedule();
-		break;
-	case SJF:
-		shortestJobFirstSchedule();
-		break;
-	}
-}
 	
-		private void shortestJobFirstSchedule() {
-			
-			/*
-			 * disk lock
-			 */
-			try {
-				Disk.diskLock.acquire();
-			} catch (InterruptedException e2) {
-				e2.printStackTrace();
-			}
-			
-			ArrayList<PCB> priorityList = new ArrayList<PCB>(pcbList);
-			
-			System.out.println("initial list");
-			
-			for(int i=0; i<priorityList.size();i++)
-				System.out.println(priorityList.get(i).getMemoryFootprint());
-			
-			
-			
-			Collections.sort(priorityList, new JobComparator());
-					
-			
-			System.out.println("sorted list");
-			for(int i=0; i<priorityList.size();i++)
-				System.out.println(priorityList.get(i).getMemoryFootprint());
-			int count = 0;
-			while (true) {
-				if (priorityList.size() == 0)
-					return;
-				
-				/*
-				 * memory lock
-				 */
-				try {
-					Memory.memoryLock.acquire();
-									
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				int[] memoryChunk = memory.GetLargestMemoryChunk();
-				
-				if (memoryChunk[1] < priorityList.get(0).getMemoryFootprint()){
-					System.out.println("Return called here");
-					return;
-				}
-				
-				count++;
-				PCB pcb = priorityList.get(0);
-				System.out.println(priorityList.get(0));
-				System.out.println("Size of job is " + priorityList.get(0).getMemoryFootprint() );
-				int memoryIndex = memoryChunk[0];
-				int tempIndex = memoryIndex;
-				for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.jobFileAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.inputBufferAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.outputBufferAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				
-				Memory.memoryLock.release();
-				Disk.diskLock.release();
-				
-				pcb.tempBufferAddress = tempIndex;
-				readyQueue.add(pcb);
-				pcb.startTime = System.currentTimeMillis();
-				pcbList.remove(pcb);
-				priorityList.remove(pcb);
-				System.out.println(count);
-				
-				
-			}
-			
-		}
-		
-
-		private void prioritySchedule() {
-			
-			ArrayList<PCB> priorityList = new ArrayList<PCB>(pcbList);
-			
-			System.out.println("initial list");
-			
-			for(int i=0; i<priorityList.size();i++)
-				System.out.println(priorityList.get(i).getMemoryFootprint());
-			
-			
-			
-			Collections.sort(priorityList, new PriorityComparator());
-			
-			System.out.println("priority list");
-			
-			for(int i=0; i<priorityList.size();i++)
-				System.out.println(priorityList.get(i).getPriority());
-					
-			int count=0;
-			while (true) {
-				if (priorityList.size() == 0)
-					return;
-				int[] memoryChunk = memory.GetLargestMemoryChunk();
-				if (memoryChunk[1] < priorityList.get(0).getMemoryFootprint()){
-					System.out.println("return called here");
-					return;
-				}
-				
-				count++;
-				PCB pcb = priorityList.get(0);
-				int memoryIndex = memoryChunk[0];
-				int tempIndex = memoryIndex;
-				for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.jobFileAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.inputBufferAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.outputBufferAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.tempBufferAddress = tempIndex;
-				readyQueue.add(pcb);
-				pcb.startTime = System.currentTimeMillis();
-				pcbList.remove(pcb);
-				priorityList.remove(pcb);
-				System.out.println(count);
-			}
-		
-	}
-
-		private void fcfsSchedule() {
-			System.out.println("I am within LT FCFS");
-			int count = 0;
-			while (true) {
-				if (pcbList.size() == 0){
-					System.out.printf("I check if pcbLIST==0, pcbListsize%d",pcbList.size());
-					return;
-					}
-				
-				System.out.println("i have passed test to be greater than pcblistsize==0");
-								
-				int[] memoryChunk = memory.GetLargestMemoryChunk();
-				if (memoryChunk[1] < pcbList.get(0).getMemoryFootprint()){
-					System.out.println("there is 'nt enough memeory to write job in memory");
-					//set to false
-					memory.setMemoryAvailability(false);
-					return;
-					
-				}
-				System.out.println("there IS enough memeory to write job in memory");
-				
-				count++;
-				PCB pcb = pcbList.get(0);
-				//System.out.println(pcbList.get(0));
-				//System.out.println("Size of job is " + pcbList.get(0).getMemoryFootprint() );
-				int memoryIndex = memoryChunk[0];
-				int tempIndex = memoryIndex;
-				for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.jobFileAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.inputBufferAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.outputBufferAddress = tempIndex;
-				tempIndex = memoryIndex;
-				for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
-					memory.writeData(memoryIndex++, disk.readData(i));
-				}
-				pcb.tempBufferAddress = tempIndex;
-				pcb.startTime = System.currentTimeMillis();
-				readyQueue.add(pcb);
-				pcb.startTime = System.currentTimeMillis();
-				pcbList.remove(pcb);
-				System.out.printf("I am job No %d being placed in memeory by LT", count);
-			}
-			
-			
-		}
-			
-			
-	}
-
+	
+	
 
 	/**
 	 * This method sorts an arrayList of jobs
 	 * It sorts jobs in ascending order
 	 */
-	class JobComparator implements Comparator<PCB>{
-
-		public JobComparator() {
-			
-		}
+	private static class JobComparator implements Comparator<PCB>{
 
 		@Override
 		public int compare(PCB o1, PCB o2) {
@@ -325,17 +76,203 @@ public class LongTermScheduler implements Runnable{
       
     }
 	
+	
+	
+	
 	/**
 	 * This method sorts an arrayList of jobs
 	 * It sorts jobs in ascending order
 	 */
-	class PriorityComparator implements Comparator<PCB>{
+	private static class PriorityComparator implements Comparator<PCB>{
 
 		@Override
 		public int compare(PCB o1, PCB o2) {
 			return (o1.priority < o2.priority ) ? -1: (o1.priority > o2.priority) ? 1:0 ;
 	
-}
-	}
-      	
+		}
+      
+    }
 
+	
+	
+	
+	
+	
+	/**
+	 * This method behaves as FCFS
+	 * It sorts job according to the first come first serve rule
+	 */
+	private void fcfsSchedule() {
+		int count = 0;
+		while (true) {
+			if (pcbList.size() == 0)
+				return;
+			int[] memoryChunk = memory.GetLargestMemoryChunk();
+			if (memoryChunk[1] < pcbList.get(0).getMemoryFootprint())
+				return;
+			count++;
+			PCB pcb = pcbList.get(0);
+			//System.out.println(pcbList.get(0));
+			//System.out.println("Size of job is " + pcbList.get(0).getMemoryFootprint() );
+			int memoryIndex = memoryChunk[0];
+			int tempIndex = memoryIndex;
+			for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.jobFileAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.inputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.outputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.tempBufferAddress = tempIndex;
+			readyQueue.add(pcb);
+			pcb.startTime = System.currentTimeMillis();
+			pcbList.remove(pcb);
+			System.out.println(count);
+		}
+		
+		
+	}
+	/**
+	 * This method behaves as PrioritySchedule
+	 * It sorts job according to the priority of the jobs
+	 */
+	private void prioritySchedule() {
+		ArrayList<PCB> priorityList = new ArrayList<PCB>(pcbList);
+		
+		System.out.println("initial list");
+		
+		for(int i=0; i<priorityList.size();i++)
+			System.out.println(priorityList.get(i).getMemoryFootprint());
+		
+		
+		
+		Collections.sort(priorityList, new PriorityComparator());
+		
+		System.out.println("priority list");
+		
+		for(int i=0; i<priorityList.size();i++)
+			System.out.println(priorityList.get(i).getPriority());
+				
+		int count=0;
+		while (true) {
+			if (priorityList.size() == 0)
+				return;
+			int[] memoryChunk = memory.GetLargestMemoryChunk();
+			if (memoryChunk[1] < priorityList.get(0).getMemoryFootprint()){
+				System.out.println("return called here");
+				return;
+			}
+			
+			count++;
+			PCB pcb = priorityList.get(0);
+			int memoryIndex = memoryChunk[0];
+			int tempIndex = memoryIndex;
+			for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.jobFileAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.inputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.outputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.tempBufferAddress = tempIndex;
+			readyQueue.add(pcb);
+			pcb.startTime = System.currentTimeMillis();
+			pcbList.remove(pcb);
+			priorityList.remove(pcb);
+			System.out.println(count);
+		}
+	}
+	/**
+	 * This method behaves as Shortest Job First
+	 * It sorts job according to the shortest job first
+	 */
+
+
+	private void shortestJobFirstSchedule() {
+	
+	
+		ArrayList<PCB> priorityList = new ArrayList<PCB>(pcbList);
+		
+		System.out.println("initial list");
+		
+		for(int i=0; i<priorityList.size();i++)
+			System.out.println(priorityList.get(i).getMemoryFootprint());
+		
+		
+		
+		Collections.sort(priorityList, new JobComparator());
+				
+		
+		System.out.println("sorted list");
+		for(int i=0; i<priorityList.size();i++)
+			System.out.println(priorityList.get(i).getMemoryFootprint());
+		int count = 0;
+		while (true) {
+			if (priorityList.size() == 0)
+				return;
+			int[] memoryChunk = memory.GetLargestMemoryChunk();
+			if (memoryChunk[1] < priorityList.get(0).getMemoryFootprint()){
+				System.out.println("Return called here");
+				return;
+			}
+			
+			count++;
+			PCB pcb = priorityList.get(0);
+			System.out.println(priorityList.get(0));
+			System.out.println("Size of job is " + priorityList.get(0).getMemoryFootprint() );
+			int memoryIndex = memoryChunk[0];
+			int tempIndex = memoryIndex;
+			for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.jobFileAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.inputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.outputBufferAddress = tempIndex;
+			tempIndex = memoryIndex;
+			for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
+				memory.writeData(memoryIndex++, disk.readData(i));
+			}
+			pcb.tempBufferAddress = tempIndex;
+			readyQueue.add(pcb);
+			pcb.startTime = System.currentTimeMillis();
+			pcbList.remove(pcb);
+			priorityList.remove(pcb);
+			System.out.println(count);
+		}
+		
+	}
+	
+	
+	
+	
+}

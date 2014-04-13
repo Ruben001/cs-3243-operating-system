@@ -22,14 +22,7 @@ public class CPU implements Runnable {
 	public static Dispatcher dispatcher;
 	public static AverageCalculator averageCalculator;
 	//int MemoryFootprint;
-
-	//private ArrayList<PCB> pcbList; // field variable for PCB List
 	//private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
-//=======
-	private ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
-
-	//private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
-
 	public ArrayList<boolean[]> cache; // field variable for CPU cache
 
 	//Holds jobs PCB
@@ -199,23 +192,6 @@ public class CPU implements Runnable {
 		System.out.println("CPU number: " + cpuNumber + " is starting..with Process number: " +processId );
 		//System.out.println("Loading Process number: " + processId  );
 		//System.out.println("Loading Process length: " + processLength  );
-		try{
-			
-			FileOutputStream fos = new FileOutputStream("cpu.txt",true);
-			PrintWriter pw = new PrintWriter( fos );
-			
-			pw.print("\nCPU number: ");
-			pw.print(cpuNumber);
-			pw.print("\nis starting..with Process number");
-			pw.print(processId);
-			pw.println();
-			pw.close();
-		}
-		catch(FileNotFoundException fnfe){
-			fnfe.printStackTrace();
-		}
-		
-		
 		
 		try{
 			
@@ -247,24 +223,11 @@ public class CPU implements Runnable {
 			cacheUsage++;
 		}
 		
-
-		
-		/** Phase 1 -Part 2 NON PRE EMPTIVE 
-		 *  As part of redesigning stScheduler, each of 4 cpu threads, 
-		 *  should call stScheduler to get the next job from one readyQueue   
-		 *  TO DO-To Lock readyQueue so that at one time only one thread access readyQueue 
-		 */  
-		/** ltScheduler.schedule();*/ 
-		//stScheduler.ScheduleAndDispatch(); // it calls the short term scheduler and dispatch next jobs
-		
-}	
-
 		//this.cpuHasProcess = false;
 		
-	//}
+	}
 	
 	
-
 	/**
 	 * This method fetches an instruction from the Memory
 	 * @param takes in memory address
@@ -827,7 +790,6 @@ public class CPU implements Runnable {
 			
 			//Free up memory for next process
 			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
-			memory.setMemoryAvailability(true);
 			pc++;
 			break;
 		case "010011"://19
