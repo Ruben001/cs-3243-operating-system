@@ -14,16 +14,6 @@ public final class Memory {
 	
 	static Semaphore memoryLock = new Semaphore(1);
 	
-	private  boolean memoryIsAvailable = true;
-	
-	public synchronized boolean getMemoryAvailability(){
-		return memoryIsAvailable;
-	}
-	
-	public synchronized void setMemoryAvailability(boolean memoryIsAvailable){
-		this.memoryIsAvailable = memoryIsAvailable;
-	}
-	
 	/**
 	 * Constant size of each word. 32 bits. 
 	 */

@@ -41,10 +41,9 @@ public class ShortTermScheduler {
 	private SchedulingAlgorithm algorithm;
 	
 	//public Constructor instantiated in OSDriver.java
-	//public ShortTermScheduler(Dispatcher dispatcher,LongTermScheduler ltScheduler,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo, AverageCalculator averageCalculator) {
-	public ShortTermScheduler(Dispatcher dispatcher, Memory memory, ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo, AverageCalculator averageCalculator) {
+	public ShortTermScheduler(Dispatcher dispatcher,LongTermScheduler ltScheduler,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo, AverageCalculator averageCalculator) {
 		this.dispatcher = dispatcher;
-		//this.ltScheduler = ltScheduler; if threaded Long Term Scheduler is used
+		this.ltScheduler = ltScheduler;
 		this.memory = memory;
 		this.pcbList = pcbList;
 		this.readyQueue = readyQueue;
@@ -62,10 +61,9 @@ public class ShortTermScheduler {
 		 * CPU Scheduler chooses a process from readyQueue, to which CPU could be allocated
 	     depending on whether CPU has no process before and if the scheduling has to be preemptive.
 	     */  	
-		System.out.println("I am within ST ScheduleandDespatch()");
+		
 		switch(algorithm) {
 		case FCFS:
-			System.out.println("I am within ST ScheduleandDespatch(), calling FCFS");
 			fcfsSchedule();
 			break;
 		case PRIORITY:
@@ -99,18 +97,16 @@ public class ShortTermScheduler {
 	
 	private void fcfsSchedule() {
 		
-		System.out.printf("I am within ST FCFSSchedule checking readqueue size = %d ",readyQueue.size() );
+		
 		while(readyQueue.size() != 0){
-			
-			System.out.printf("I have checked readyQueue size is not zero");
 			//nextProcess =  readyQueue.remove(0);
 			//dispatch(nextProcess);
 			
-			//Not needed in case of LT Threaded server
+			
 			//Long term scheduler runs again if the Ready queue falls under 5 jobs
-			//if(readyQueue.size() < 5){
-				//ltScheduler.schedule();
-			//}
+			if(readyQueue.size() < 5){
+				ltScheduler.schedule();
+			}
 			/**
 			 * Thread tries to acquire the lock
 			 */
