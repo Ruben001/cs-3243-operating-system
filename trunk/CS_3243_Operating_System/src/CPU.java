@@ -168,7 +168,7 @@ public class CPU implements Runnable {
 			dispatcher.dispatcherLock.release();
 			//writeLock.release();
 			try {
-				Thread.sleep(10);
+				Thread.sleep(0);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -193,10 +193,32 @@ public class CPU implements Runnable {
 		//System.out.println("Loading Process number: " + processId  );
 		//System.out.println("Loading Process length: " + processLength  );
 		
+		
+		
+		
+		
+try{
+			
+			
+			
+			FileOutputStream fos2 = new FileOutputStream("cpu.txt",true);
+			PrintWriter pw2 = new PrintWriter( fos2 );
+		
+			pw2.print("\nCPU number: ");
+			pw2.print(cpuNumber);
+			pw2.print(" is starting..with Process number: ");
+			pw2.print(processId);
+			pw2.close();
+		}
+		catch(FileNotFoundException fnfe){
+			fnfe.printStackTrace();
+		}
 		try{
 			
 			FileOutputStream fos = new FileOutputStream("results.txt",true);
 			PrintWriter pw = new PrintWriter( fos );
+			
+			
 			
 			pw.print("\nJob: ");
 			pw.print(processId);
@@ -204,6 +226,8 @@ public class CPU implements Runnable {
 			pw.print(processLength);
 			pw.println();
 			pw.close();
+			
+			
 		}
 		catch(FileNotFoundException fnfe){
 			fnfe.printStackTrace();
@@ -759,6 +783,9 @@ public class CPU implements Runnable {
 				FileOutputStream fos = new FileOutputStream("results.txt",true);
 				PrintWriter pw = new PrintWriter( fos );
 				
+				FileOutputStream fos2 = new FileOutputStream("cpu.txt",true);
+				PrintWriter pw2 = new PrintWriter( fos2 );
+				
 				pw.print("\nCompletion time: ");
 				pw.print(completionTime);
 				pw.print(" Wait time: ");
@@ -776,10 +803,21 @@ public class CPU implements Runnable {
 				pw.print("*************");
 				
 				
+				pw2.print("\nCompletion time: ");
+				pw2.print(completionTime);
+				pw2.print(" Wait time: ");
+				pw2.print(waitTime);
+				pw2.print(" Number IO requests: ");
+				pw2.print(numberIO);
+				
+				
 				
 				
 				pw.println();
 				pw.close();
+				pw2.println();
+				pw2.println();
+				pw2.close();
 			}
 			catch(FileNotFoundException fnfe){
 				

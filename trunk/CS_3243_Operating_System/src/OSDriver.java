@@ -2,8 +2,10 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -36,7 +38,10 @@ public class OSDriver{
 	private static LongTermScheduler ltScheduler; //LongTermScheduler field variable
 	private static ShortTermScheduler stScheduler; // ShortTermScheduler field variable
 	public static String content;  // this variable is used to return result to GUI interface
+	public static String cpuContent;  // this variable is used to return result to GUI interface
 	private static String filename; // this variable gets the the filename from GUI interface to run
+	private static String algorithm; // this variable gets the the algorithm from GUI interface to run
+	private static int cpuNumber; // this variable gets the the cpuNumber from GUI interface to run
 	// list of all PCB's remaining in the disk
 	private static ArrayList<PCB> pcbList; // ArrayList of PCB class, it behaves as list of PCB
 	
@@ -53,6 +58,79 @@ public class OSDriver{
 		
 		filename = name;
 		
+		
+	}
+	
+	
+	/**
+	 * It is setter method to filename, algorithm and cpuNumber
+	 * @param it takes in string value as a filename
+	 * @param it takes in string value as an algorithm
+	 * @param it takes in int value as a cpuNumber
+	 */
+	
+	public static void setParameters(String name,String algo, int cpu){
+		
+		filename = name;
+		algorithm = algo;
+		cpuNumber = cpu;
+		
+		
+	}
+	
+	
+	private static void createCpu(int number){
+		
+		if(number==4){
+			Runnable cpu1 = new CPU(1,memory,dispatcher,averageCalculator);
+			Runnable cpu2 = new CPU(2,memory,dispatcher,averageCalculator);
+			Runnable cpu3 = new CPU(3,memory,dispatcher,averageCalculator);
+			Runnable cpu4 = new CPU(4,memory,dispatcher,averageCalculator);
+			
+			new Thread(cpu1).start();
+			new Thread(cpu2).start();
+			new Thread(cpu3).start();
+			new Thread(cpu4).start();
+			
+			}
+			
+			else if(number==3){
+				Runnable cpu1 = new CPU(1,memory,dispatcher,averageCalculator);
+				Runnable cpu2 = new CPU(2,memory,dispatcher,averageCalculator);
+				Runnable cpu3 = new CPU(3,memory,dispatcher,averageCalculator);
+				//Runnable cpu4 = new CPU(4,memory,dispatcher,averageCalculator);
+				
+				new Thread(cpu1).start();
+				new Thread(cpu2).start();
+				new Thread(cpu3).start();
+				//new Thread(cpu4).start();
+				
+				}
+			else if(number==2){
+				Runnable cpu1 = new CPU(1,memory,dispatcher,averageCalculator);
+				Runnable cpu2 = new CPU(2,memory,dispatcher,averageCalculator);
+				//Runnable cpu3 = new CPU(3,memory,dispatcher,averageCalculator);
+				//Runnable cpu4 = new CPU(4,memory,dispatcher,averageCalculator);
+				
+				new Thread(cpu1).start();
+				new Thread(cpu2).start();
+				//new Thread(cpu3).start();
+				//new Thread(cpu4).start();
+				
+				}
+			else if(number==1){
+				Runnable cpu1 = new CPU(1,memory,dispatcher,averageCalculator);
+				//Runnable cpu2 = new CPU(2,memory,dispatcher,averageCalculator);
+				//Runnable cpu3 = new CPU(3,memory,dispatcher,averageCalculator);
+				//Runnable cpu4 = new CPU(4,memory,dispatcher,averageCalculator);
+				
+				new Thread(cpu1).start();
+				//new Thread(cpu2).start();
+				//new Thread(cpu3).start();
+				//new Thread(cpu4).start();
+				
+				}
+			
 		
 	}
 	
@@ -80,27 +158,47 @@ public class OSDriver{
 		
 		//filename = "DataFile2-Cleaned.txt";//if you don't want to use the GUI, uncomment this line
 
+		
+		
+		
+		
 		/*
 		 * Phase 1 part-2 
 		 * Creates a new CPU thread using the Runnable interface
 		 */
 		
-		Runnable cpu1 = new CPU(1,memory,dispatcher,averageCalculator);
-		Runnable cpu2 = new CPU(2,memory,dispatcher,averageCalculator);
-		Runnable cpu3 = new CPU(3,memory,dispatcher,averageCalculator);
-		Runnable cpu4 = new CPU(4,memory,dispatcher,averageCalculator);
 		
-		new Thread(cpu1).start();
-		new Thread(cpu2).start();
-		new Thread(cpu3).start();
-		new Thread(cpu4).start();
+		createCpu(cpuNumber);
+		
+		
+		/*
+		 *Creates the files to which the various output will be written to
+		 *By this, old contents/files will be destroyed and will be replaced by new ones each time
+		 */
+		try{
+			
+			FileOutputStream fos = new FileOutputStream("results.txt",false);
+			FileOutputStream fos2 = new FileOutputStream("cpu.txt",false);
+			PrintWriter pw = new PrintWriter( fos );
+			PrintWriter pw2 = new PrintWriter( fos2 );
+			
+			
+			pw.close();
+			pw2.close();
+			}
+		catch(FileNotFoundException fnfe){
+			fnfe.printStackTrace();
+		}
 		
 		
 		
 		//ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
 
-		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
-
+		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, algorithm); // initiated ltScheduler
+		//Changed the last parameter from SchedulingAlgorithm type to string to be able to use selected algorithm from GUI
+		
+		
+		
 		stScheduler = new ShortTermScheduler(dispatcher,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS, averageCalculator); // initiated stScheduler
 		// call the loader to load the job file into the Disk
 		
@@ -129,6 +227,8 @@ public class OSDriver{
 		stScheduler.ScheduleAndDispatch(); // it calls the short term scheduler and dispatch jobs
 		
 		content = "";
+		cpuContent = "";
+		
 		/**
 		 * This block of codes get the results from cpu and display on the GUI console
 		 */
@@ -137,6 +237,10 @@ public class OSDriver{
 			File f = new File("results.txt");
 			FileReader fr = new FileReader("results.txt");
 			BufferedReader br = new BufferedReader(fr);
+			
+			File f2 = new File("cpu.txt");
+			FileReader fr2 = new FileReader("cpu.txt");
+			BufferedReader br2 = new BufferedReader(fr2);
 			
 			String lineRead = br.readLine();
 			
@@ -152,8 +256,33 @@ public class OSDriver{
 				}
 			}
 			
+			
+			
+			
+			/**
+			 * This block of codes get the results from the different cpu(s) and display on the GUI console
+			 */
+			
+			String cpuLineRead = br2.readLine();
+			
+			cpuContent = cpuLineRead;
+			
+			while(cpuLineRead!=null){
+				
+				cpuLineRead = br2.readLine();
+				
+				if(cpuLineRead!=null){
+				cpuContent = cpuContent + "\n" + cpuLineRead;
+				System.out.println(cpuLineRead);
+				}
+			}
+			
+			
 			br.close();
 			f.delete();
+			
+			br2.close();
+			fr2.close();
 			
 		}
 		catch(FileNotFoundException fnfe){
@@ -168,6 +297,7 @@ public class OSDriver{
 		return;
 		
 	}
+	
 
 
 	
