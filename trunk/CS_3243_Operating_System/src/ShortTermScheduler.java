@@ -3,6 +3,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.io.*;
 
+
+
+
+
 /**
  * The Short term scheduler keeps its scheduling algorithms that 
  * are called by ScheduleAndDispatch().  The dispatcher puts jobs 
@@ -38,10 +42,10 @@ public class ShortTermScheduler {
 	private static ArrayList<PCB> readyQueue;
 	private int currentQIndex;
 	
-	private SchedulingAlgorithm algorithm;
+	private String algorithm;
 	
 	//public Constructor instantiated in OSDriver.java
-	public ShortTermScheduler(Dispatcher dispatcher,LongTermScheduler ltScheduler,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, SchedulingAlgorithm algo, AverageCalculator averageCalculator) {
+	public ShortTermScheduler(Dispatcher dispatcher,LongTermScheduler ltScheduler,Memory memory,ArrayList<PCB> pcbList, ArrayList<PCB> readyQueue, String algo, AverageCalculator averageCalculator) {
 		this.dispatcher = dispatcher;
 		this.ltScheduler = ltScheduler;
 		this.memory = memory;
@@ -63,16 +67,13 @@ public class ShortTermScheduler {
 	     */  	
 		
 		switch(algorithm) {
-		case FCFS:
+		case "FCFS":
 			fcfsSchedule();
 			break;
-		case PRIORITY:
+		case "PRIORITY":
 			prioritySchedule();
 			break;
-		case RR:
-			rrSchedule();
-			break;
-		case SJF:
+		case "SJF":
 			sjfSchedule();
 			break;
 		}
@@ -147,60 +148,100 @@ public class ShortTermScheduler {
 		
 	}
 	
+	
+	
+	
+
+	
+	/**
+	 * This method sorts an arrayList of jobs
+	 * It sorts jobs in ascending order
+	 */
+	private static class PriorityComparator implements Comparator<PCB>{
+
+		@Override
+		public int compare(PCB o1, PCB o2) {
+			return (o1.priority < o2.priority ) ? -1: (o1.priority > o2.priority) ? 1:0 ;
+	
+		}
+      
+    }
+
+	
+	
+	
+	
+	
+
 	private void prioritySchedule() {
 		
-		//Once the readyQueue is prepared based on selected scheduling Algorithm by LOngTermScheduler
-		//Go in loop of 4 to allocate each cpu thread, a process if it is available in ready queu
-		//each cpu after completing a process will call short term scheduler to get a new job with a flag
-		//if true call else allocate in for loop
-		//ready queue would be based on chosen algorithm already  
+		//Shortest next CPU Burst algorithm -see long term scheduler
+		// may be both pre emption and non pre emption
 		
-		while(readyQueue.size() != 0){
-			
-			//getPriority() of running process on CPU to compare with one at top of PriorityQueue  
-			//remove low priority on cpu and add to ready queue based on priority  pre emption phase 11 not part 2
+		Collections.sort(readyQueue, new PriorityComparator());
 				
-			/** Phase 2
-			 if (!cpu.isRunning()) 
-		    	 dispatch(nextProcess);
-
-		      if (readyQueue.peek() != null && cpu.isRunning() &&
-		            readyQueue.peek().getPriority() > cpu.getRunningPriority())
-		            //swapProcesses(); 
-		             remove and despatch as below.
-		    */
-			
-			nextProcess =  readyQueue.remove(0);
-			try {
-				dispatcher.shortTermProduce(nextProcess);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}				
-		}
-			
-	}
-	
-	private void rrSchedule() {
-		//fcfs with pre emption allocating cpu to each in circular readu queue upto 1 time quantum 10ms-100ms
-		
 		while(readyQueue.size() != 0){
 			//see long term scheduling 
-			nextProcess =  readyQueue.remove(0);
+			if(readyQueue.size() < 5){
+				ltScheduler.schedule();
+			}
 			try {
-				dispatcher.shortTermProduce(nextProcess);
+				dispatcher.dispatcherLock.acquire();
+				//writeLock.acquire();
+				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}				
+			}
+			if(dispatcher.hasProcessForCPU() == false){
+				try {
+					nextProcess =  readyQueue.remove(0);
+					dispatcher.shortTermProduce(nextProcess);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			dispatcher.dispatcherLock.release();
+			//writeLock.release();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+						
 		}
-		
 	}
+	
+	
+	
+	
+	/**
+	 * This method sorts an arrayList of jobs
+	 * It sorts jobs in ascending order
+	 */
+	private static class JobComparator implements Comparator<PCB>{
+
+		@Override
+		public int compare(PCB o1, PCB o2) {
+			return (o1.jobFileLength < o2.jobFileLength ) ? -1: (o1.jobFileLength > o2.jobFileLength) ? 1:0 ;
+	
+		}
+	}
+      
+	
+	
+	
+	
 	
 	private void sjfSchedule() {
 		
 		//Shortest next CPU Burst algorithm -see long term scheduler
 		// may be both pre emption and non pre emption
+		
+		Collections.sort(readyQueue, new JobComparator());
 				
 		while(readyQueue.size() != 0){
 			//see long term scheduling 
