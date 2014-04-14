@@ -48,7 +48,7 @@ public class LongTermScheduler {
 			fcfsSchedule();
 						
 			break;
-		case "PRIORITY":
+		/*case "PRIORITY":
 			prioritySchedule();
 			break;
 		case "RR":
@@ -56,7 +56,7 @@ public class LongTermScheduler {
 			break;
 		case "SJF":
 			shortestJobFirstSchedule();
-			break;
+			break;*/
 		}
 	}
 	
@@ -68,6 +68,8 @@ public class LongTermScheduler {
 	 * This method sorts an arrayList of jobs
 	 * It sorts jobs in ascending order
 	 */
+	
+	/*
 	private static class JobComparator implements Comparator<PCB>{
 
 		@Override
@@ -77,6 +79,7 @@ public class LongTermScheduler {
 		}
       
     }
+    */
 	
 	
 	
@@ -85,6 +88,7 @@ public class LongTermScheduler {
 	 * This method sorts an arrayList of jobs
 	 * It sorts jobs in ascending order
 	 */
+	/*
 	private static class PriorityComparator implements Comparator<PCB>{
 
 		@Override
@@ -93,7 +97,7 @@ public class LongTermScheduler {
 	
 		}
       
-    }
+    }*/
 
 	
 	
@@ -145,10 +149,16 @@ public class LongTermScheduler {
 		
 		
 	}
+	
+	
+	
 	/**
 	 * This method behaves as PrioritySchedule
 	 * It sorts job according to the priority of the jobs
 	 */
+	
+	
+	/*
 	private void prioritySchedule() {
 		ArrayList<PCB> priorityList = new ArrayList<PCB>(pcbList);
 		
@@ -160,6 +170,8 @@ public class LongTermScheduler {
 		
 		
 		Collections.sort(priorityList, new PriorityComparator());
+		
+		
 		
 		System.out.println("priority list");
 		
@@ -203,16 +215,16 @@ public class LongTermScheduler {
 			pcb.startTime = System.currentTimeMillis();
 			pcbList.remove(pcb);
 			priorityList.remove(pcb);
-			System.out.println(count);
+		
 		}
-	}
+	}*/
 	/**
 	 * This method behaves as Shortest Job First
 	 * It sorts job according to the shortest job first
 	 */
 
 
-	private void shortestJobFirstSchedule() {
+	/*private void shortestJobFirstSchedule() {
 	
 	
 		ArrayList<PCB> priorityList = new ArrayList<PCB>(pcbList);
@@ -269,11 +281,11 @@ public class LongTermScheduler {
 			pcb.startTime = System.currentTimeMillis();
 			pcbList.remove(pcb);
 			priorityList.remove(pcb);
-			System.out.println(count);
+		
 		}
 		
 	}
-	
+	*/
 	
 	
 	

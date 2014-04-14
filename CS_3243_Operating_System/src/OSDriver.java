@@ -194,12 +194,12 @@ public class OSDriver{
 		
 		//ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, SchedulingAlgorithm.FCFS); // initiated ltScheduler
 
-		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, algorithm); // initiated ltScheduler
+		ltScheduler = new LongTermScheduler(disk, memory, pcbList, readyQueue, "FCFS"); // initiated ltScheduler
 		//Changed the last parameter from SchedulingAlgorithm type to string to be able to use selected algorithm from GUI
 		
 		
 		
-		stScheduler = new ShortTermScheduler(dispatcher,ltScheduler,memory,pcbList,readyQueue,SchedulingAlgorithm.FCFS, averageCalculator); // initiated stScheduler
+		stScheduler = new ShortTermScheduler(dispatcher,ltScheduler,memory,pcbList,readyQueue,algorithm, averageCalculator); // initiated stScheduler
 		// call the loader to load the job file into the Disk
 		
 		//filename = "DataFile2-Cleaned.txt";
