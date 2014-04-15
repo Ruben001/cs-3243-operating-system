@@ -173,12 +173,21 @@ public class ShortTermScheduler {
 		//Shortest next CPU Burst algorithm -see long term scheduler
 		// may be both pre emption and non pre emption
 		
+		
+		//Sorts the readyQueue initially
 		Collections.sort(readyQueue, new PriorityComparator());
+		
 				
 		while(readyQueue.size() != 0){
+			
+			
 			//see long term scheduling 
+			//Collections.sort(readyQueue, new PriorityComparator());
+			
 			if(readyQueue.size() < 5){
 				ltScheduler.schedule();
+				Collections.sort(readyQueue, new PriorityComparator());
+				
 			}
 			try {
 				dispatcher.dispatcherLock.acquire();
@@ -202,6 +211,7 @@ public class ShortTermScheduler {
 			//writeLock.release();
 			
 						
+		
 		}
 	}
 	
@@ -231,12 +241,18 @@ public class ShortTermScheduler {
 		//Shortest next CPU Burst algorithm -see long term scheduler
 		// may be both pre emption and non pre emption
 		
+		//Sorts the readyQueue initially
 		Collections.sort(readyQueue, new JobComparator());
+		
 				
 		while(readyQueue.size() != 0){
+			
+			//Sorts the readyQueue again once the LongTermScheduler adds more jobs
+			
 			//see long term scheduling 
 			if(readyQueue.size() < 5){
 				ltScheduler.schedule();
+				Collections.sort(readyQueue, new JobComparator());
 			}
 			try {
 				dispatcher.dispatcherLock.acquire();
