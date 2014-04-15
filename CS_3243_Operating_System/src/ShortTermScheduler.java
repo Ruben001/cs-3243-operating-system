@@ -202,14 +202,11 @@ public class ShortTermScheduler {
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			if(dispatcher.hasProcessForCPU() == false){
 				try {
-					
-					
-					
-					
 					//priority Testing
 					nextProcess = readyQueue.get(0);
 					int locationInQueue = 0;
@@ -230,6 +227,8 @@ public class ShortTermScheduler {
 					
 					//end Priority Test
 					nextProcess =  readyQueue.remove(locationInQueue);
+					
+					
 					dispatcher.shortTermProduce(nextProcess);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

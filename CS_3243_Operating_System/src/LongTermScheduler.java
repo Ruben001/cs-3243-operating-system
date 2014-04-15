@@ -115,32 +115,42 @@ public class LongTermScheduler {
 		while (true) {
 			if (pcbList.size() == 0)
 				return;
+			
 			int[] memoryChunk = memory.GetLargestMemoryChunk();
 			if (memoryChunk[1] < pcbList.get(0).getMemoryFootprint())
 				return;
+			
 			count++;
 			PCB pcb = pcbList.get(0);
+			pcb.initiatePageTable();
+			OSDriver.memoryManager.firstData(pcb);
 			//System.out.println(pcbList.get(0));
 			//System.out.println("Size of job is " + pcbList.get(0).getMemoryFootprint() );
 			int memoryIndex = memoryChunk[0];
 			int tempIndex = memoryIndex;
+			
 			for (int i = pcb.jobFileAddress; i - pcb.jobFileAddress < pcb.jobFileLength; ++i) {
-				memory.writeData(memoryIndex++, disk.readData(i));
+				//memory.writeData(memoryIndex++, disk.readData(i));
+				memoryIndex++;
 			}
 			pcb.jobFileAddress = tempIndex;
 			tempIndex = memoryIndex;
 			for (int i = pcb.inputBufferAddress; i - pcb.inputBufferAddress < pcb.inputBufferLength; ++i) {
-				memory.writeData(memoryIndex++, disk.readData(i));
+				//memory.writeData(memoryIndex++, disk.readData(i));
+				memoryIndex++;
+				
 			}
 			pcb.inputBufferAddress = tempIndex;
 			tempIndex = memoryIndex;
 			for (int i = pcb.outputBufferAddress; i - pcb.outputBufferAddress < pcb.outputBufferLength; ++i) {
-				memory.writeData(memoryIndex++, disk.readData(i));
+				//memory.writeData(memoryIndex++, disk.readData(i));
+				memoryIndex++;
 			}
 			pcb.outputBufferAddress = tempIndex;
 			tempIndex = memoryIndex;
 			for (int i = pcb.tempBufferAddress; i - pcb.tempBufferAddress < pcb.tempBufferLength; ++i) {
-				memory.writeData(memoryIndex++, disk.readData(i));
+				//memory.writeData(memoryIndex++, disk.readData(i));
+				memoryIndex++;
 			}
 			pcb.tempBufferAddress = tempIndex;
 			readyQueue.add(pcb);

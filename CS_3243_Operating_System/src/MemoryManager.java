@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 public class MemoryManager {
 	
-	private static Disk disk;
-	private static Memory ram;
+	public static Disk disk;
+	public static Memory ram;
 	private static int totalPageNumber, totalFrameNumber;
 	
 	private final int PAGE_SIZE = 16;
@@ -79,7 +79,7 @@ public class MemoryManager {
 		} else {
 			pcb.setPageFault(pcb.getPageFault()+1);
 			pageFault(index,pcb);
-			physicalAddress = -1;
+			physicalAddress = pcb.pageTable[index].getFrameNumber()*getPAGE_SIZE()+ remainder;
 		}
 		return physicalAddress;
 				

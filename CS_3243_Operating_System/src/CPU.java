@@ -269,7 +269,8 @@ try{
 		
 		//Put the instructions into the Cache
 		for(int i =0; i < processLength;i++){
-			fetch(processAddress + i);
+			//fetch(processAddress + i);
+			fetch(i);
 			cacheUsage++;
 		}
 		
@@ -295,7 +296,8 @@ try{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setCache(memory.readBinaryData(lineRam));
+		setCache(OSDriver.memoryManager.fetchData(lineRam,pcbHolder.get(0)));
+		//setCache(memory.readBinaryData(lineRam));
 		memory.memoryLock.release();
 		ramUsage++;
 	}
@@ -859,7 +861,14 @@ try{
 			}
 			
 			//Free up memory for next process
+			try {
+				memory.memoryLock.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
+			memory.memoryLock.release();
 			pc++;
 			break;
 		case "010011"://19
