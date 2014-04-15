@@ -147,7 +147,20 @@ public class CPU implements Runnable {
 	
 	
 	public synchronized void run(){
+		System.out.println("CPU number: " + cpuNumber + " has started");
 		
+		try{
+					FileOutputStream fos2 = new FileOutputStream("cpu.txt",true);
+					PrintWriter pw2 = new PrintWriter( fos2 );
+				
+					pw2.print("\nCPU number: ");
+					pw2.print(cpuNumber);
+					pw2.print(" has started");
+					pw2.close();
+				}
+				catch(FileNotFoundException fnfe){
+					fnfe.printStackTrace();
+				}
 		while(true){
 			
 			
@@ -172,6 +185,25 @@ public class CPU implements Runnable {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			
+			if(dispatcher.killCPUs == true){
+				System.out.println("CPU number: " + cpuNumber + " has terminated");
+				
+				try{
+					FileOutputStream fos2 = new FileOutputStream("cpu.txt",true);
+					PrintWriter pw2 = new PrintWriter( fos2 );
+				
+					pw2.print("\nCPU number: ");
+					pw2.print(cpuNumber);
+					pw2.print(" has terminated");
+					pw2.close();
+				}
+				catch(FileNotFoundException fnfe){
+					fnfe.printStackTrace();
+				}
+				
+				break;
 			}
 		}
 		
