@@ -41,6 +41,8 @@ public class LongTermScheduler {
 	 * 
 	 */
 	public void schedule() {
+		
+		this.algorithm = "FCFS";
 		switch(algorithm)
 		{
 		case "FCFS":	
