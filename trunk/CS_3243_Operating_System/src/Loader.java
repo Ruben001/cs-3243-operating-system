@@ -65,7 +65,8 @@ public final class Loader {
 			pcb.jobFileLength = Integer.parseInt(tokens[3], 16);
 			for (int i = 0; i < pcb.jobFileLength; ++i) {
 				line = reader.nextLine();
-				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				//disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				OSDriver.memoryManager.writeDiskData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
 				diskIndex++;
 			}
 			line = reader.nextLine();
@@ -75,21 +76,24 @@ public final class Loader {
 			for (int i = 0; i < pcb.inputBufferLength; ++i) {
 				line = reader.nextLine();
 				//System.out.println(line);
-				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				//disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				OSDriver.memoryManager.writeDiskData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
 				++diskIndex;
 			}
 			pcb.outputBufferAddress = diskIndex;
 			pcb.outputBufferLength = Integer.parseInt(tokens[3], 16);
 			for (int i = 0; i < pcb.outputBufferLength; ++i) {
 				line = reader.nextLine();
-				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				//disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				OSDriver.memoryManager.writeDiskData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
 				++diskIndex;
 			}
 			pcb.tempBufferAddress = diskIndex;
 			pcb.tempBufferLength = Integer.parseInt(tokens[4], 16);
 			for (int i = 0; i < pcb.tempBufferLength; ++i) {
 				line = reader.nextLine();
-				disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				//disk.writeData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
+				OSDriver.memoryManager.writeDiskData(diskIndex, Long.parseLong(line.replace("0x", ""), 16));
 				++diskIndex;
 			}
 			line = reader.nextLine();
