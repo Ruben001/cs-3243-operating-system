@@ -4,26 +4,26 @@ public class MemoryManager {
 	private static Disk disk;
 	private static Memory ram;
 	private static int totalPageNumber, totalFrameNumber;
-	private ArrayList<JobFrame> frames;
+	
 	private final int PAGE_SIZE = 16;
-	private static PageTable[] pageTable;
+	
 	private ArrayList<Integer> freePageList, freeFrameList;
 	
 	
 	public MemoryManager(){
-		frames = new ArrayList<JobFrame>();
+		
 		freeFrameList = new ArrayList<Integer>();
        
         disk = new Disk();
         ram = new Memory();
         
-        totalPageNumber = 1024/PAGE_SIZE;
-        totalFrameNumber = 2048/PAGE_SIZE;
+        totalPageNumber = 2048/PAGE_SIZE;
+        totalFrameNumber = 1024/PAGE_SIZE;
         
-        pageTable = new PageTable[totalPageNumber];
+        
         freePageList = new ArrayList<Integer>();
         
-        initializePageTable();
+        
         initializeFreePageList();
         initializeFreeFrameList();
         
@@ -42,11 +42,7 @@ public class MemoryManager {
 	/*
 	 * This method initialize page table for the first time
 	 */
-	private void initializePageTable(){
-		for(int i =0;i<totalPageNumber;i++){
-			pageTable[i]= new PageTable();
-		}
-	}
+	
 	/**
 	 * This method initialize freePageList
 	 */
@@ -56,43 +52,78 @@ public class MemoryManager {
 		}
 	}
 	
-	public int getFrame(int initial, PCB pcb){
-		
+	public int getFreeFrame(PCB pcb){
 		return 0;
+		
 	}
 	
-	public int getPhysicalAddress(int pageNumber, int offset){
-		int frameNumber, physicalAddress;
-		if(isValidFrame(pageNumber) && offset<PAGE_SIZE){
-			frameNumber= pageTable[pageNumber].getFrameNumber();
-			physicalAddress= frameNumber*PAGE_SIZE+offset;
-			return physicalAddress;
+	public int getPhysicalAddress(int offset, PCB pcb){
+		int physicalAddress;
+		int index = offset/getPAGE_SIZE();
+		int remainder = offset%getPAGE_SIZE();
+		if(pcb.pageTable[index].isValid()==true){
+			physicalAddress = pcb.pageTable[index].getFrameNumber()*getPAGE_SIZE()+ remainder;
+		} else {
+			pcb.setPageFault(pcb.getPageFault()+1);
+			pageFault(index,pcb);
+			physicalAddress = -1;
+		}
+		return physicalAddress;
+				
+	}
+	
+	public boolean[] fetchData(int offset, PCB pcb){
+		int physicalAddress = getPhysicalAddress(offset,pcb);
+		return readRamDataBinary(physicalAddress);
+	}
+	
+	private void pageFault(int index, PCB pcb) {
+		int frame = getFreeFrameNumber();
+		int page = getFreePageNumber();
+		pcb.pageTable[index].setFrameNumber(frame);
+		pcb.pageTable[index].setValid(true);
+		pcb.pageTable[index].setJobID(pcb.processId);
+		
+		int remainder = pcb.jobFileLength%getPAGE_SIZE();
+		int stop;
+		int diskAddress = pcb.diskFileAddress+index*getPAGE_SIZE();
+		if(remainder>0){
+			stop = diskAddress+remainder;
+		} else {
+			stop = diskAddress+getPAGE_SIZE();
 		}
 		
-		return -1;
+		int memoryAddress = frame * getPAGE_SIZE();
+		for(int i =diskAddress;i<stop;i++){
+			ram.writeData(memoryAddress, disk.readData(i));
+			memoryAddress++;
+		}
+		
+		
 	}
-	public boolean isValidFrame(int pageNumber){
-		return pageTable[pageNumber].isValid();
-	}
-	
+
 	/**
 	 * This methods gives the first free page number
 	 * returns -1 if pages are not free
 	 */
 	public int getFreePageNumber(){
 		if(freePageList.size()>0){
-			return freePageList.get(0);
+			return freePageList.remove(0);
 		}
 		return -1;
 	}
 	
+	public int getPAGE_SIZE() {
+		return PAGE_SIZE;
+	}
+
 	/**
 	 * This methods gives the first free frame number
 	 * returns -1 if frames are not free
 	 */
 	public int getFreeFrameNumber(){
 		if(freeFrameList.size()>0){
-			return freeFrameList.get(0);
+			return freeFrameList.remove(0);
 		}
 		return -1;
 	}
@@ -104,9 +135,7 @@ public class MemoryManager {
 	public void freePage(int pageNumber){
 		int address = pageNumber*PAGE_SIZE;
 		int length = PAGE_SIZE;
-		pageTable[pageNumber].setValid(false);
-		pageTable[pageNumber].setFrameNumber(0);
-		pageTable[pageNumber].setJobID(0);
+		
 		
 		
 		ram.free(address, length);

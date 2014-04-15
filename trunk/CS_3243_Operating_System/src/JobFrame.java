@@ -30,5 +30,12 @@ public class JobFrame {
 	public void setFrameList(LinkedList<Integer> frameList) {
 		this.frameList = frameList;
 	}
+	
+	public int getFrame(int iteration){
+		if(iteration<frameList.size()){
+			return frameList.get(iteration);
+		}
+		return -1;
+	}
 
 }

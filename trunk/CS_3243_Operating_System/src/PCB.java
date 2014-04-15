@@ -18,6 +18,10 @@ public class PCB {
 	public int processId;
 	public int priority;
 	
+	public PageTable[] pageTable;
+	
+	public int pageFault;
+
 	public ProcessState state;
 	public int pc;
 	
@@ -32,8 +36,8 @@ public class PCB {
 	public int tempBufferLength;
 	
 	// memory
-	public int memoryStart;
-	public int memoryLength;
+	//public int memoryStart;
+	//public int memoryLength;
 	
 	// progeny
 	public PCB parent;
@@ -65,15 +69,26 @@ public class PCB {
 	long numberIO;
 	long ramUsage;
 	long cacheUsage;
+	
+	public int diskFileAddress;
 
 	/**
 	 * Constructor for the PCB class
 	 */
 	public PCB() {
+		pageFault=0;
 		children = new ArrayList<PCB>();
 		registers = new long[16];
 		cache = new ArrayList<boolean[]>();
 		pc = 0;
+	}
+
+	public int getPageFault() {
+		return pageFault;
+	}
+
+	public void setPageFault(int pageFault) {
+		this.pageFault = pageFault;
 	}
 
 	/**
@@ -118,7 +133,25 @@ public class PCB {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}	
-		
+	
+	/**
+	 * this method initiate page table for the pcb
+	 */
+	public void initiatePageTable(){
+		int length = getMemoryFootprint();
+		int div = length/OSDriver.memoryManager.getPAGE_SIZE();
+		if(length%OSDriver.memoryManager.getPAGE_SIZE()>0){
+			pageTable = new PageTable[div+1];
+			for(int i =0; i<div+1;i++){
+				pageTable[i]= new PageTable();
+			}
+		} else {
+			pageTable = new PageTable[div];
+			for(int i =0; i<div;i++){
+				pageTable[i]= new PageTable();
+			}
+		}
+	}
 	
 	
 }

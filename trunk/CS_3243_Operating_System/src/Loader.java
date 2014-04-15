@@ -60,6 +60,7 @@ public final class Loader {
 			tokens = line.split(" ");
 			pcb.priority = Integer.parseInt(tokens[4], 16);
 			pcb.processId = Integer.parseInt(tokens[2], 16);//Set the process ID
+			pcb.diskFileAddress = diskIndex;
 			pcb.jobFileAddress = diskIndex;
 			pcb.jobFileLength = Integer.parseInt(tokens[3], 16);
 			for (int i = 0; i < pcb.jobFileLength; ++i) {
