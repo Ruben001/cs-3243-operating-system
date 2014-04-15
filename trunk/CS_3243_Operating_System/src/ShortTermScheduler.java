@@ -200,12 +200,7 @@ public class ShortTermScheduler {
 			
 			dispatcher.dispatcherLock.release();
 			//writeLock.release();
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 						
 		}
 	}
@@ -263,12 +258,7 @@ public class ShortTermScheduler {
 			
 			dispatcher.dispatcherLock.release();
 			//writeLock.release();
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 						
 		}
 	}
