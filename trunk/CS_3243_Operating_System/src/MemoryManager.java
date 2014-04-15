@@ -57,6 +57,19 @@ public class MemoryManager {
 		
 	}
 	
+	public void firstData(PCB pcb){
+		int frame = getFreeFrameNumber();
+		int page = getFreePageNumber();
+		int diskAddress = pcb.diskFileAddress;
+		int memoryAddress = frame * getPAGE_SIZE();
+		for(int i = 0 ;i<getPAGE_SIZE();i++){
+			ram.writeData(memoryAddress+i, disk.readData(diskAddress+i));
+		}
+		pcb.pageTable[0].setFrameNumber(frame);
+		pcb.pageTable[0].setValid(true);
+		pcb.pageTable[0].setJobID(pcb.processId);
+		
+	}
 	public int getPhysicalAddress(int offset, PCB pcb){
 		int physicalAddress;
 		int index = offset/getPAGE_SIZE();
