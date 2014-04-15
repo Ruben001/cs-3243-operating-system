@@ -31,11 +31,13 @@ public class OSDriver{
 	public static Dispatcher dispatcher;
 	public static AverageCalculator averageCalculator;
 	
+	
 	public static Runnable cpu;
 	//private static CPU cpu; // CPU field varaible
 	private static Disk disk; // Disk field variable
 	private static Memory memory; //Memory field variable
 	private static LongTermScheduler ltScheduler; //LongTermScheduler field variable
+	private static MemoryManager memoryManager;
 	private static ShortTermScheduler stScheduler; // ShortTermScheduler field variable
 	public static String content;  // this variable is used to return result to GUI interface
 	public static String cpuContent;  // this variable is used to return result to GUI interface
@@ -145,6 +147,9 @@ public class OSDriver{
 		dispatcher = new Dispatcher();
 		//Calculates the averages between the CPUs
 		averageCalculator = new AverageCalculator();
+		
+		//This is when 
+		memoryManager = new MemoryManager();
 		
 		
 		// initialize components
