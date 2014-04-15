@@ -37,7 +37,7 @@ public class OSDriver{
 	private static Disk disk; // Disk field variable
 	private static Memory memory; //Memory field variable
 	private static LongTermScheduler ltScheduler; //LongTermScheduler field variable
-	private static MemoryManager memoryManager;
+	public static MemoryManager memoryManager;
 	private static ShortTermScheduler stScheduler; // ShortTermScheduler field variable
 	public static String content;  // this variable is used to return result to GUI interface
 	public static String cpuContent;  // this variable is used to return result to GUI interface
