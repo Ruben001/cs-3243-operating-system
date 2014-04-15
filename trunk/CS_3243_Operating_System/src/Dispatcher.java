@@ -17,6 +17,8 @@ public  class  Dispatcher {
 	//Lock that has to be acquired to access this class is created 
 	static Semaphore dispatcherLock = new Semaphore(1);
 	
+	boolean killCPUs = false;
+	
 	//set to true when there is a job for the CPU 
 	private  boolean cpuHasProcess = false;
 	public synchronized boolean hasProcessForCPU(){
@@ -90,8 +92,8 @@ public  class  Dispatcher {
 		synchronized(this){
 			
 		//CPU time
-		cpuStartTime = nProcess.startTime;
-		cpuEndTime = nProcess.endTime;
+		cpuStartTime = nProcess.cpuStartTime;
+		cpuEndTime = nProcess.cpuEndTime;
 	//If its the first time the job gets the CPU
 	if(nProcess.pc == 0){
 		cpuStartTime = System.currentTimeMillis();
@@ -160,7 +162,7 @@ public  class  Dispatcher {
 		synchronized(this){
 			//CPU time
 		cpu.cpuStartTime = cpuStartTime;
-		cpu.endTime = cpuEndTime;
+		cpu.cpuEndTime = cpuEndTime;
 		//If its the first time the job gets the CPU
 		
 		
