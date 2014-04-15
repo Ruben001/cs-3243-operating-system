@@ -189,6 +189,13 @@ public class ShortTermScheduler {
 				Collections.sort(readyQueue, new PriorityComparator());
 				
 			}
+			
+			/*for(int i=0; i<readyQueue.size();i++)
+				System.out.println("The priority of "+ i + " is "+readyQueue.get(i).priority);*/
+			
+			
+			
+			
 			try {
 				dispatcher.dispatcherLock.acquire();
 				//writeLock.acquire();
@@ -199,7 +206,30 @@ public class ShortTermScheduler {
 			}
 			if(dispatcher.hasProcessForCPU() == false){
 				try {
-					nextProcess =  readyQueue.remove(0);
+					
+					
+					
+					
+					//priority Testing
+					nextProcess = readyQueue.get(0);
+					int locationInQueue = 0;
+					int oldProcessPriority = nextProcess.priority;
+					
+					for(int i=1; i<readyQueue.size();i++){
+					
+						int newProcessPriority = readyQueue.get(i).priority;
+						
+						if(newProcessPriority>oldProcessPriority){
+							
+							oldProcessPriority = newProcessPriority;
+							locationInQueue    = i;
+						}
+					
+					
+					}
+					
+					//end Priority Test
+					nextProcess =  readyQueue.remove(locationInQueue);
 					dispatcher.shortTermProduce(nextProcess);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -207,6 +237,10 @@ public class ShortTermScheduler {
 				}
 			}
 			
+			
+			//Shouldn't check if process is done before releasing?
+			//Seems if it has not completed a process it just releases and goes to the next process
+			//So should check if the current process has been completed before releasing
 			dispatcher.dispatcherLock.release();
 			//writeLock.release();
 			

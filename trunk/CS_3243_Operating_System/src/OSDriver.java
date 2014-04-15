@@ -252,7 +252,7 @@ public class OSDriver{
 				
 				if(lineRead!=null){
 				content = content + "\n" + lineRead;
-				System.out.println(lineRead);
+				//System.out.println(lineRead);
 				}
 			}
 			
@@ -273,7 +273,7 @@ public class OSDriver{
 				
 				if(cpuLineRead!=null){
 				cpuContent = cpuContent + "\n" + cpuLineRead;
-				System.out.println(cpuLineRead);
+				//System.out.println(cpuLineRead);
 				}
 			}
 			
