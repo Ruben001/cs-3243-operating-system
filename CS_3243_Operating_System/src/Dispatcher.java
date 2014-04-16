@@ -146,18 +146,6 @@ public  class  Dispatcher {
 		}
 	}
 	
-	public synchronized void cpuProduce() throws InterruptedException{
-		synchronized(this){
-			
-		}
-	}
-	
-	public synchronized void shortTermConsume() throws InterruptedException{
-		synchronized(this){
-			
-		}
-	}
-	
 	public synchronized void cpuConsume(CPU cpu) throws InterruptedException{
 		synchronized(this){
 			//CPU time
