@@ -156,7 +156,7 @@ public class ShortTermScheduler {
 
 		@Override
 		public int compare(PCB o1, PCB o2) {
-			return (o1.priority < o2.priority ) ? -1: (o1.priority > o2.priority) ? 1:0 ;
+			return (o1.priority > o2.priority ) ? -1: (o1.priority < o2.priority) ? 1:0 ;
 	
 		}
       
@@ -186,7 +186,7 @@ public class ShortTermScheduler {
 			
 			if(readyQueue.size() < 5){
 				ltScheduler.schedule();
-				Collections.sort(readyQueue, new PriorityComparator());
+			
 				
 			}
 			
@@ -208,25 +208,10 @@ public class ShortTermScheduler {
 			if(dispatcher.hasProcessForCPU() == false){
 				try {
 					//priority Testing
-					nextProcess = readyQueue.get(0);
-					int locationInQueue = 0;
-					int oldProcessPriority = nextProcess.priority;
-					
-					for(int i=1; i<readyQueue.size();i++){
-					
-						int newProcessPriority = readyQueue.get(i).priority;
-						
-						if(newProcessPriority>oldProcessPriority){
-							
-							oldProcessPriority = newProcessPriority;
-							locationInQueue    = i;
-						}
-					
-					
-					}
 					
 					//end Priority Test
-					nextProcess =  readyQueue.remove(locationInQueue);
+					Collections.sort(readyQueue, new PriorityComparator());
+					nextProcess =  readyQueue.remove(0);
 					
 					
 					dispatcher.shortTermProduce(nextProcess);
@@ -285,7 +270,7 @@ public class ShortTermScheduler {
 			//see long term scheduling 
 			if(readyQueue.size() < 5){
 				ltScheduler.schedule();
-				Collections.sort(readyQueue, new JobComparator());
+				
 			}
 			try {
 				dispatcher.dispatcherLock.acquire();
@@ -297,6 +282,7 @@ public class ShortTermScheduler {
 			}
 			if(dispatcher.hasProcessForCPU() == false){
 				try {
+					Collections.sort(readyQueue, new JobComparator());
 					nextProcess =  readyQueue.remove(0);
 					dispatcher.shortTermProduce(nextProcess);
 				} catch (InterruptedException e) {
