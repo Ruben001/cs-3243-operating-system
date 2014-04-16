@@ -25,6 +25,7 @@ public class AverageCalculator {
 	private ArrayList<Long> cacheUsageList = new ArrayList<Long>();
 	private ArrayList<Long> waitTimeList = new ArrayList<Long>();
 	private ArrayList<Long> numberIOList = new ArrayList<Long>();
+	private ArrayList<Long> pageFaultList = new ArrayList<Long>();
 	
 	DecimalFormat form = new DecimalFormat("#.00");
 	
@@ -54,6 +55,9 @@ public class AverageCalculator {
 		cacheUsageList.add(cacheUsage);
 	}
 	
+	public synchronized void addToPageFaultList(Long pageFault){
+		pageFaultList.add(pageFault);
+	}
 	
 	//Calculates the average completion time
 		public void averagecompletionTime(){
@@ -197,6 +201,34 @@ public class AverageCalculator {
 					}
 					//System.out.println("\nAverage completion time: " + answer);
 				}
+				
+				//Calculates the average page fault
+				public void averagePageFault(){
+					double averagePageFault = 0;
+					double numberOfProcesses = pageFaultList.size();
+					double answer = 0;
+					while(0 < pageFaultList.size()){
+						averagePageFault += pageFaultList.remove(0);
+					}
+					answer = Double.valueOf(form.format(averagePageFault/numberOfProcesses));
+					try{
+						
+						FileOutputStream fos = new FileOutputStream("results.txt",true);
+						PrintWriter pw = new PrintWriter( fos );
+						
+						pw.print("\nAverage Page Fault: ");
+						pw.print(answer);
+						pw.println();
+						pw.close();
+					}
+					catch(FileNotFoundException fnfe){
+						
+						fnfe.printStackTrace();
+						
+						
+					}
+				}
+			
 			
 			
 

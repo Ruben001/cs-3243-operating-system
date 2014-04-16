@@ -92,6 +92,7 @@ public class ShortTermScheduler {
 			averageCalculator.averageNumberOfIORequests();
 			averageCalculator.averageRamUsageTime();
 			averageCalculator.averageCacheUsageTime();
+			averageCalculator.averagePageFault();
 			
 		}
 		
