@@ -84,12 +84,38 @@ public class MemoryManager {
 		return physicalAddress;
 				
 	}
+	/**
+	 * A method that writes data to the ram.
+	 * @param takes offset address of logical memory
+	 * @param takes pcb
+	 * @param data to write in ram
+	 */
+	public void writeData(int offset,PCB pcb, int data){
+		int physicalAddress = getPhysicalAddress(offset, pcb);
+		ram.writeData(physicalAddress, data);
+	}
 	
+	/**
+	 * Fetches binary data from ram
+	 * @param takes offset address of logical memory
+	 * @param takes pcb
+	 * @return boolean array of binary data from ram
+	 */
 	public boolean[] fetchData(int offset, PCB pcb){
 		int physicalAddress = getPhysicalAddress(offset,pcb);
 		return readRamDataBinary(physicalAddress);
 	}
 	
+	/**
+	 * Fetches data as a long from ram
+	 * @param takes offset address of logical memory
+	 * @param takes pcb
+	 * @return long type data from ram
+	 */
+	public long fetchLongData(int offset, PCB pcb){
+		int physicalAddress = getPhysicalAddress(offset,pcb);
+		return readRamData(physicalAddress);
+	}
 	private void pageFault(int index, PCB pcb) {
 		int frame = getFreeFrameNumber();
 		int page = getFreePageNumber();
@@ -141,12 +167,31 @@ public class MemoryManager {
 		return -1;
 	}
 	
+	
+	public void freeMemory(PCB pcb){
+		int length = pcb.pageTable.length;
+		for(int i =0;i<length;i++){
+			if(pcb.pageTable[i].isValid()==true){
+				int frame = pcb.pageTable[i].getFrameNumber();
+				pcb.pageTable[i].setValid(false);
+				pcb.pageTable[i].setJobID(0);
+				pcb.pageTable[i].setFrameNumber(0);
+				freeFrame(frame);
+				addFrameList(frame);				
+			}
+		}
+		
+	}
+	public void addFrameList(int frameNumber){
+		freeFrameList.add(frameNumber);
+		
+	}
 	/**
-	 * This methods free page from page table, and also free memory of ram
-	 * @param pageNumber that would be free
+	 * This methods free frame from page table, and also free memory of ram
+	 * @param frameNumber that would be free
 	 */
-	public void freePage(int pageNumber){
-		int address = pageNumber*PAGE_SIZE;
+	public void freeFrame(int frameNumber){
+		int address = frameNumber*PAGE_SIZE;
 		int length = PAGE_SIZE;
 		
 		
