@@ -210,6 +210,7 @@ public class AverageCalculator {
 					while(0 < pageFaultList.size()){
 						averagePageFault += pageFaultList.remove(0);
 					}
+					totalPageFault(averagePageFault);
 					answer = Double.valueOf(form.format(averagePageFault/numberOfProcesses));
 					try{
 						
@@ -217,6 +218,28 @@ public class AverageCalculator {
 						PrintWriter pw = new PrintWriter( fos );
 						
 						pw.print("\nAverage Page Fault: ");
+						pw.print(answer);
+						pw.println();
+						pw.close();
+					}
+					catch(FileNotFoundException fnfe){
+						
+						fnfe.printStackTrace();
+						
+						
+					}
+				}
+				
+				//Calculates the Total page fault
+				public void totalPageFault(double total){
+					int answer;
+					answer = (int) total;
+					try{
+						
+						FileOutputStream fos = new FileOutputStream("results.txt",true);
+						PrintWriter pw = new PrintWriter( fos );
+						
+						pw.print("\nTotal Page Fault: ");
 						pw.print(answer);
 						pw.println();
 						pw.close();
