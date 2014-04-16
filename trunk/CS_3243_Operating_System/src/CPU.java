@@ -873,6 +873,7 @@ try{
 			}
 			//memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
 			OSDriver.memoryManager.freeMemory(pcbHolder.get(0));
+			pcbHolder.remove(0);
 			memory.memoryLock.release();
 			pc++;
 			break;
