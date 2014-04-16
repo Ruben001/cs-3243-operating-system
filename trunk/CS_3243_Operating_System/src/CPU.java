@@ -588,7 +588,7 @@ try{
 				e.printStackTrace();
 			}
 			//register[dReg] = memory.readData((int)register[bReg]);
-			register[reg1] = OSDriver.memoryManager.fetchLongData((int)register[bReg] - processAddress , pcbHolder.get(0));
+			register[dReg] = OSDriver.memoryManager.fetchLongData((int)register[bReg] - processAddress , pcbHolder.get(0));
 			memory.memoryLock.release();
 			pc++;
 			break;
