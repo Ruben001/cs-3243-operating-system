@@ -526,7 +526,7 @@ try{
 					e.printStackTrace();
 				}
 				//register[reg1] = memory.readData(processAddress + inputBufferAddress);
-				register[reg1] = OSDriver.memoryManager.fetchLongData(processAddress + inputBufferAddress, pcbHolder.get(0));
+				register[reg1] = OSDriver.memoryManager.fetchLongData(inputBufferAddress - processAddress , pcbHolder.get(0));
 				memory.memoryLock.release();
 				pc++;
 				break;
@@ -540,7 +540,7 @@ try{
 					e.printStackTrace();
 				}
 				//register[reg1] = memory.readData((int)register[reg2]);
-				register[reg1] = OSDriver.memoryManager.fetchLongData((int)register[reg2], pcbHolder.get(0));
+				register[reg1] = OSDriver.memoryManager.fetchLongData((int)register[reg2] - processAddress, pcbHolder.get(0));
 				memory.memoryLock.release();
 				pc++;
 				break;
@@ -558,7 +558,8 @@ try{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			memory.writeData(outputBufferAddress, register[reg1]);
+			//memory.writeData(outputBufferAddress, register[reg1]);
+			OSDriver.memoryManager.writeData(outputBufferAddress, pcbHolder.get(0), register[reg1]);
 			memory.memoryLock.release();
 			pc++;
 			break;
@@ -572,7 +573,8 @@ try{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			memory.writeData((int)register[dReg], register[bReg]);
+			//memory.writeData((int)register[dReg], register[bReg]);
+			OSDriver.memoryManager.writeData((int)register[dReg], pcbHolder.get(0), register[bReg]);
 			memory.memoryLock.release();
 			pc++;
 			break;
@@ -586,7 +588,7 @@ try{
 				e.printStackTrace();
 			}
 			//register[dReg] = memory.readData((int)register[bReg]);
-			register[reg1] = OSDriver.memoryManager.fetchLongData((int)register[bReg], pcbHolder.get(0));
+			register[reg1] = OSDriver.memoryManager.fetchLongData((int)register[bReg] - processAddress , pcbHolder.get(0));
 			memory.memoryLock.release();
 			pc++;
 			break;
@@ -869,7 +871,8 @@ try{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
+			//memory.free(processAddress,(processLength + inputBufferLength + outputBufferLength + tempBufferLength));
+			OSDriver.memoryManager.freeMemory(pcbHolder.get(0));
 			memory.memoryLock.release();
 			pc++;
 			break;
