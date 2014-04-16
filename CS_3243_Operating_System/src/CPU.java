@@ -76,6 +76,8 @@ public class CPU implements Runnable {
 	//keeps track of RAM usage
 	public ArrayList<Long> ramUsageList; 
 	long ramUsage;
+	
+	long pageFault;
 	//keeps track of Cache usage
 	//public ArrayList<Long> cacheUsageList; // field
 	long cacheUsage;
@@ -791,7 +793,7 @@ try{
 			//Process wait time
 			waitTime = cpuStartTime - startTime;
 			//waitTimeList.add(waitTime);
-			
+			pageFault = pcbHolder.get(0).pageFault;
 			//number of IO requests put onto a Array
 			//numberIOList.add(numberIO);
 			
@@ -812,6 +814,7 @@ try{
 			averageCalculator.addToNumberIOList(numberIO);
 			averageCalculator.addToRamUsageListt(ramUsage);
 			averageCalculator.addToCacheUsageList(cacheUsage);
+			averageCalculator.addToPageFaultList(pageFault);
 			
 			averageCalculator.calculatorLock.release();
 			
@@ -834,6 +837,8 @@ try{
 				pw.print(ramUsage);
 				pw.print(" Cache Usage: ");
 				pw.print(cacheUsage);
+				pw.print(" Page Fault: ");
+				pw.print(pageFault);
 				
 				pw.print("\n****************Accumulator");
 				pw.print(": ");
