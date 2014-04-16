@@ -514,7 +514,7 @@ try{
 		
 		switch(opcodeS){
 		case "000000"://0
-			//System.out.println("Instruction: RD  Type: I/O" );
+			System.out.println("Instruction: RD  Type: I/O" );
 			//Reads content of I/P buffer into a accumulator
 			ramUsage++;
 			numberIO++;
@@ -525,7 +525,8 @@ try{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				register[reg1] = memory.readData(inputBufferAddress);
+				//register[reg1] = memory.readData(processAddress + inputBufferAddress);
+				register[reg1] = OSDriver.memoryManager.fetchLongData(processAddress + inputBufferAddress, pcbHolder.get(0));
 				memory.memoryLock.release();
 				pc++;
 				break;
@@ -538,7 +539,8 @@ try{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				register[reg1] = memory.readData((int)register[reg2]);
+				//register[reg1] = memory.readData((int)register[reg2]);
+				register[reg1] = OSDriver.memoryManager.fetchLongData((int)register[reg2], pcbHolder.get(0));
 				memory.memoryLock.release();
 				pc++;
 				break;
@@ -546,7 +548,7 @@ try{
 			
 			
 		case "000001"://1
-			//System.out.println("Instruction: WR  Type: I/O" );
+			System.out.println("Instruction: WR  Type: I/O" );
 			//Writes the content of accumulator into O/P buffer
 			ramUsage++;
 			numberIO++;
@@ -562,7 +564,7 @@ try{
 			break;
 			
 		case "000010"://2
-			//System.out.println("Instruction: ST  Type: I" );
+			System.out.println("Instruction: ST  Type: I" );
 			//Stores content of a reg. into an address
 			try {
 				memory.memoryLock.acquire();
@@ -575,7 +577,7 @@ try{
 			pc++;
 			break;
 		case "000011"://3
-			//System.out.println("Instruction: LW  Type: I" );
+			System.out.println("Instruction: LW  Type: I" );
 			//Loads the content of an address into a reg.
 			try {
 				memory.memoryLock.acquire();
@@ -583,18 +585,19 @@ try{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			register[dReg] = memory.readData((int)register[bReg]);
+			//register[dReg] = memory.readData((int)register[bReg]);
+			register[reg1] = OSDriver.memoryManager.fetchLongData((int)register[bReg], pcbHolder.get(0));
 			memory.memoryLock.release();
 			pc++;
 			break;
 		case "000100"://4
-			//System.out.println("Instruction: MOV  Type: R" );
+			System.out.println("Instruction: MOV  Type: R" );
 			//Transfers the content of two S2-reg into S1-reg
 			register[s1Reg] = register[s2Reg];
 			pc++;
 			break;
 		case "000101"://5
-			//System.out.println("Instruction: ADD  Type: R" );
+			System.out.println("Instruction: ADD  Type: R" );
 			//Adds content of two S-regs into D-reg
 			register[dReg] = register[s1Reg] + register[s2Reg];
 			
@@ -602,7 +605,7 @@ try{
 			break;
 			
 		case "000110"://6
-			//System.out.println("Instruction: SUB  Type: R" );
+			System.out.println("Instruction: SUB  Type: R" );
 			//Subtracts content of two S-regs into D-reg
 			if(register[s1Reg] > register[s2Reg]){
 				register[dReg] = register[s1Reg] - register[s2Reg];
@@ -617,13 +620,13 @@ try{
 			
 			
 		case "000111"://7
-			//System.out.println("Instruction: MUL  Type: R" );
+			System.out.println("Instruction: MUL  Type: R" );
 			//Multiplies content of two S-regs into D-reg
 			register[dReg] = register[s1Reg] * register[s2Reg];
 			pc++;
 			break;
 		case "001000"://8
-			//System.out.println("Instruction: DIV  Type: R" );
+			System.out.println("Instruction: DIV  Type: R" );
 			//Divides content of two S-regs into D-reg
 			if(register[s2Reg] == 0){
 				System.out.println("Process number: " + processId + "didn't execute becuase it divided by 0");
@@ -642,7 +645,7 @@ try{
 				break;
 			}
 		case "001001"://9
-			//System.out.println("Instruction: AND  Type: R" );
+			System.out.println("Instruction: AND  Type: R" );
 			//Logical AND of two S-regs into D-reg
 			if(register[s1Reg] == 1 && register[s2Reg] == 1){
 				register[dReg] = 1;
@@ -655,7 +658,7 @@ try{
 				break;
 			}
 		case "001010"://10
-			//System.out.println("Instruction: OR  Type: R" );
+			System.out.println("Instruction: OR  Type: R" );
 			//Logical OR of two S-regs into D-reg
 			if((register[s1Reg] == 1) || (register[s2Reg] == 1)){
 				register[dReg] = 1;
@@ -669,7 +672,7 @@ try{
 			}
 			
 		case "001011"://11
-			//System.out.println("Instruction: MOVI  Type: I" );
+			System.out.println("Instruction: MOVI  Type: I" );
 			//Transfers address/data directly into a register
 			if(bReg == 0){
 				register[dReg] = address;
@@ -680,7 +683,7 @@ try{
 			
 			
 		case "001100"://12
-			//System.out.println("Instruction: ADDI  Type: I" );
+			System.out.println("Instruction: ADDI  Type: I" );
 			//Adds a data directly to the content of a register
 			if (address % 4 == 0 && address != 1) {
 				register[dReg] = register[dReg] + (address/4);
@@ -692,7 +695,7 @@ try{
 				break;
 			}
 		case "001101"://13
-			//System.out.println("Instruction: MULI  Type: I" );
+			System.out.println("Instruction: MULI  Type: I" );
 			//Multiplies a data directly to the content of a register
 			if (address % 4 == 0 && address != 1) {
 				register[dReg] = register[dReg] * (address/4);
@@ -705,7 +708,7 @@ try{
 			}
 			
 		case "001110"://14
-			//System.out.println("Instruction: DIVI  Type: I" );
+			System.out.println("Instruction: DIVI  Type: I" );
 			//Divides a data directly to the content of a register
 			if (address % 4 == 0 && address != 1) {
 				register[dReg] = register[dReg] / (address/4);
@@ -717,7 +720,7 @@ try{
 				break;
 			}
 		case "001111"://15
-			//System.out.println("Instruction: LDI  Type: I" );
+			System.out.println("Instruction: LDI  Type: I" );
 			//Loads a data/address directly to the content of a register
 			if ((address/4) == processLength) {
 				register[dReg] = (inputBufferAddress);
@@ -741,11 +744,10 @@ try{
 			}
 			
 		case "010000"://16
-			//System.out.println("Instruction: SLT  Type: R" );
+			System.out.println("Instruction: SLT  Type: R" );
 			//Sets the D-reg to 1 if first S-reg is less than 
 			//second S-reg, 0 otherwise
-			//System.out.println("s1Reg: " + register[s1Reg] +
-				//	"<" + " s2Reg" + register[s2Reg] );
+			System.out.println("s1Reg: " + register[s1Reg] +	"<" + " s2Reg" + register[s2Reg] );
 			if(register[s1Reg] < register[s2Reg]){
 				register[dReg] = 1;
 				pc++;
@@ -757,7 +759,7 @@ try{
 				break;
 			}
 		case "010001"://17?? DATA?
-			//System.out.println("Instruction: SLTI  Type: I" );
+			System.out.println("Instruction: SLTI  Type: I" );
 			//Sets the D-reg to 1 if first S-reg is less 
 			//than a data, and 0 otherwise
 			if(register[s1Reg] < register[s2Reg]){
@@ -771,9 +773,9 @@ try{
 				break;
 			}
 		case "010010"://18
-			//System.out.println("Instruction: HLT  Type: J" );
+			System.out.println("Instruction: HLT  Type: J" );
 			//Logical end of program
-			//System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
+			System.out.println("****************Job" + processId+ ": " + register[0] + "*************");
 			
 			//End process time
 			endTime = System.currentTimeMillis();
@@ -872,18 +874,18 @@ try{
 			pc++;
 			break;
 		case "010011"://19
-			//System.out.println("Instruction: NOP  Type: -" );
+			System.out.println("Instruction: NOP  Type: -" );
 			//Does nothing and moves to next instruction
 			pc++;
 			break;
 		case "010100"://20
-			//System.out.println("Instruction: JMP  Type: J" );
+			System.out.println("Instruction: JMP  Type: J" );
 			//Jumps to a specified location
 			pc = address/4;
 			break;
 		case "010101"://21
-			//System.out.println("Instruction: BEQ  Type: I" );
-			//System.out.println("BReg= " + register[bReg] + "dReg= " + register[dReg]);
+			System.out.println("Instruction: BEQ  Type: I" );
+			System.out.println("BReg= " + register[bReg] + "dReg= " + register[dReg]);
 			//Branches to an address when content of B-reg = D-reg
 			if(register[bReg] == register[dReg]){
 				//Branch
@@ -898,8 +900,8 @@ try{
 			}
 			
 		case "010110"://22
-			//System.out.println("Instruction: BNE  Type: I" );
-			//System.out.println("BReg= " + register[bReg] + "dReg= " + register[dReg]);
+			System.out.println("Instruction: BNE  Type: I" );
+			System.out.println("BReg= " + register[bReg] + "dReg= " + register[dReg]);
 			//Branches to an address when content of B-reg != D-reg
 			if(register[bReg] != register[dReg]){
 				//Branch
@@ -914,7 +916,7 @@ try{
 			}
 			
 		case "010111"://23
-			//System.out.println("Instruction: BEZ  Type: I" );
+			System.out.println("Instruction: BEZ  Type: I" );
 			//Branches to an address when content of B-reg = 0
 			if(register[bReg] == 0 ){
 				//Branch
@@ -928,7 +930,7 @@ try{
 				break;
 			}
 		case "011000"://24
-			//System.out.println("Instruction: BNZ  Type: I" );
+			System.out.println("Instruction: BNZ  Type: I" );
 			//Branches to an address when content of B-reg <> 0
 			if(register[bReg] != 0 ){
 				//Branch
@@ -942,7 +944,7 @@ try{
 				break;
 			}
 		case "011001"://25
-			//System.out.println("Instruction: BGZ  Type: I" );
+			System.out.println("Instruction: BGZ  Type: I" );
 			//Branches to an address when content of B-reg > 0
 			if(register[bReg] > 0 ){
 				//Branch
@@ -956,7 +958,7 @@ try{
 				break;
 			}
 		case "011010"://26
-			//System.out.println("Instruction: BLZ  Type: I" );
+			System.out.println("Instruction: BLZ  Type: I" );
 			//Branches to an address when content of B-reg < 0
 			if(register[bReg] < 0 ){
 				//Branch
