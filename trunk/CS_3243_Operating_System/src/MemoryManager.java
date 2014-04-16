@@ -88,11 +88,11 @@ public class MemoryManager {
 	 * A method that writes data to the ram.
 	 * @param takes offset address of logical memory
 	 * @param takes pcb
-	 * @param data to write in ram
+	 * @param register to write in ram
 	 */
-	public void writeData(int offset,PCB pcb, int data){
+	public void writeData(int offset,PCB pcb, long register){
 		int physicalAddress = getPhysicalAddress(offset, pcb);
-		ram.writeData(physicalAddress, data);
+		ram.writeData(physicalAddress, register);
 	}
 	
 	/**
@@ -122,11 +122,11 @@ public class MemoryManager {
 		pcb.pageTable[index].setFrameNumber(frame);
 		pcb.pageTable[index].setValid(true);
 		pcb.pageTable[index].setJobID(pcb.processId);
-		
-		int remainder = pcb.jobFileLength%getPAGE_SIZE();
+		int tempIndex = pcb.getMemoryFootprint()/getPAGE_SIZE();
+		int remainder = pcb.getMemoryFootprint()%getPAGE_SIZE();
 		int stop;
 		int diskAddress = pcb.diskFileAddress+index*getPAGE_SIZE();
-		if(remainder>0){
+		if((remainder>0) && (index == tempIndex)){
 			stop = diskAddress+remainder;
 		} else {
 			stop = diskAddress+getPAGE_SIZE();
