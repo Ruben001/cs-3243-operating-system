@@ -24,6 +24,8 @@ public class CPU implements Runnable {
 	//int MemoryFootprint;
 	//private static ShortTermScheduler stScheduler; // field variable for Short Term Scheduler
 	public ArrayList<boolean[]> cache; // field variable for CPU cache
+	
+	public ArrayList<Long> accumulatorList;
 
 	//Holds jobs PCB
 	public ArrayList<PCB> pcbHolder;
@@ -133,6 +135,7 @@ public class CPU implements Runnable {
 		register = new long[16];
 		cache = new ArrayList<boolean[]>();
 		pcbHolder = new ArrayList<PCB>();
+		accumulatorList = new ArrayList<Long>();
 		/*
 		//Average Times
 		completionTimeList = new ArrayList<Long>();
@@ -561,6 +564,7 @@ try{
 				e.printStackTrace();
 			}
 			//memory.writeData(outputBufferAddress, register[reg1]);
+			accumulatorList.add(register[reg1]);
 			OSDriver.memoryManager.writeData(outputBufferAddress, pcbHolder.get(0), register[reg1]);
 			memory.memoryLock.release();
 			pc++;
@@ -842,7 +846,7 @@ try{
 				
 				pw.print("\n****************Accumulator");
 				pw.print(": ");
-				pw.print(register[0]);
+				pw.print(accumulatorList.toString());
 				pw.print("*************");
 				
 				
@@ -853,6 +857,7 @@ try{
 				pw2.print(" Number IO requests: ");
 				pw2.print(numberIO);
 				
+				accumulatorList.clear();
 				
 				
 				
